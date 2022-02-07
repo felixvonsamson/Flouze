@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    body {
+      background-image: url({{url_for('static', filename="images/6.jpg")}});
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+    </style>
+    <title>Faire un don</title>
+  </head>
+<body>
+  <div class="w3-display-topleft" style="width:150px">
+  <ul class="w3-ul w3-border w3-light-blue w3-border-light-blue w3-card-2">
+    <li class="w3-center w3-border-white"><h4>Participants</h4></li>
+    <li class="w3-border-0">Baptiste<i class="fa fa-star w3-right"> {{players[0].stars}}</i></li>
+    <li class="w3-border-0">Juliette<i class="fa fa-star w3-right"> {{players[1].stars}}</i></li>
+    <li class="w3-border-0">Léa<i class="fa fa-star w3-right"> {{players[2].stars}}</i></li>
+    <li class="w3-border-0">Margot<i class="fa fa-star w3-right"> {{players[3].stars}}</i></li>
+    <li class="w3-border-0">Sylvain<i class="fa fa-star w3-right"> {{players[4].stars}}</i></li>
+  </ul>
+  </div>
+
+  <div class="w3-container w3-center w3-teal" style="height:80px">
+    <h3 class="w3-right w3-xxlarge">{{user.flouze}} <img src="https://cdn-icons-png.flaticon.com/512/217/217853.png" class="w3-round" style="width:42px" alt="Coin"></h3>
+  </div>
+
+  <div class="w3-card-4 w3-display-middle w3-white w3-center" style="width:300px;">
+  <header class="w3-container w3-teal">
+      <h4>Faire un don</h4>
+  </header>
+  <form class="w3-container">
+  <select class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:50%;" name="option">
+    <option value="" disabled="" selected="">Destinataire</option>
+  <option value="0">{{players[0].first_name}}</option>
+  <option value="1">{{players[1].first_name}}</option>
+  <option value="2">{{players[2].first_name}}</option>
+  <option value="3">{{players[3].first_name}}</option>
+  </select>
+  <input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name="last" type="text" style="width:100px; display:inline-block;">
+  <p><button onclick="this.parentElement.style.display='none'" class="w3-button w3-teal">Envoyer</button></p>
+  <p>
+</form>
+  </div>
+
+  </body>
+</html>

@@ -1,7 +1,22 @@
-{% extends "base.html" %} {% block title %}Login{% endblock %} {% block content
-%}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+    body {
+      background-image: url({{url_for('static', filename="images/2.jpg")}});
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+    </style>
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
 
-<div class="w3-card w3-display-middle w3-white" style="width:70%;">
+<body>
+<div class="w3-card-4 w3-display-middle w3-white" style="width:350px;">
     <div class="w3-container w3-green">
       <h2 class="w3-center">Qui est-tu ?</h2>
     </div>
@@ -16,4 +31,5 @@
       <p class="w3-center"><button type="submit" class="w3-btn w3-blue-grey">Se connecter</button></p>
     </form>
   </div>
-{% endblock %}
+</body>
+</html>
