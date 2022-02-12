@@ -19,11 +19,11 @@
   <div class="w3-display-topleft" style="width:150px">
   <ul class="w3-ul w3-border w3-light-blue w3-border-light-blue w3-card-2">
     <li class="w3-center w3-border-white"><h4>Participants</h4></li>
-    <li class="w3-border-0">Baptiste<i class="fa fa-star w3-right"> {{players[0].stars}}</i></li>
-    <li class="w3-border-0">Juliette<i class="fa fa-star w3-right"> {{players[1].stars}}</i></li>
-    <li class="w3-border-0">Léa<i class="fa fa-star w3-right"> {{players[2].stars}}</i></li>
-    <li class="w3-border-0">Margot<i class="fa fa-star w3-right"> {{players[3].stars}}</i></li>
-    <li class="w3-border-0">Sylvain<i class="fa fa-star w3-right"> {{players[4].stars}}</i></li>
+    <li class="w3-border-0">{{players[0].name}}<i class="fa fa-star w3-right"> {{players[0].stars}}</i></li>
+    <li class="w3-border-0">{{players[1].name}}<i class="fa fa-star w3-right"> {{players[1].stars}}</i></li>
+    <li class="w3-border-0">{{players[2].name}}<i class="fa fa-star w3-right"> {{players[2].stars}}</i></li>
+    <li class="w3-border-0">{{players[3].name}}<i class="fa fa-star w3-right"> {{players[3].stars}}</i></li>
+    <li class="w3-border-0">{{players[4].name}}<i class="fa fa-star w3-right"> {{players[4].stars}}</i></li>
   </ul>
   </div>
 
@@ -38,10 +38,10 @@
   <form class="w3-container">
   <select class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:50%;" name="option">
     <option value="" disabled="" selected="">Destinataire</option>
-  <option value="0">{{players[0].first_name}}</option>
-  <option value="1">{{players[1].first_name}}</option>
-  <option value="2">{{players[2].first_name}}</option>
-  <option value="3">{{players[3].first_name}}</option>
+  <option value="0">{{players[playerIDs[0]].first_name}}</option>
+  <option value="1">{{players[playerIDs[1]].first_name}}</option>
+  <option value="2">{{players[playerIDs[2]].first_name}}</option>
+  <option value="3">{{players[playerIDs[3]].first_name}}</option>
   </select>
   <input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name="last" type="text" style="width:100px; display:inline-block;">
   <p><button onclick="this.parentElement.style.display='none'" class="w3-button w3-teal">Envoyer</button></p>

@@ -1,10 +1,15 @@
-from . import db
-from flask_login import UserMixin
-from sqlalchemy.sql import func
+class Player:
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(150))
-    password = db.Column(db.String(150))
-    flouze = db.Column(db.Integer, default=0)
-    stars = db.Column(db.Integer, default=0)
+    def __init__(self, ID, prenom, mdp):
+        self.ID = ID
+        self.name = prenom
+        self.password = mdp
+        self.flouze = 0
+        self.stars = 0
+        self.color = "#ffffff"
+
+    def add_flouze(amount):
+        self.flouze += amount
+
+    def add_stars(amount):
+        self.stars += amount
