@@ -11,13 +11,13 @@ def login():
         first_name = request.form.get('firstName')
         password = request.form.get('password')
         if first_name == "felix" and password == "felix":
-            session["user"] = "admin"
+            session["ID"] = "admin"
             return redirect(url_for('views.home'))
         for i in range(5):
             if first_name == players[i]["name"]:
                 if players[i]["password"] == password:
                     flash('Logged in successfully!', category = 'success')
-                    session["user"] = players[i]
+                    session["ID"] = i
                     return redirect(url_for('views.home'))
                 else:
                     flash('Incorrect password, try again.', category = 'error')
