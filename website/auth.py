@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session
 from . import players
-from .test import change_user
 
 
 auth = Blueprint('auth', __name__)
@@ -11,15 +10,14 @@ def login():
     if request.method == 'POST':
         first_name = request.form.get('firstName')
         password = request.form.get('password')
-        if (first_name == "felix") & (password == "felix"):
-            change_user("admin")
+        if first_name == "felix" and password == "felix":
+            session["user"] = "admin"
             return redirect(url_for('views.home'))
         for i in range(5):
-            if (first_name == players[i].name):
-                if players[i].password == password :
+            if first_name == players[i]["name"]:
+                if players[i]["password"] == password:
                     flash('Logged in successfully!', category = 'success')
-                    print(players[i].name)
-                    change_user(players[i])
+                    session["user"] = players[i]
                     return redirect(url_for('views.home'))
                 else:
                     flash('Incorrect password, try again.', category = 'error')

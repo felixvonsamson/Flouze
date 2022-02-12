@@ -1,5 +1,14 @@
 from flask import Flask
-from .models import Player
+
+def init_player(ID, prenom, mdp):
+    player = {}
+    player["ID"] = ID
+    player["name"] = prenom
+    player["password"] = mdp
+    player["flouze"] = 0
+    player["stars"] = 0
+    player["color"] = "#ffffff"
+    return player
 
 pages = ["Jeu1-choix.html", "Jeu2-choix.html", "Jeu3-choix.html", "Jeu4-choix.html", "Jeu5-choix.html"]
 iterator = 3
@@ -8,11 +17,8 @@ players = []
 file = open("players.txt", "r")
 for p in range(5):
     line = file.readline().split()
-    players.append(Player(p, line[0], line[1]))
+    players.append(init_player(p, line[0], line[1]))
 file.close()
-
-from .globals import initialize
-globals.initialize()
 
 def create_app():
     app = Flask(__name__)

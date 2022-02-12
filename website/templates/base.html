@@ -31,16 +31,16 @@
   <div class="w3-display-topleft" style="width:150px">
   <ul class="w3-ul w3-border w3-light-blue w3-border-light-blue w3-card-2">
     <li class="w3-center w3-border-white"><h4>Participants</h4></li>
-    <li class="w3-border-0">{{players[0].name}}<i class="fa fa-star w3-right"> {{players[0].stars}}</i></li>
-    <li class="w3-border-0">{{players[1].name}}<i class="fa fa-star w3-right"> {{players[1].stars}}</i></li>
-    <li class="w3-border-0">{{players[2].name}}<i class="fa fa-star w3-right"> {{players[2].stars}}</i></li>
-    <li class="w3-border-0">{{players[3].name}}<i class="fa fa-star w3-right"> {{players[3].stars}}</i></li>
-    <li class="w3-border-0">{{players[4].name}}<i class="fa fa-star w3-right"> {{players[4].stars}}</i></li>
+    <li class="w3-border-0">{{players[0]["name"]}}<i class="fa fa-star w3-right"> {{players[0]["stars"]}}</i></li>
+    <li class="w3-border-0">{{players[1]["name"]}}<i class="fa fa-star w3-right"> {{players[1]["stars"]}}</i></li>
+    <li class="w3-border-0">{{players[2]["name"]}}<i class="fa fa-star w3-right"> {{players[2]["stars"]}}</i></li>
+    <li class="w3-border-0">{{players[3]["name"]}}<i class="fa fa-star w3-right"> {{players[3]["stars"]}}</i></li>
+    <li class="w3-border-0">{{players[4]["name"]}}<i class="fa fa-star w3-right"> {{players[4]["stars"]}}</i></li>
   </ul>
   </div>
 
   <div class="w3-container w3-center w3-teal" style="height:80px">
-    <h3 class="w3-right w3-xxlarge">{{user.flouze}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:42px" alt="Coin"></h3>
+    <h3 class="w3-right w3-xxlarge">{{user["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:42px" alt="Coin"></h3>
   </div>
   <div class="w3-container w3-center">
   <form method="POST">
