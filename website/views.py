@@ -1,24 +1,26 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for
-from . import pages, iterator, players
+from . import pages, iterator, players, socketio
 import random
 import pickle
+from flask_socketio import send, emit
 
 views = Blueprint('views', __name__)
 
-def save_data():
+def update_data():
     with open("data.pck", 'wb') as file:
-        pickle.dump(players, file)
-
+        pickle.dump((iterator, players), file)
+    socketio.emit('changed', None, broadcast=True)
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
     if "ID" not in session :
         return redirect(url_for('auth.login'))
     if session["ID"] == "admin":
-        #if request.method == 'POST':
-        #    return
-        #    if request.form['boutton'] == 'increment':
-        #        iterator += 1
+        if request.method == 'POST':
+           if request.form['boutton'] == 'increment':
+               global iterator
+               iterator += 1
+               update_data()
         print(iterator)
         return render_template("monitoring.html" , players=players, pages=pages, iterator=iterator)
     otherPlayers = players.copy()
@@ -28,7 +30,7 @@ def home():
         if request.form['boutton'] == 'increment':
             players[session["ID"]]["flouze"] = random.randint(0,100000)
             players[session["ID"]]["stars"] += 1
-            save_data()
+            update_data()
 
         if request.form['boutton'] == 'don':
             return render_template("faire_un_don.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
