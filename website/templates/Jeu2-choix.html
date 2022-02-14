@@ -1,28 +1,24 @@
-{% extends "base.html" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content
+{% extends "base+don.html" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content
 %}
 
 <div id="card2" class="w3-card-4 w3-display-middle w3-center w3-white">
 <header class="w3-container w3-teal">
     <h4>Choisissez un nombre</h4>
 </header>
-<div class="w3-margin w3-lobster">
-  <div class="w3-cell w3-padding-small">
-    <div class="circle w3-xlarge w3-lime w3-hover-opacity w3-cell w3-cell-middle">1</div>
+<form method="POST">
+  <div class="w3-margin w3-lobster">
+    {% for i in range(5) %}
+    <div class="w3-cell w3-padding-small">
+      {% if user["choix"] == i+1 %}
+      <div class="circle w3-xlarge w3-cell w3-cell-middle w3-grayscale" style="background-color: #bff5ea;">{{i+1}}</div>
+      {% else %}
+      <button type="submit" name="boutton" value={{i+1}} class="circle w3-xlarge w3-hover-opacity w3-cell w3-cell-middle" style="background-color: #bff5ea;">{{i+1}}</button>
+      {% endif %}
+    </div>
+    {% endfor %}
   </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="circle w3-xlarge w3-amber w3-hover-opacity w3-cell w3-cell-middle">2</div>
+  <p><button type="submit" name="boutton" value="validate num" class="w3-button w3-teal">Valider</button></p>
   </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="circle w3-xlarge w3-red w3-hover-opacity w3-cell w3-cell-middle">3</div>
-  </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="circle w3-xlarge w3-blue w3-hover-opacity w3-cell w3-cell-middle">4</div>
-  </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="circle w3-xlarge w3-grey w3-hover-opacity w3-cell w3-cell-middle">5</div>
-  </div>
-</div>
-<p><button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-teal">Valider</button></p>
-</div>
+</form>
 
 {% endblock %}

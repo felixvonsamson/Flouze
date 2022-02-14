@@ -16,6 +16,17 @@
   </head>
 
 <body>
+{% with messages = get_flashed_messages(with_categories=true) %} {% if
+ messages %} {% for category, message in messages %}
+  <div class="w3-panel w3-pale-red w3-round-large w3-border w3-border-red w3-center w3-display-container animate__lightSpeedInRight" style="position: absolute; width:90%; bottom:15px; left:5%;">
+    <i class="fa fa-exclamation-circle w3-display-left w3-xlarge w3-text-red w3-margin-left"></i>
+    <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright w3-round-large">&times;</span>
+    <h4>{{ message }}</h4>
+  </div>
+ {% endfor %} {% endif %} {% endwith %}
+
+{% block inside %} {% endblock %}
+
 <div class="w3-card-4 w3-display-middle w3-white" style="width:350px;">
     <div class="w3-container w3-green">
       <h2 class="w3-center">Qui est-tu ?</h2>

@@ -11,9 +11,14 @@ def init_player(ID, prenom, mdp):
     player["flouze"] = 0
     player["stars"] = 0
     player["color"] = "#ffffff"
+    player["choix"] = 0
+    player["done"] = False
+    player["message"] = None
     return player
 
-pages = ["Jeu1-choix.html", "Jeu2-choix.html", "Jeu3-choix.html", "Jeu4-choix.html", "Jeu5-choix.html"]
+pages = ["Jeu1-title.html", "Jeu1-choix.html", "Jeu1-choix.html", "Jeu1-choix.html",
+    "Jeu2-choix.html", "Jeu2-reveal.html", "Jeu3-choix.html", "Jeu4-choix.html", "Jeu5-choix.html"]
+prizes = [0, 100, 200, 300, 100, 100, 100, 100]
 iterator = None
 
 def load_data():
@@ -31,12 +36,15 @@ def init_players():
 
 iterator, players = load_data() if os.path.isfile("data.pck") else init_players()
 
+done = 0
+for i in players:
+    done += i["done"]
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     global socketio
-    socketio = SocketIO(app, logger=True, engineio_logger=True)
-    #socketio = SocketIO(app)
+    socketio = SocketIO(app)
 
     from .views import views
     from .auth import auth

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block inside%}
+
+<div class="w3-container w3-center">
+<form method="POST">
+<button type="submit" class="w3-button w3-xlarge w3-circle w3-red w3-card-4 w3-margin" name="boutton" value="increment">+</button>
+<button type="submit" class="w3-btn w3-xlarge w3-round-large w3-red w3-margin" name="boutton" value="don">Faire un don</button>
+</form>
+</div>
+
+ <div class="container">{% block content %} {% endblock %}</div>
+{% endblock %}

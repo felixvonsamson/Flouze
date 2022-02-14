@@ -19,7 +19,7 @@
        border-radius: 50%;
        width: 50px;
        height: 50px;
-       border: 5px solid #bbb;
+       border: 5px solid #009688;
      }
      .w3-lobster {
        font-family: "Lobster", serif;
@@ -42,12 +42,6 @@
   <div class="w3-container w3-center w3-teal" style="height:80px">
     <h3 class="w3-right w3-xxlarge">{{user["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:42px" alt="Coin"></h3>
   </div>
-  <div class="w3-container w3-center">
-  <form method="POST">
-  <button type="submit" class="w3-button w3-xlarge w3-circle w3-red w3-card-4 w3-margin" name="boutton" value="increment">+</button>
-  <button type="submit" class="w3-btn w3-xlarge w3-round-large w3-red w3-margin" name="boutton" value="don">Faire un don</button>
-  </form>
-  </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
    messages %} {% for category, message in messages %} {% if category ==
@@ -65,7 +59,7 @@
    </div>
    {% endif %} {% endfor %} {% endif %} {% endwith %}
 
- <div class="container">{% block content %} {% endblock %}</div>
+ {% block inside %} {% endblock %}
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
   <script type="text/javascript" charset="utf-8">
