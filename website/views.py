@@ -26,6 +26,14 @@ def home():
                    i["done"] = False
                    i["choix"] = None
                done = 0
+               if pages[iterator] == "Jeu3-title.html":
+                   for i in players:
+                       i["saved_flouze"] = i["flouze"]
+                       i["flouze"] = 1000
+               if pages[iterator] == "Jeu4-title.html":
+                   for i in players:
+                       i["flouze"] += i["saved_flouze"]
+                       i["saved_flouze"] = 0
                update_data()
 
            if request.form['boutton'] == 'page précedente' and iterator > 0:
@@ -115,6 +123,32 @@ def home():
                     done = 0
                 update_data()
 
+        if request.form['boutton'] == "Jeu3-choix":
+            montant = request.form.get('montant')
+            if montant == '':
+                flash(Markup('Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir)'), category='error')
+                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            montant = int(montant)
+            if montant < 0:
+                flash('Le montant à investir ne peut pas être negatif', category='error')
+                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            if montant > players[session["ID"]]["flouze"]:
+                flash('Le montant indiqué dépasse votre solde', category='error')
+                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            players[session["ID"]]["flouze"] -= montant
+            players[session["ID"]]["choix"] = montant
+            players[session["ID"]]["done"] = True
+            done += 1
+            flash(Markup('Vous avez versé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> dans le pot commun'), category='success')
+            if done == 5:
+                pot_commun = 0
+                for i in players:
+                    pot_commun += i["choix"]
+                prize = round(pot_commun * prizes[iterator] / 5)
+                for i in players:
+                    i["flouze"] += prize
+                    i["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+            update_data()
 
     if done == 5:
         return render_template("results.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)

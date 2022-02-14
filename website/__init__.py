@@ -9,6 +9,7 @@ def init_player(ID, prenom, mdp):
     player["name"] = prenom
     player["password"] = mdp
     player["flouze"] = 0
+    player["saved_flouze"] = 0
     player["stars"] = 0
     player["color"] = "#ffffff"
     player["choix"] = 0
@@ -17,8 +18,13 @@ def init_player(ID, prenom, mdp):
     return player
 
 pages = ["Jeu1-title.html", "Jeu1-choix.html", "Jeu1-choix.html", "Jeu1-choix.html",
-    "Jeu2-choix.html", "Jeu2-reveal.html", "Jeu3-choix.html", "Jeu4-choix.html", "Jeu5-choix.html"]
-prizes = [0, 100, 200, 300, 100, 100, 100, 100]
+    "Jeu2-title.html", "Jeu2-choix.html", "Jeu2-reveal.html", "Jeu2-choix.html", "Jeu2-reveal.html", "Jeu2-choix.html", "Jeu2-reveal.html",
+    "Jeu3-title.html", "Jeu3-choix.html", "Jeu3-choix.html", "Jeu3-choix.html",
+    "Jeu4-title.html", "Jeu4-choix.html", "Jeu5-choix.html"]
+prizes = [0, 100, 200, 300,
+        0, 0, 100, 0, 200, 0, 300,
+        0, 1.2, 1.5, 2,
+        0, 100, 100]
 iterator = None
 
 def load_data():
