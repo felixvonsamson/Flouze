@@ -5,24 +5,28 @@
 <header class="w3-container w3-teal">
     <h4>Choisissez un nombre</h4>
 </header>
-<div class="w3-margin">
-  <div class="w3-cell w3-padding-small">
-    <div class="w3-card w3-xlarge w3-hover-opacity w3-padding-small" style="white-space: nowrap;">100 <img src="https://cdn-icons-png.flaticon.com/512/217/217853.png" class="w3-round" style="width:25px" alt="Coin"></div>
+<form method="POST">
+  <div class="w3-margin">
+    {% for i in range(5) %}
+    <div class="w3-cell w3-padding-small">
+      {% if user["choix"] == i %}
+        {% if prizes[i] == "star" %}
+        <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+        {% else %}
+        <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;">{{prizes[i]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        {% endif %}
+      {% else %}
+        {% if prizes[i] == "star" %}
+        <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
+        {% else %}
+        <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;">{{prizes[i]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></button>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% endfor %}
   </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="w3-card w3-xlarge w3-hover-opacity w3-padding-small" style="white-space: nowrap;">50 <img src="https://cdn-icons-png.flaticon.com/512/217/217853.png" class="w3-round" style="width:25px" alt="Coin"></div>
-  </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="w3-card w3-xlarge w3-hover-opacity w3-padding-small" style="white-space: nowrap;">0 <img src="https://cdn-icons-png.flaticon.com/512/217/217853.png" class="w3-round" style="width:25px" alt="Coin"></div>
-  </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="w3-card w3-xlarge w3-hover-opacity w3-padding-small" style="white-space: nowrap;">-10 <img src="https://cdn-icons-png.flaticon.com/512/217/217853.png" class="w3-round" style="width:25px" alt="Coin"></div>
-  </div>
-  <div class="w3-cell w3-padding-small">
-    <div class="w3-card w3-xlarge w3-hover-opacity w3-padding-small" style="white-space: nowrap;"><i class="fa fa-star"></i></div>
-  </div>
-</div>
-<p><button onclick="this.parentElement.parentElement.style.display='none'" class="w3-button w3-teal">Valider</button></p>
+  <p><button type="submit" name="boutton" value="Jeu4-choix" class="w3-button w3-teal">Valider</button></p>
+</form>
 </div>
 
 {% endblock %}

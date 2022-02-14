@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, iterator, players, socketio, done, prizes
+from . import pages, iterator, players, socketio, done, prizes, prizes_jeu4, bonus_jeu4
 import random
 import pickle
 from flask_socketio import send, emit
@@ -15,6 +15,7 @@ def update_data():
 def home():
     global iterator
     global done
+    global bonus_jeu4
     if "ID" not in session :
         return redirect(url_for('auth.login'))
     if session["ID"] == "admin":
@@ -45,11 +46,6 @@ def home():
     otherPlayers.pop(session["ID"])
     if request.method == 'POST':
 
-        if request.form['boutton'] == 'increment':
-            players[session["ID"]]["flouze"] = random.randint(0,100000)
-            players[session["ID"]]["stars"] += 1
-            update_data()
-
         if request.form['boutton'] == 'don':
             return render_template("faire_un_don.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
 
@@ -74,7 +70,7 @@ def home():
             players[otherPlayers[destinataire]["ID"]]["flouze"] += montant
             flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> à ' + otherPlayers[destinataire]["name"]), category='success')
             update_data()
-            return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])
 
         if request.form['boutton'] == "jeu1-choix":
             tickets = request.form.get('tickets')
@@ -150,8 +146,37 @@ def home():
                     i["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
             update_data()
 
+        if pages[iterator] == "Jeu4-choix.html":
+            if request.form['boutton'] == '0':
+                players[session["ID"]]["choix"] = 0
+            if request.form['boutton'] == '1':
+                players[session["ID"]]["choix"] = 1
+            if request.form['boutton'] == '2':
+                players[session["ID"]]["choix"] = 2
+            if request.form['boutton'] == '3':
+                players[session["ID"]]["choix"] = 3
+            if request.form['boutton'] == '4':
+                players[session["ID"]]["choix"] = 4
+            if request.form['boutton'] == "Jeu4-choix":
+                if players[session["ID"]]["choix"] == None:
+                    flash('Veuiller choisir un nombre', category='error')
+                    return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])
+                players[session["ID"]]["done"] = True
+                done += 1
+                if prizes_jeu4[prizes[iterator] + bonus_jeu4][players[session["ID"]]["choix"]] == "star":
+                    flash(Markup('Vous avez choisis le prix : <i class="fa fa-star"></i>'), category='success')
+                else:
+                    flash(Markup('Vous avez choisis le prix : ' + str(prizes_jeu4[prizes[iterator] + bonus_jeu4][players[session["ID"]]["choix"]]) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">'), category='success')
+                if done == 5:
+                    iterator += 1
+                    for i in players:
+                        i["done"] = False
+                    done = 0
+                update_data()
+
+
     if done == 5:
         return render_template("results.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
     if players[session["ID"]]["done"]:
         return render_template("en_attente.html", done=done, user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
-    return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+    return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])

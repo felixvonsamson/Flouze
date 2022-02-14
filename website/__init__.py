@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, Markup
 import os.path
 import pickle
 from flask_socketio import SocketIO
@@ -20,11 +20,20 @@ def init_player(ID, prenom, mdp):
 pages = ["Jeu1-title.html", "Jeu1-choix.html", "Jeu1-choix.html", "Jeu1-choix.html",
     "Jeu2-title.html", "Jeu2-choix.html", "Jeu2-reveal.html", "Jeu2-choix.html", "Jeu2-reveal.html", "Jeu2-choix.html", "Jeu2-reveal.html",
     "Jeu3-title.html", "Jeu3-choix.html", "Jeu3-choix.html", "Jeu3-choix.html",
-    "Jeu4-title.html", "Jeu4-choix.html", "Jeu5-choix.html"]
+    "Jeu4-title.html", "Jeu4-choix.html", "Jeu4-reveal.html", "Jeu4-choix.html", "Jeu4-reveal.html", "Jeu4-choix.html", "Jeu4-reveal.html",
+    "Jeu5-choix.html"]
 prizes = [0, 100, 200, 300,
         0, 0, 100, 0, 200, 0, 300,
         0, 1.2, 1.5, 2,
-        0, 100, 100]
+        0, 0, 0, 1, 1, 3, 3,
+        100]
+prizes_jeu4 =  [[10,   5,    0,      -1,     "star"],
+                [100,  50,   0,      -10,    "star"],
+                [100,  50,   -10,    "star", "star"],
+                [1000, 500,  0,      -100,   "star"],
+                [1000, 500,  -100,   "star", "star"],
+                [1000, -100, "star", "star", "star"]]
+bonus_jeu4 = 0
 iterator = None
 
 def load_data():
