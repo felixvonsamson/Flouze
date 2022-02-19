@@ -15,36 +15,45 @@ def init_player(ID, prenom, mdp):
     player["choix"] = 0
     player["done"] = False
     player["message"] = None
-    player["pointer"] = 0
     return player
 
-pages = ["Jeu1-title.html", "Jeu1-choix.html", "Jeu1-choix.html", "Jeu1-choix.html",
-    "Jeu2-title.html", "Jeu2-choix.html", "Jeu2-reveal.html", "results.html", "Jeu2-choix.html", "Jeu2-reveal.html", "results.html", "Jeu2-choix.html", "Jeu2-reveal.html", "results.html",
-    "Jeu3-title.html", "Jeu3-choix.html", "Jeu3-choix.html", "Jeu3-choix.html",
-    "Jeu4-title.html", "Jeu4-choix.html", "Jeu4-reveal.html", "results.html", "Jeu4-choix.html", "Jeu4-reveal.html", "results.html", "Jeu4-choix.html", "Jeu4-reveal.html", "results.html",
-    "donner_des_etoiles.html",
-    "Jeu5-title.html", "Jeu5-choix.html"]
+pages = [      #Liste des pages a afficher dans l'ordre
+    { "url": "Jeu1-title.html" },
+    { "url": "Jeu1-choix.html", "prize": 100 },
+    { "url": "Jeu1-choix.html", "prize": 200 },
+    { "url": "Jeu1-choix.html", "prize": 300 },
+    { "url": "Jeu2-title.html" },
+    { "url": "Jeu2-choix.html"},
+    { "url": "Jeu2-reveal.html"},
+    { "url": "results.html", "prize": 10},
+    { "url": "Jeu2-choix.html"},
+    { "url": "Jeu2-reveal.html"},
+    { "url": "results.html", "prize": 20},
+    { "url": "Jeu2-choix.html"},
+    { "url": "Jeu2-reveal.html"},
+    { "url": "results.html", "prize": 30},
+    { "url": "Jeu3-title.html" },
+    { "url": "Jeu3-choix.html", "prize": 1.2 },
+    { "url": "Jeu3-choix.html", "prize": 1.5 },
+    { "url": "Jeu3-choix.html", "prize": 2 },
+    { "url": "Jeu4-title.html" },
+    { "url": "Jeu4-choix.html"},
+    { "url": "Jeu4-reveal.html"},
+    { "url": "results.html", "prize": [10, 5, 0, -1, "star"]},
+    { "url": "Jeu4-choix.html"},
+    { "url": "Jeu4-reveal.html"},
+    { "url": "results.html", "prize": [100, 50, 0, -10, "star"], "prizeBonus": [100, 50, -10, "star", "star"]},
+    { "url": "Jeu4-choix.html"},
+    { "url": "Jeu4-reveal.html"},
+    { "url": "results.html", "prize": [1000, 500, 0, -100, "star"], "prizeBonus": [1000, 500, -100, "star", "star"], "prizeDoubleBonus": [1000, -100, "star", "star", "star"]},
+    { "url": "donner_des_etoiles.html"},
+    { "url": "Jeu5-title.html" },
+    { "url": "Jeu5-choix.html", "urlwinner": "Jeu5-choix.html"},
+    ]
 
-prizes = {
-    'a': 'b',
-    'c': 2
-}
 
-prizes = [0, 100, 200, 300,
-        0, 0, 100, 0, 0, 200, 0, 0, 300, 0,
-        0, 1.2, 1.5, 2,
-        0, 0, 0, 0, 1, 1, 1, 3, 3, 3,
-        0, 0, 0]
-
-prizes_jeu4 =  [[10,   5,    0,      -1,     "star"],
-                [100,  50,   0,      -10,    "star"],
-                [100,  50,   -10,    "star", "star"],
-                [1000, 500,  0,      -100,   "star"],
-                [1000, 500,  -100,   "star", "star"],
-                [1000, -100, "star", "star", "star"]]
-
-bonus_jeu4 = 0
-iterator = None
+bonus_jeu4 = 0 #Augmente si les joueurs choisissent tous un prix different a une manche du 4ème jeu
+iterator = None #pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
 
 def load_data():
     with open("data.pck", 'rb') as file:

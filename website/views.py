@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, iterator, players, socketio, done, prizes, prizes_jeu4, bonus_jeu4
+from . import pages, iterator, players, socketio, done, bonus_jeu4
 import random
 import pickle
 from flask_socketio import send, emit
@@ -23,7 +23,9 @@ def home():
 
            if request.form['boutton'] == 'page suivante' and iterator < len(pages)-1:
 
-               if pages[iterator] == "Jeu2-reveal.html":
+
+
+               if pages[iterator]['url'] == "Jeu2-reveal.html":
                    for p in players:
                        p["message"] = "Personne n'a remporté de lot a cette manche"
                    for i in range(1, 6):
@@ -34,13 +36,13 @@ def home():
                                count += 1
                                player = p
                        if count == 1:
-                           prize = prizes[iterator]*i
+                           prize = pages[iterator]["prize"]*i
                            player["flouze"] += prize
                            for p in players:
                                p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
                            break
 
-               if pages[iterator] == "Jeu4-reveal.html":
+               if pages[iterator]['url'] == "Jeu4-reveal.html":
                    for p in players:
                        p["message"] = "Vous n'avez pas remporter le prix"
                    bonus = 0
@@ -53,7 +55,12 @@ def home():
                                player = p
                        if count == 1:
                            bonus += 1
-                           prize = prizes_jeu4[prizes[iterator] + bonus_jeu4][i]
+                           if bonus_jeu4 == 0:
+                               prize = pages[iterator]['prize'][i]
+                           elif bonus_jeu4 == 1:
+                               prize = pages[iterator]['prizeBonus'][i]
+                           else:
+                               prize = pages[iterator]['prizeDoubleBonus'][i]
                            if prize == "star":
                                player["stars"] += 1
                                player["message"] = Markup('Vous avez remporté le prix : <i class="fa fa-star"></i>')
@@ -70,12 +77,12 @@ def home():
                    i["choix"] = None
                done = 0
 
-               if pages[iterator] == "Jeu3-title.html":
+               if pages[iterator]['url'] == "Jeu3-title.html":
                    for i in players:
                        i["saved_flouze"] = i["flouze"]
                        i["flouze"] = 1000
 
-               if pages[iterator] == "Jeu4-title.html":
+               if pages[iterator]['url'] == "Jeu4-title.html":
                    for i in players:
                        i["flouze"] += i["saved_flouze"]
                        i["saved_flouze"] = 0
@@ -115,13 +122,13 @@ def home():
             players[otherPlayers[destinataire]["ID"]]["flouze"] += montant
             flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> à ' + otherPlayers[destinataire]["name"]), category='success')
             update_data()
-            return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])
+            return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, pages=pages)
 
         if request.form['boutton'] == "jeu1-choix":
             tickets = request.form.get('tickets')
             if tickets == None:
                 flash('Veuiller faire un choix', category='error')
-                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+                return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
             players[session["ID"]]["choix"] = int(tickets)
             players[session["ID"]]["done"] = True
             done += 1
@@ -134,12 +141,12 @@ def home():
                     i["message"] = Markup("Vous n'avez pas gagné la lotterie <i class='fa fa-frown-o'></i>")
                 if len(lottery) > 0:
                     winner = lottery[random.randint(0,len(lottery)-1)]
-                    prize = round(prizes[iterator]/len(lottery))
+                    prize = round(pages[iterator]["prize"]/len(lottery))
                     players[winner]["flouze"] += prize
                     players[winner]["message"] = Markup("Vous avez gagné la lotterie ! <br> Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">')
             update_data()
 
-        if pages[iterator] == "Jeu2-choix.html":
+        if pages[iterator]['url'] == "Jeu2-choix.html":
             if request.form['boutton'] == '1':
                 players[session["ID"]]["choix"] = 1
             if request.form['boutton'] == '2':
@@ -153,7 +160,7 @@ def home():
             if request.form['boutton'] == "validate num":
                 if players[session["ID"]]["choix"] == None:
                     flash('Veuiller choisir un nombre', category='error')
-                    return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+                    return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
                 players[session["ID"]]["done"] = True
                 done += 1
                 flash('Vous avez choisis le nombre ' + str(players[session["ID"]]["choix"]), category='success')
@@ -168,14 +175,14 @@ def home():
             montant = request.form.get('montant')
             if montant == '':
                 flash(Markup('Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir)'), category='error')
-                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+                return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
             montant = int(montant)
             if montant < 0:
                 flash('Le montant à investir ne peut pas être negatif', category='error')
-                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+                return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
             if montant > players[session["ID"]]["flouze"]:
                 flash('Le montant indiqué dépasse votre solde', category='error')
-                return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+                return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
             players[session["ID"]]["flouze"] -= montant
             players[session["ID"]]["choix"] = montant
             players[session["ID"]]["done"] = True
@@ -185,13 +192,13 @@ def home():
                 pot_commun = 0
                 for i in players:
                     pot_commun += i["choix"]
-                prize = round(pot_commun * prizes[iterator] / 5)
+                prize = round(pot_commun * pages[iterator]["prize"] / 5)
                 for i in players:
                     i["flouze"] += prize
                     i["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
             update_data()
 
-        if pages[iterator] == "Jeu4-choix.html":
+        if pages[iterator]['url'] == "Jeu4-choix.html":
             if request.form['boutton'] == '0':
                 players[session["ID"]]["choix"] = 0
             if request.form['boutton'] == '1':
@@ -205,13 +212,19 @@ def home():
             if request.form['boutton'] == "Jeu4-choix":
                 if players[session["ID"]]["choix"] == None:
                     flash('Veuiller choisir un nombre', category='error')
-                    return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])
+                    return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, pages=pages)
                 players[session["ID"]]["done"] = True
                 done += 1
-                if prizes_jeu4[prizes[iterator] + bonus_jeu4][players[session["ID"]]["choix"]] == "star":
+                if bonus_jeu4 == 0:
+                    prize = pages[iterator]['prize'][i]
+                elif bonus_jeu4 == 1:
+                    prize = pages[iterator]['prizeBonus'][i]
+                else:
+                    prize = pages[iterator]['prizeDoubleBonus'][i]
+                if prize[players[session["ID"]]["choix"]] == "star":
                     flash(Markup('Vous avez choisis le prix : <i class="fa fa-star"></i>'), category='success')
                 else:
-                    flash(Markup('Vous avez choisis le prix : ' + str(prizes_jeu4[prizes[iterator] + bonus_jeu4][players[session["ID"]]["choix"]]) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">'), category='success')
+                    flash(Markup('Vous avez choisis le prix : ' + str(prize[players[session["ID"]]["choix"]]) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">'), category='success')
                 if done == 5:
                     iterator += 1
                     for i in players:
@@ -265,5 +278,4 @@ def home():
         return render_template("results.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
     if players[session["ID"]]["done"]:
         return render_template("en_attente.html", done=done, user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
-    print('\n',prizes[iterator], bonus_jeu4,'\n')
-    return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])
+    return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, pages=pages)
