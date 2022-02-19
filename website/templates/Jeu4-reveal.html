@@ -8,7 +8,7 @@
         {% if prizes[players[0]["choix"]] == "star" %}
         <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{prizes[players[1]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{prizes[players[0]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>

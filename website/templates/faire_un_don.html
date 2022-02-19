@@ -1,18 +1,18 @@
 {% extends "base.html" %} {% block title %}Faire un don{% endblock %} {% block inside%}
 
-  <div class="w3-card-4 w3-display-middle w3-white w3-center" style="width:300px;">
+  <div class="w3-card-4 w3-display-middle w3-white w3-center" style="width:220px;">
   <header class="w3-container w3-teal">
       <h4>Faire un don</h4>
   </header>
   <form class="w3-container" method="POST">
-  <select name="destinataire" class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:50%;">
+  <select name="destinataire" class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:120px;">
     <option value="" disabled="" selected="">Destinataire</option>
   <option value=0>{{otherPlayers[0]["name"]}}</option>
   <option value=1>{{otherPlayers[1]["name"]}}</option>
   <option value=2>{{otherPlayers[2]["name"]}}</option>
   <option value=3>{{otherPlayers[3]["name"]}}</option>
   </select>
-  <input name="montant" class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" type="number" style="width:100px; display:inline-block;">
+  <input name="montant" class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" type="number" style="width:120px; display:inline-block;">
   <p><button type="submit" name="boutton" value="envoyer don" class="w3-button w3-teal">Envoyer</button></p>
   <p>
 </form>

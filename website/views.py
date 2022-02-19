@@ -22,26 +22,71 @@ def home():
         if request.method == 'POST':
 
            if request.form['boutton'] == 'page suivante' and iterator < len(pages)-1:
+
+               if pages[iterator] == "Jeu2-reveal.html":
+                   for p in players:
+                       p["message"] = "Personne n'a remporté de lot a cette manche"
+                   for i in range(1, 6):
+                       count = 0
+                       player = None
+                       for p in players:
+                           if p["choix"] == i:
+                               count += 1
+                               player = p
+                       if count == 1:
+                           prize = prizes[iterator]*i
+                           player["flouze"] += prize
+                           for p in players:
+                               p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+                           break
+
+               if pages[iterator] == "Jeu4-reveal.html":
+                   for p in players:
+                       p["message"] = "Vous n'avez pas remporter le prix"
+                   bonus = 0
+                   for i in range(5):
+                       count = 0
+                       player = None
+                       for p in players:
+                           if p["choix"] == i:
+                               count += 1
+                               player = p
+                       if count == 1:
+                           bonus += 1
+                           prize = prizes_jeu4[prizes[iterator] + bonus_jeu4][i]
+                           if prize == "star":
+                               player["stars"] += 1
+                               player["message"] = Markup('Vous avez remporté le prix : <i class="fa fa-star"></i>')
+                           else:
+                               player["flouze"] += prize
+                               player["message"] = Markup("Vous avez remporté le prix : " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+                   if bonus == 5:
+                       bonus_jeu4 += 1
+
                iterator += 1
+
                for i in players:
                    i["done"] = False
                    i["choix"] = None
                done = 0
+
                if pages[iterator] == "Jeu3-title.html":
                    for i in players:
                        i["saved_flouze"] = i["flouze"]
                        i["flouze"] = 1000
+
                if pages[iterator] == "Jeu4-title.html":
                    for i in players:
                        i["flouze"] += i["saved_flouze"]
                        i["saved_flouze"] = 0
+
                update_data()
 
            if request.form['boutton'] == 'page précedente' and iterator > 0:
                iterator -= 1
                update_data()
 
-        return render_template("monitoring.html" , players=players, pages=pages, iterator=iterator)
+        return render_template("monitoring.html" , players=players, pages=pages, iterator=iterator, bonus=bonus_jeu4)
     otherPlayers = players.copy()
     otherPlayers.pop(session["ID"])
     if request.method == 'POST':
@@ -114,8 +159,8 @@ def home():
                 flash('Vous avez choisis le nombre ' + str(players[session["ID"]]["choix"]), category='success')
                 if done == 5:
                     iterator += 1
-                    for i in players:
-                        i["done"] = False
+                    for p in players:
+                        p["done"] = False
                     done = 0
                 update_data()
 
@@ -174,9 +219,51 @@ def home():
                     done = 0
                 update_data()
 
+        if request.form['boutton'] == "envoyer etoile":
+            destinataire = request.form.get('destinataire')
+            montant = request.form.get('quantité')
+            if destinataire == None:
+                flash('Veuiller choisir un destinataire', category='error')
+                return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            if montant == '':
+                flash('Veuiller indiquer un montant', category='error')
+                return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            destinataire = int(destinataire)
+            montant = int(montant)
+            if montant < 1:
+                flash('Le montant à envoyer ne peut pas être negatif ou nul', category='error')
+                return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            if montant > players[session["ID"]]["stars"]:
+                flash("Vous n'avez pas assez d'étoiles", category='error')
+                return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+            players[session["ID"]]["stars"] -= montant
+            players[otherPlayers[destinataire]["ID"]]["stars"] += montant
+            flash(Markup('Vous avez envoyé ' + str(montant) + ' <i class="fa fa-star"></i> à ' + otherPlayers[destinataire]["name"]), category='success')
+            update_data()
+            return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+
+        if request.form['boutton'] == "léguer etoiles":
+            return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+
+        if request.form['boutton'] == "terminer":
+            players[session["ID"]]["done"] = True
+            done += 1
+            if done == 5:
+                iterator += 1
+                for i in players:
+                    i["done"] = False
+                done = 0
+
+        if request.form['boutton'] == 'Jeu5-choix':
+            for p in otherPlayers:
+                p["message"] = ""
+            destinataire = request.form.get('destinataire')
+
+
 
     if done == 5:
         return render_template("results.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
     if players[session["ID"]]["done"]:
         return render_template("en_attente.html", done=done, user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+    print('\n',prizes[iterator], bonus_jeu4,'\n')
     return render_template(pages[iterator], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, prizes=prizes_jeu4[prizes[iterator]+bonus_jeu4])
