@@ -25,6 +25,11 @@ pages = ["Jeu1-title.html", "Jeu1-choix.html", "Jeu1-choix.html", "Jeu1-choix.ht
     "donner_des_etoiles.html",
     "Jeu5-title.html", "Jeu5-choix.html"]
 
+prizes = {
+    'a': 'b',
+    'c': 2
+}
+
 prizes = [0, 100, 200, 300,
         0, 0, 100, 0, 0, 200, 0, 0, 300, 0,
         0, 1.2, 1.5, 2,
