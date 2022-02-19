@@ -5,20 +5,20 @@
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
       <h3><b>{{players[0]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
-        {% if pages[iterator]['prize'][players[0]["choix"]] == "star" %}
+        {% if page['prize'][players[0]["choix"]] == "star" %}
         <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{pages[iterator]['prize'][players[0]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][players[0]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
       <h3><b>{{players[1]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
-        {% if pages[iterator]['prize'][players[1]["choix"]] == "star" %}
+        {% if page['prize'][players[1]["choix"]] == "star" %}
         <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{pages[iterator]['prize'][players[1]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][players[1]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
@@ -27,20 +27,20 @@
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
       <h3><b>{{players[2]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
-        {% if pages[iterator]['prize'][players[2]["choix"]] == "star" %}
+        {% if page['prize'][players[2]["choix"]] == "star" %}
         <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{pages[iterator]['prize'][players[2]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][players[2]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
       <h3><b>{{players[3]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
-        {% if pages[iterator]['prize'][players[3]["choix"]] == "star" %}
+        {% if page['prize'][players[3]["choix"]] == "star" %}
         <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{pages[iterator]['prize'][players[3]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][players[3]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
@@ -49,10 +49,10 @@
     <div class="w3-card w3-margin w3-padding w3-teal" style="width:200px; height:150px;">
       <h3><b>{{players[4]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
-        {% if pages[iterator]['prize'][players[4]["choix"]] == "star" %}
+        {% if page['prize'][players[4]["choix"]] == "star" %}
         <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{pages[iterator]['prize'][players[4]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][players[4]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>

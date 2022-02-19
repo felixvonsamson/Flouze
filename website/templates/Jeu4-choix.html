@@ -10,16 +10,16 @@
     {% for i in range(5) %}
     <div class="w3-cell w3-padding-small">
       {% if user["choix"] == i %}
-        {% if pages[iterator]['prize'][i] == "star" %}
+        {% if page['prize'][i] == "star" %}
         <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;">{{pages[iterator]['prize'][i]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;">{{page['prize'][i]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       {% else %}
-        {% if pages[iterator]['prize'][i] == "star" %}
+        {% if page['prize'][i] == "star" %}
         <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
         {% else %}
-        <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;">{{pages[iterator]['prize'][i]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></button>
+        <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;">{{page['prize'][i]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></button>
         {% endif %}
       {% endif %}
     </div>
