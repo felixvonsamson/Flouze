@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, session
-from . import players
+from . import players, log
+import datetime
 
 
 auth = Blueprint('auth', __name__)
@@ -16,6 +17,7 @@ def login():
         for i in range(5):
             if first_name == players[i]["name"]:
                 if players[i]["password"] == password:
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + first_name + " s'est connecté")
                     flash('Logged in successfully!', category = 'success')
                     session["ID"] = i
                     return redirect(url_for('views.home'))

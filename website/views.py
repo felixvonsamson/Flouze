@@ -1,53 +1,56 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, iterator, players, socketio, done, bonus_jeu4
+from . import pages, iterator, players, socketio, done, log, validation
 import random
 import pickle
+import datetime
+import numpy as np
 from flask_socketio import send, emit
 
 views = Blueprint('views', __name__)
 
 def update_data():
     with open("data.pck", 'wb') as file:
-        pickle.dump((iterator, players), file)
+        pickle.dump((iterator, players, log), file)
     socketio.emit('changed', None, broadcast=True)
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
     global iterator
     global done
-    global bonus_jeu4
+    global validation
+
     if "ID" not in session :
         return redirect(url_for('auth.login'))
+
     if session["ID"] == "admin":
         if request.method == 'POST':
 
            if request.form['boutton'] == 'page suivante' and iterator < len(pages)-1:
 
-
-
-               if pages[iterator]['url'] == "Jeu2-reveal.html":
-                   for p in players:
+               if pages[iterator]['url'] == "Jeu2-reveal.html": #determiner le gagnant du jeu 2
+                   for p in players: #initialiser les messages
                        p["message"] = "Personne n'a remporté de lot a cette manche"
                    for i in range(1, 6):
-                       count = 0
+                       count = 0 #nombre de fois que i a été choisis
                        player = None
                        for p in players:
                            if p["choix"] == i:
                                count += 1
-                               player = p
+                               player = p #joueur gagnant
                        if count == 1:
                            prize = pages[iterator]["prize"]*i
                            player["flouze"] += prize
+                           log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + "Pièces")
                            for p in players:
                                p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
                            break
+                   if players[0]['message'] == "Personne n'a remporté de lot a cette manche":
+                       log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Personne n'a remporté de lot a cette manche")
 
-               if pages[iterator]['url'] == "Jeu4-reveal.html":
-                   for p in players:
-                       p["message"] = "Vous n'avez pas remporter le prix"
-                   bonus = 0
+               if pages[iterator]['url'] == "Jeu4-reveal.html": #determiner le gagnant du jeu 4
+                   bonus = 0 #compte le nobre de choix uniques
                    for i in range(5):
-                       count = 0
+                       count = 0 #nombre de fois que le prix i a été choisis
                        player = None
                        for p in players:
                            if p["choix"] == i:
@@ -55,47 +58,63 @@ def home():
                                player = p
                        if count == 1:
                            bonus += 1
-                           if bonus_jeu4 == 0:
-                               prize = pages[iterator]['prize'][i]
-                           elif bonus_jeu4 == 1:
-                               prize = pages[iterator]['prizeBonus'][i]
-                           else:
-                               prize = pages[iterator]['prizeDoubleBonus'][i]
+                           prize = pages[iterator]['prize'][i]
                            if prize == "star":
                                player["stars"] += 1
                                player["message"] = Markup('Vous avez remporté le prix : <i class="fa fa-star"></i>')
+                               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a gagné une étoile")
                            else:
                                player["flouze"] += prize
                                player["message"] = Markup("Vous avez remporté le prix : " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+                               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + "Pièces")
+                       else:
+                           player["message"] = "Vous n'avez pas remporté le prix"
+                           log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " n'a pas remporté son prix")
                    if bonus == 5:
-                       bonus_jeu4 += 1
+                       if pages[iterator]['id'][1] == 3:
+                           pages[29]['prize'] += 5000
+                           log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Tous les joueurs ont choisis un prix différent donc le gros lot passe de 25000 à 30000 Pièces")
+                       else:
+                           log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Tous les joueurs ont choisis un prix différent donc un bonus s'applique pour la manche suivante")
+                           pages[22]['prize'] = jeu4_bonus['prize2Bonus']
+                           pages[23]['prize'] = jeu4_bonus['prize2Bonus']
+                           pages[25]['prize'] = jeu4_bonus['prize3Bonus']
+                           pages[26]['prize'] = jeu4_bonus['prize3Bonus']
+                           jeu4_bonus['prize3Bonus'] = jeu4_bonus['prize3Double']
 
                iterator += 1
+               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Passage à la page suivante : " + pages[iterator]['url'] + " (jeu " + pages[iterator]['id'][0] + ", manche " + pages[iterator]['id'][1] + ")")
 
-               for i in players:
+               for i in players: #reinitialiser le statut et les choix des joueurs
                    i["done"] = False
                    i["choix"] = None
                done = 0
+               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Les statuts et les choix des joueurs à été réinitialisé")
 
-               if pages[iterator]['url'] == "Jeu3-title.html":
+               if pages[iterator]['url'] == "Jeu3-title.html": #mettre de coté le Flouze
                    for i in players:
-                       i["saved_flouze"] = i["flouze"]
-                       i["flouze"] = 1000
+                       i["saved_flouze"] = max(i["flouze"]-pages[iterator]['prize'],0)
+                       i["flouze"] = pages[iterator]['prize']
+               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "L'argent des joueurs à été mis de coté. Ils leur restent tous " + pages[iterator]['prize'] + " Pièces")
 
-               if pages[iterator]['url'] == "Jeu4-title.html":
+               if pages[iterator]['url'] == "Jeu4-title.html": #rassembler le Flouze
                    for i in players:
                        i["flouze"] += i["saved_flouze"]
                        i["saved_flouze"] = 0
+               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "L'argent mis de coté à été remis en jeu")
 
                update_data()
 
            if request.form['boutton'] == 'page précedente' and iterator > 0:
                iterator -= 1
+               log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Revenir à la page précedente : " + pages[iterator]['url'] + " (jeu " + pages[iterator]['id'][0] + ", manche " + pages[iterator]['id'][1] + ")")
                update_data()
 
-        return render_template("monitoring.html" , players=players, pages=pages, iterator=iterator, bonus=bonus_jeu4)
+        return render_template("monitoring.html" , players=players, pages=pages, iterator=iterator, log=log, imax=min(len(log),10))
+
     otherPlayers = players.copy()
     otherPlayers.pop(session["ID"])
+
     if request.method == 'POST':
 
         if request.form['boutton'] == 'don':
@@ -121,6 +140,7 @@ def home():
             players[session["ID"]]["flouze"] -= montant
             players[otherPlayers[destinataire]["ID"]]["flouze"] += montant
             flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> à ' + otherPlayers[destinataire]["name"]), category='success')
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a fait un don de " + montant + " Pièces à " + otherPlayers[destinataire]["name"])
             update_data()
             return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, page=pages[iterator])
 
@@ -132,6 +152,7 @@ def home():
             players[session["ID"]]["choix"] = int(tickets)
             players[session["ID"]]["done"] = True
             done += 1
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a choisis " + tickets + " tickets")
             flash('Vous avez choisis ' + tickets + ' tickets', category='success')
             if done == 5:
                 lottery = []
@@ -144,6 +165,9 @@ def home():
                     prize = round(pages[iterator]["prize"]/len(lottery))
                     players[winner]["flouze"] += prize
                     players[winner]["message"] = Markup("Vous avez gagné la lotterie ! <br> Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">')
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Le gagnant de la lotterie est " + players[winner]["name"] + " qui a reçu " + str(prize) + " Pièces")
+                else:
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Il n'y a pas de gagnant à la lotterie car personne n'a participé")
             update_data()
 
         if pages[iterator]['url'] == "Jeu2-choix.html":
@@ -163,6 +187,7 @@ def home():
                     return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
                 players[session["ID"]]["done"] = True
                 done += 1
+                log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a choisis le nombre " + str(players[session["ID"]]["choix"]))
                 flash('Vous avez choisis le nombre ' + str(players[session["ID"]]["choix"]), category='success')
                 if done == 5:
                     iterator += 1
@@ -187,12 +212,14 @@ def home():
             players[session["ID"]]["choix"] = montant
             players[session["ID"]]["done"] = True
             done += 1
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a versé " + str(montant) + " Pièces dans le pot commun")
             flash(Markup('Vous avez versé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> dans le pot commun'), category='success')
             if done == 5:
                 pot_commun = 0
                 for i in players:
                     pot_commun += i["choix"]
                 prize = round(pot_commun * pages[iterator]["prize"] / 5)
+                log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + str(prize*5) + " Pièces ont été redistribué équitablement à tous les joueurs ce qui fait " + str(prize) + " Pièces par joueur")
                 for i in players:
                     i["flouze"] += prize
                     i["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
@@ -215,15 +242,12 @@ def home():
                     return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, page=pages[iterator])
                 players[session["ID"]]["done"] = True
                 done += 1
-                if bonus_jeu4 == 0:
-                    prize = pages[iterator]['prize'][i]
-                elif bonus_jeu4 == 1:
-                    prize = pages[iterator]['prizeBonus'][i]
-                else:
-                    prize = pages[iterator]['prizeDoubleBonus'][i]
+                prize = pages[iterator]['prize'][i]
                 if prize[players[session["ID"]]["choix"]] == "star":
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a choisis l'etoile")
                     flash(Markup('Vous avez choisis le prix : <i class="fa fa-star"></i>'), category='success')
                 else:
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a choisis le prix : " + str(players[session["ID"]]["choix"]) + " Pièces")
                     flash(Markup('Vous avez choisis le prix : ' + str(prize[players[session["ID"]]["choix"]]) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">'), category='success')
                 if done == 5:
                     iterator += 1
@@ -251,6 +275,7 @@ def home():
                 return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
             players[session["ID"]]["stars"] -= montant
             players[otherPlayers[destinataire]["ID"]]["stars"] += montant
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a légué une étoile à " + players[otherPlayers[destinataire]["ID"]]["name"])
             flash(Markup('Vous avez envoyé ' + str(montant) + ' <i class="fa fa-star"></i> à ' + otherPlayers[destinataire]["name"]), category='success')
             update_data()
             return render_template("don_etoiles.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
@@ -262,20 +287,37 @@ def home():
             players[session["ID"]]["done"] = True
             done += 1
             if done == 5:
-                iterator += 1
-                for i in players:
-                    i["done"] = False
-                done = 0
+                stars = []
+                for p in players:
+                    stars.append(p['stars'])
+                winnerID = np.argmax(stars)
+                if stars.count(winnerID) = 1:
+                    winner = players[winnerID]
+                    iterator += 1
+                    for i in players:
+                        i["done"] = False
+                    done = 0
+                else:
+                    for p in players:
+                        p['message'] = "Dû à une égalité en terme d'étoiles, personne ne remporte le gros lot et le cinquième jeu est annulé"
+                update_data()
 
         if request.form['boutton'] == 'Jeu5-choix':
             for p in otherPlayers:
-                p["message"] = ""
-            destinataire = request.form.get('destinataire')
+                montant = request.form.get(p['name'])
+                p["message"] = Markup(players[session["ID"]]['name'] + 'vous fait une proposition de ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+            validation = True
+            update_data()
 
 
+    if validation:
+        if
+        return render_template("Jeu5-Valider.html", user=players[session["ID"]], players=players)
 
     if done == 5:
         return render_template("results.html", user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+
     if players[session["ID"]]["done"]:
         return render_template("en_attente.html", done=done, user=players[session["ID"]] , otherPlayers=otherPlayers, players=players)
+
     return render_template(pages[iterator]['url'], user=players[session["ID"]] , otherPlayers=otherPlayers, players=players, page=pages[iterator])
