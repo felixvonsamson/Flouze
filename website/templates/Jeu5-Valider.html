@@ -1,4 +1,4 @@
-{% extends "base+don.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block content%}
+{% extends "base-etoiles.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
 
   <div class="w3-card-4 w3-display-middle w3-white w3-center" style="width:350px;">
   <header class="w3-container w3-teal">
@@ -6,8 +6,8 @@
   </header>
   <form class="w3-container" method="POST">
   <p>
-    <button type="submit" name="boutton" value="accepter" class="w3-margin-right w3-button w3-red" style="width:120px;">Accepter</button>
-    <button type="submit" name="boutton" value="refuser" class="w3-margin-left w3-button w3-teal" style="width:120px;">Refuser</button>
+    <button type="submit" name="boutton" value=1 class="w3-margin-right w3-button w3-red" style="width:120px;">Accepter</button>
+    <button type="submit" name="boutton" value=0 class="w3-margin-left w3-button w3-teal" style="width:120px;">Refuser</button>
   </p>
   <p>
 </form>
