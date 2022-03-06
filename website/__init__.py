@@ -1,8 +1,10 @@
-from flask import Flask, Markup
+from flask import Flask, Markup, request
 import os.path
 import pickle
 import datetime
 from flask_socketio import SocketIO
+
+
 
 def init_player(ID, prenom, mdp):
     player = {}
@@ -17,6 +19,7 @@ def init_player(ID, prenom, mdp):
     player["done"] = False # Indique si le joueur a fait son choix
     player["otherPlayers"] = list(range(5))
     player["otherPlayers"].remove(ID)
+    player["namespace"] = None
     return player
 
 pages = [      # Liste des pages a afficher dans l'ordre / round est de la forme [jeu, manche]
@@ -55,14 +58,15 @@ pages = [      # Liste des pages a afficher dans l'ordre / round est de la forme
     { "url": "Jeu4-reveal.html", "round": [4, 3], "prize": [[400, 200, -250, "star", "star"], [600, 250, -300, "star", "star"], [1000, 300, -400, "star", "star"]]},
     { "url": "results.html",     "round": [4, 3]},
     { "url": "donner_des_etoiles.html", "round": [0, 0]},
+    { "url": "results.html",     "round": [0, 1]},
     { "url": "Jeu5-title.html",  "round": [5, 0], "prize": 2500, "bonus": 500},
-    { "url": "Jeu 5",            "round": [5, 1]},
-    { "url": "results.html",     "round": [5, 1]},
-    { "url": "Jeu 5",            "round": [5, 2]},
-    { "url": "results.html",     "round": [5, 2]},
-    { "url": "Jeu 5",            "round": [5, 3]},
+    { "url": "Jeu 5",            "round": [5, 1], "phase": "proposition"},
+    { "url": "Jeu 5",            "round": [5, 1], "phase": "validation"},
+    { "url": "Jeu 5",            "round": [5, 1], "phase": "reveal"},
     { "url": "results.html",     "round": [5, 3]}
 ]
+
+pages_by_round = { tuple(page['round']) : page for page in pages }
 
 def load_data():
     with open("data.pck", 'rb') as file:
@@ -83,11 +87,13 @@ def init_game():
         'masterPrizeBonus': False,  # bonus pour le jeu 5
         'starMaster': None, # joueur ayant le plus d'étoiles à la fin du jeu 4
         'otherPlayers': players.copy(), # Liste des autres joueurs pour le jeu 5
-        'phase': "proposition" # Indique dans quelle phase on est pour le jeu 5
+        'remaining_trials': 3
     }
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]
 
 gameState, players, log = load_data() if os.path.isfile("data.pck") else init_game()
+
+players_by_name = { p['name']: p for p in players}
 
 
 def create_app():
@@ -95,6 +101,10 @@ def create_app():
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
     global socketio
     socketio = SocketIO(app)
+    @socketio.on('give_identity')
+    def give_identity(name):
+        print(f"{name} connected")
+        players_by_name[name]['sid'] = request.sid
 
     from .views import views
     from .auth import auth

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, gameState, players, socketio, log
+from . import pages, pages_by_round, gameState, players, socketio, log
 import random
 import pickle
 import datetime
@@ -8,6 +8,9 @@ from flask_socketio import send, emit
 
 views = Blueprint('views', __name__)
 
+def send_message(player, msg):
+    socketio.emit('message', msg, room=player['sid'])
+
 def update_data():
     with open("data.pck", 'wb') as file:
         pickle.dump((gameState, players, log), file)
@@ -15,6 +18,7 @@ def update_data():
 
 def check_all_done():
     return all(p['done'] for p in players)
+
 def end_waiting():
     gameState['iterator'] += 1
     for p in players:
@@ -113,11 +117,21 @@ def game4_logic():
     if uniqueChoices == 5:
         if pages[gameState['iterator']]['round'][1] == 3:
             gameState["masterPrizeBonus"] = True
-            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Tous les joueurs ont choisis un prix différent donc le gros lot passe de 25000 à 30000 Pièces")
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + f"Tous les joueurs ont choisis un prix différent donc le gros lot passe de {pages_by_round[(5, 0)]['prize']} à {pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus']} Pièces")
         else:
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Tous les joueurs ont choisis un prix différent donc un bonus s'applique pour la manche suivante")
             gameState["game4_bonus"] += 1
 
+
+def game5_init():
+    for p in gameState['otherPlayers']:
+        p['message'] = f"Veuillez attendre la proposition de {gameState['starMaster']['name']} ..."
+
+def game5_done():
+    gameState['iterator'] = len(pages) - 1
+    for p in players:
+        p["done"] = False
+    gameState['done'] = 0
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
@@ -142,9 +156,15 @@ def home():
                 if pages[gameState['iterator']]['url'] == "Jeu4-title.html": #rassembler le Flouze
                     game3_done()
 
+                if pages[gameState['iterator']]['url'] == "Jeu5-title.html":
+                    game5_init()
+
                 update_data()
 
             if request.form['boutton'] == 'page précedente' and gameState['iterator'] > 0:
+                send_message(players[0], "kikou")
+                return render_template("monitoring.html" , players=players, pages=pages, iterator=gameState['iterator'], log=log, imax=min(len(log),10))
+
                 for p in players:
                     p["choix"] = False
                     p["done"] = False
@@ -290,8 +310,8 @@ def home():
             otherPlayers = players[session["ID"]]['otherPlayers']
             destinataireID = otherPlayers[destinataire_level]
             players[destinataireID]["stars"] += montant
-            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a légué une étoile à " + players[otherPlayers[destinataire]["ID"]]["name"])
-            flash(Markup('Vous avez envoyé ' + str(montant) + ' <i class="fa fa-star"></i> à ' + otherPlayers[destinataire]["name"]), category='success')
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a légué une étoile à " + players[destinataireID]["name"])
+            flash(Markup('Vous avez envoyé ' + str(montant) + ' <i class="fa fa-star"></i> à ' + players[destinataireID]["name"]), category='success')
             update_data()
             return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
 
@@ -307,84 +327,92 @@ def home():
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + f"Le nombre d'etoiles pour chaque joueur est respectivement : {stars}")
                 if stars.count(max(stars)) == 1:
                     gameState['starMaster'] = players[winnerID]
-                    gameState['starMaster']['flouze'] += pages[gameState['iterator']+1]['prize'] + pages[gameState['iterator']+1]['bonus'] * gameState['masterPrizeBonus']
-                    gameState['otherPlayers'].pop(winnerID)
+                    gameState['starMaster']['flouze'] += pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus'] * gameState['masterPrizeBonus']
+                    gameState['otherPlayers'].remove(players[winnerID])
                     for p in players:
-                        p['message'] = Markup(f"{gameState['starMaster']['name']} a le plus d'étoiles et est ainsi en possesionde la somme de {pages[gameState['iterator']+1]['prize'] + pages[gameState['iterator']+1]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'> pour le 5ème jeu")
-                    gameState['starMaster']['message'] = Markup(f"Vous avez le plus d'étoiles et êtes ainsi en possesionde la somme de {pages[gameState['iterator']+1]['prize'] + pages[gameState['iterator']+1]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'> pour le 5ème jeu")
-                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + f"{gameState['starMaster']['name']} a le plus d'étoileset remporte ainsi la somme de {pages[gameState['iterator']+1]['prize']} pièces pour le cinquième jeu.")
+                        p['message'] = Markup(f"{gameState['starMaster']['name']} a le plus d'étoiles et est ainsi en possesion de la somme de {pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'> pour le 5ème jeu")
+                    gameState['starMaster']['message'] = Markup(f"Vous avez le plus d'étoiles et êtes ainsi en possesion de la somme de {pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'> pour le 5ème jeu")
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + f"{gameState['starMaster']['name']} a le plus d'étoileset remporte ainsi la somme de {pages_by_round[(5, 0)]['prize']} pièces pour le cinquième jeu.")
                 else:
                     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Dû à une égalité en terme d'étoiles, personne ne remporte le gros lot et le cinquième jeu est annulé")
                     for p in players:
                         p['message'] = "Dû à une égalité en terme d'étoiles, personne ne remporte le gros lot et le cinquième jeu est annulé"
-                update_data()
+                end_waiting()
+            update_data()
 
         if pages[gameState['iterator']]['url'] == "Jeu 5":
-
-            if request.form['boutton'] == 'Jeu5-choix':
+            if request.form['boutton'] == 'proposition':
                 total = 0
-                for p in otherPlayers:
+                for p in gameState['otherPlayers']:
                     montant = request.form.get(p['name'])
                     if montant == '':
                         flash('Veuiller indiquer un montant pour tous les joueurs', category='error')
-                        return render_template("Jeu5-choix.html", user=players[session["ID"]], otherPlayers=otherPlayers)
+                        return render_template("Jeu5-proposition.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
                     montant = int(montant)
                     total += montant
                 if total > gameState['starMaster']['flouze']:
                     flash('Les propositions que vous avez faites dépasse vos moyens', category='error')
-                    return render_template("Jeu5-choix.html", user=players[session["ID"]], otherPlayers=otherPlayers)
-                for p in otherPlayers:
+                    return render_template("Jeu5-proposition.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
+                for p in gameState['otherPlayers']:
+                    montant = int(request.form.get(p['name']))
                     p["proposition"] = montant
-                    p["message"] = Markup(players[session["ID"]]['name'] + 'vous fait une proposition de ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
-                gameState['phase'] = "validation"
-                update_data()
+                    p["message"] = Markup(players[session["ID"]]['name'] + ' vous fait une proposition de ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+                gameState['iterator'] += 1
 
-            elif request.form['boutton'] == 'nouvelle proposition':
-                return render_template("Jeu5-choix.html", user=players[session["ID"]], otherPlayers=otherPlayers)
 
-            else:
+            elif request.form['boutton'] in ["0", "1"]:
+                if players[session["ID"]]["done"]: pass
                 players[session['ID']]['choix'] = int(request.form['boutton'])
+                players[session["ID"]]["done"] = True
                 gameState['done'] += 1
+
                 if gameState['done'] == 4:
-                    if sum(p['choix'] for p in players) >= 3:
-                        gameState['starMaster']['message'] = "votre proposition a été acceptée par la majorité"
-                        for i in range(4):
-                            otherPlayers[i]['message'] = Markup("La proposition à été acceptée par tous les joueurs.\n Vous avez recu " + otherPlayers[i]['proposition'] + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
-                        update_data()
-                        end_waiting()
+                    if sum(p['choix'] for p in gameState['otherPlayers']) >= 3:
+                        gameState['starMaster']['message'] = "Votre proposition a été acceptée par la majorité"
+                        for p in gameState['otherPlayers']:
+                            gameState['starMaster']['flouze'] -= p['proposition']
+                            p['flouze'] += p['proposition']
+                            p['message'] = Markup(f'La proposition à été acceptée par la majorité des joueurs.\n Vous avez recu {p["proposition"]} <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+                        game5_done()
                     else:
-                        if pages[gameState['iterator']]['round'][1] == 3:
-                            gameState['starMaster']['message'] = Markup(f"votre dernière proposition a été refusée par la majorité. Les {gameState['starMaster']['name']} ne remporte pas les {pages[gameState['iterator']+1]['prize'] + pages[gameState['iterator']+1]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'> vous sont donc retirés")
-                            for i in range(4):
-                                otherPlayers[i]['message'] = Markup(f"Auccun accord à été trouvé apprès ces 3 essais donc {gameState['starMaster']['name']} ne remporte pas les {pages[gameState['iterator']+1]['prize'] + pages[gameState['iterator']+1]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'>")
-                            update_data()
-                            end_waiting()
+                        gameState['remaining_trials'] -= 1
+                        if gameState['remaining_trials'] == 0:
+                            gameState['starMaster']['flouze'] -= pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus'] * gameState['masterPrizeBonus']
+                            gameState['starMaster']['message'] = Markup(f"Votre dernière proposition a été refusée par la majorité. Les {pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'> vous sont donc retirés")
+                            for p in gameState['otherPlayers']:
+                                p['message'] = Markup(f"Auccun accord à été trouvé apprès ces 3 essais donc {gameState['starMaster']['name']} ne remporte pas les {pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus'] * gameState['masterPrizeBonus']} <img src='/static/images/coin.png' style='width:25px' alt='Coin'>")
+                            game5_done()
                         else:
-                            gameState['phase'] = "proposition"
-                            gameState['starMaster']['message'] = "votre proposition a été refusée par la majorité"
-                            for i in range(4):
-                                otherPlayers[i]['message'] = Markup(f"La proposition à été refusée par au moins 2 joueurs.\nEn attente d'une nouvelle proposition.")
-                            update_data()
+                            gameState['starMaster']['message'] = "Votre proposition a été refusée par la majorité"
+                            for p in gameState['otherPlayers']:
+                                p['message'] = Markup(f"La proposition à été refusée par au moins 2 joueurs.\nEn attente d'une nouvelle proposition.")
                             end_waiting()
+            elif request.form['boutton'] == 'nouvelle proposition':
+                gameState['iterator'] -= 2
 
-    if request.method == 'GET':
+            update_data()
+
+    if pages[gameState['iterator']]['url'] == "Jeu 5":
         if players[session["ID"]]["done"]:
-            return render_template("en_attente.html", done=gameState['done'], user=players[session["ID"]], players=players)
+            return render_template("en_attente_jeu5.html", done=gameState['done'], user=players[session["ID"]], players=players)
 
-        if pages[gameState['iterator']]['round'][0] == 5 and pages[gameState['iterator']]['round'][1]:
-            if gameState['phase'] == "validation":
-                if players[session['ID']] == gameState['starMaster']:
-                    return render_template("en_attente_jeu5.html", user=players[session["ID"]], players=players, done=gameState['done'])
-                else:
-                    return render_template("Jeu5-Valider.html", user=players[session["ID"]], players=players)
-
+        if pages[gameState['iterator']]["phase"] == "proposition":
+            if players[session['ID']] == gameState['starMaster']:
+                return render_template("Jeu5-proposition.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
             else:
-                if players[session['ID']] == gameState['starMaster']:
-                    return render_template("Jeu5-reveal.html", user=players[session["ID"]], otherPlayers=otherPlayers, enable=not(pages[gameState['iterator']]['round'][1] == 3))
-                else:
-                    return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]])
+                return render_template("results.html", user=players[session["ID"]], players=players)
+        elif pages[gameState['iterator']]["phase"] == "validation":
+            if players[session['ID']] == gameState['starMaster']:
+                return render_template("en_attente_jeu5.html", user=players[session["ID"]], done=gameState['done'])
+            else:
+                return render_template("Jeu5-Valider.html", user=players[session["ID"]])
+        elif pages[gameState['iterator']]["phase"] == "reveal":
+            if players[session['ID']] == gameState['starMaster']:
+                return render_template("Jeu5-reveal.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
+            else:
+                return render_template("results.html", user=players[session["ID"]], players=players)
 
     if players[session["ID"]]["done"]:
         return render_template("en_attente.html", done=gameState['done'], user=players[session["ID"]], players=players)
-        
+
     return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState)

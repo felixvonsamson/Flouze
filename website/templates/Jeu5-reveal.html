@@ -2,14 +2,14 @@
 
 <div class="w3-display-middle w3-center" style="width:500px;">
   <header class="w3-container w3-teal">
-      <h4>user['message']</h4>
+      <h4>{{user['message']}}</h4>
   </header>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{players[0]["name"]}}</b></h3>
+      <h3><b>{{otherPlayers[0]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[0]['proposition']}}</div>
-        {% if players[0]['choix'] = 0 %}
+        {% if otherPlayers[0]['choix'] == 0 %}
         <p class="w3-text-red w3-xlarge">Refusé</p>
         {% else %}
         <p class="w3-text-green w3-xlarge">Accepté</p>
@@ -17,10 +17,10 @@
       </div>
     </div>
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{players[1]["name"]}}</b></h3>
+      <h3><b>{{otherPlayers[1]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[1]['proposition']}}</div>
-        {% if players[1]['choix'] = 0 %}
+        {% if otherPlayers[1]['choix'] == 0 %}
         <p class="w3-text-red w3-xlarge">Refusé</p>
         {% else %}
         <p class="w3-text-green w3-xlarge">Accepté</p>
@@ -30,10 +30,10 @@
   </div>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{players[2]["name"]}}</b></h3>
+      <h3><b>{{otherPlayers[2]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[2]['proposition']}}</div>
-        {% if players[2]['choix'] = 0 %}
+        {% if otherPlayers[2]['choix'] == 0 %}
         <p class="w3-text-red w3-xlarge">Refusé</p>
         {% else %}
         <p class="w3-text-green w3-xlarge">Accepté</p>
@@ -41,10 +41,10 @@
       </div>
     </div>
     <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{players[3]["name"]}}</b></h3>
+      <h3><b>{{otherPlayers[3]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[3]['proposition']}}</div>
-        {% if players[3]['choix'] = 0 %}
+        {% if otherPlayers[3]['choix'] == 0 %}
         <p class="w3-text-red w3-xlarge">Refusé</p>
         {% else %}
         <p class="w3-text-green w3-xlarge">Accepté</p>
@@ -53,11 +53,9 @@
     </div>
   </div>
   <div class="w3-container w3-center">
-    {% if enable %}
       <form method="POST">
         <button type="submit" class="w3-btn w3-xlarge w3-teal w3-padding" name="boutton" value="nouvelle proposition">Faire une nouvelle proposition</button>
       </form>
-    {% endif %}
   </div>
 </div>
 

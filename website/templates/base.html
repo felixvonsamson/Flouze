@@ -63,8 +63,19 @@
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
   <script type="text/javascript" charset="utf-8">
-
     var socket = io();
+    socket.on('connect', function() {
+        socket.emit('give_identity', '{{user["name"]}}');
+    });
+    socket.on('message', function(msg) {
+        document.body.innerHTML += `
+  <div class="w3-panel w3-pale-green w3-round-large w3-border w3-border-green w3-center w3-display-container" style="position: absolute; width:90%; bottom:15px; left:5%;">
+    <i class="fa fa-info-circle w3-display-left w3-xlarge w3-text-green w3-margin-left"></i>
+    <span onclick="this.parentElement.style.display=\'none\'" class="w3-button w3-large w3-display-topright w3-round-large">&times;</span>
+    <h4>` + msg + `</h4>
+  </div>
+`;
+    });
     socket.on('changed', function() {
         window.location = window.location;
     });
