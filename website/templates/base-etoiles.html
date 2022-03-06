@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+    body {
+      background-image: url({{url_for('static', filename="images/6.jpg")}});
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+    .circle {
+       border-radius: 50%;
+       width: 50px;
+       height: 50px;
+       border: 5px solid #009688;
+     }
+     .w3-lobster {
+       font-family: "Lobster", serif;
+     }
+    </style>
+    <title>{% block title %}Home{% endblock %}</title>
+  </head>
+<body>
+
+  <div class="w3-container w3-teal" style="height:80px">
+    <h3 class="w3-right w3-xxlarge">{{user["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:40px" alt="Coin"></h3>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+   messages %} {% for category, message in messages %} {% if category ==
+   'error' %}
+    <div class="w3-panel w3-pale-red w3-round-large w3-border w3-border-red w3-center w3-display-container animate__lightSpeedInRight" style="position: absolute; width:90%; bottom:15px; left:5%;">
+      <i class="fa fa-exclamation-circle w3-display-left w3-xlarge w3-text-red w3-margin-left"></i>
+      <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright w3-round-large">&times;</span>
+      <h4>{{ message }}</h4>
+    </div>
+   {% else %}
+   <div class="w3-panel w3-pale-green w3-round-large w3-border w3-border-green w3-center w3-display-container" style="position: absolute; width:90%; bottom:15px; left:5%;">
+     <i class="fa fa-info-circle w3-display-left w3-xlarge w3-text-green w3-margin-left"></i>
+     <span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-display-topright w3-round-large">&times;</span>
+     <h4>{{ message }}</h4>
+   </div>
+   {% endif %} {% endfor %} {% endif %} {% endwith %}
+
+ {% block inside %} {% endblock %}
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  <script type="text/javascript" charset="utf-8">
+
+    var socket = io();
+    socket.on('changed', function() {
+        window.location = window.location;
+    });
+
+    function disableBack() { window.history.forward(); }
+    setTimeout("disableBack()", 0);
+    window.onunload = function () { null };
+  </script>
+
+  </body>
+</html>
