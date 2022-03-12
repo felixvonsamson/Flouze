@@ -5,53 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
     <style>
+      body, h1, h2, h3, h4, h5, h6  {
+        font-family: 'Baloo 2', cursive;
+      }
     </style>
     <link rel = "icon" href ="{{url_for('static', filename="images/coin.png")}}" type = "image/x-icon">
     <title>Flouze-Admin</title>
   </head>
 <body>
-  <div class="container" style="display:flex; justify-content:space-around;">
-    <div class="container w3-center w3-margin" style="flex-grow:1; background-color:{{players[0]['color']}}">
-      <p class="w3-xlarge"><b>{{players[0]["name"]}}</b></p>
-      <p class="w3-xlarge"><i class="fa fa-star"> {{players[0]["stars"]}}</i></p>
-      <p class="w3-xlarge">{{players[0]["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:28px" alt="Coin"></p>
-      <p class="w3-xlarge">{{players[0]["choix"]}}</p>
-      <p class="w3-large">{{players[0]["message"]}}</p>
-      <p class="w3-large">{{players[0]["done"]}}</p>
+  <div class="container" style="display:flex; justify-content:space-evenly;">
+    {% for p in players %}
+    <div class="container w3-center w3-margin-top" style="width:360px; background-color:{{p['color']}}">
+      <p class="w3-xlarge"><b>{{p["name"]}}</b></p>
+      <p class="w3-xlarge"><i class="fa fa-star"> {{p["stars"]}}</i></p>
+      <p class="w3-xlarge">{{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:25px" alt="Coin"></p>
+      {% if pages[iterator]['round'][0] == 3 %}
+        <p class="w3-xlarge">({{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:25px" alt="Coin">)</p>
+      {% endif %}
+      <p class="w3-xlarge">choix : {{p["choix"]}}</p>
+      <div class="w3-text-white w3-margin" style="background-color:{{p['secColor']}}">
+        <p class="w3-large">message : {{p["message"]}}</p>
+      </div>
+      <p class="w3-xlarge">done : {{p["done"]}}</p>
     </div>
-    <div class="container w3-center w3-margin" style="flex-grow:1; background-color:{{players[1]['color']}}">
-      <p class="w3-xlarge"><b>{{players[1]["name"]}}</b></p>
-      <p class="w3-xlarge"><i class="fa fa-star"> {{players[1]["stars"]}}</i></p>
-      <p class="w3-xlarge">{{players[1]["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:28px" alt="Coin"></p>
-      <p class="w3-xlarge">{{players[1]["choix"]}}</p>
-      <p class="w3-large">{{players[1]["message"]}}</p>
-      <p class="w3-large">{{players[1]["done"]}}</p>
-    </div>
-    <div class="container w3-center w3-margin" style="flex-grow:1; background-color:{{players[2]['color']}}">
-      <p class="w3-xlarge"><b>{{players[2]["name"]}}</b></p>
-      <p class="w3-xlarge"><i class="fa fa-star"> {{players[2]["stars"]}}</i></p>
-      <p class="w3-xlarge">{{players[2]["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:28px" alt="Coin"></p>
-      <p class="w3-xlarge">{{players[2]["choix"]}}</p>
-      <p class="w3-large">{{players[2]["message"]}}</p>
-      <p class="w3-large">{{players[2]["done"]}}</p>
-    </div>
-    <div class="container w3-center w3-margin" style="flex-grow:1; background-color:{{players[3]['color']}}">
-      <p class="w3-xlarge"><b>{{players[3]["name"]}}</b></p>
-      <p class="w3-xlarge"><i class="fa fa-star"> {{players[3]["stars"]}}</i></p>
-      <p class="w3-xlarge">{{players[3]["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:28px" alt="Coin"></p>
-      <p class="w3-xlarge">{{players[3]["choix"]}}</p>
-      <p class="w3-large">{{players[3]["message"]}}</p>
-      <p class="w3-large">{{players[3]["done"]}}</p>
-    </div>
-    <div class="container w3-center w3-margin" style="flex-grow:1; background-color:{{players[4]['color']}}">
-      <p class="w3-xlarge"><b>{{players[4]["name"]}}</b></p>
-      <p class="w3-xlarge"><i class="fa fa-star"> {{players[4]["stars"]}}</i></p>
-      <p class="w3-xlarge">{{players[4]["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:28px" alt="Coin"></p>
-      <p class="w3-xlarge">{{players[4]["choix"]}}</p>
-      <p class="w3-large">{{players[4]["message"]}}</p>
-      <p class="w3-large">{{players[4]["done"]}}</p>
-    </div>
+    {% endfor %}
   </div>
   <form class="w3-center" method="POST">
     <p>Page actuelle : {{pages[iterator]['url']}}</p>

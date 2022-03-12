@@ -140,7 +140,7 @@ def game4_logic():
             else:
                 player["flouze"] += prize
                 player["message"] = Markup("Vous avez remporté le prix : " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
-                log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + "Pièces")
+                log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + " Pièces")
     if uniqueChoices == 5:
         if pages[gameState['iterator']]['round'][1] == 3:
             gameState["masterPrizeBonus"] = True
@@ -177,13 +177,13 @@ def home():
                 gameState['iterator'] += 1
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Passage à la page suivante : " + pages[gameState['iterator']]['url'] + " (jeu " + str(pages[gameState['iterator']]['round'][0]) + ", manche " + str(pages[gameState['iterator']]['round'][1]) + ")")
 
-                if pages[gameState['iterator']]['url'] == "Jeu3-title.html": #mettre de coté le Flouze
+                if pages[gameState['iterator']]['round'] == [3, 0]: #mettre de coté le Flouze
                     game3_init()
 
-                if pages[gameState['iterator']]['url'] == "Jeu4-title.html": #rassembler le Flouze
+                if pages[gameState['iterator']]['url'] == [4, 0]: #rassembler le Flouze
                     game3_done()
 
-                if pages[gameState['iterator']]['url'] == "Jeu5-title.html":
+                if pages[gameState['iterator']]['url'] == [5, 0]:
                     game5_init()
 
                 update_data()

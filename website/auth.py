@@ -18,11 +18,11 @@ def login():
             if first_name == players[i]["name"]:
                 if players[i]["password"] == password:
                     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + first_name + " s'est connecté")
-                    flash('Logged in successfully!', category = 'success')
+                    flash('Vous êtes connecté !', category = 'success')
                     session["ID"] = i
                     return redirect(url_for('views.home'))
                 else:
-                    flash('Incorrect password, try again.', category = 'error')
+                    flash('Mot de passe incorrect, réessayez.', category = 'error')
                     return render_template("login.html")
-        flash('You are not a participant', category = 'error')
+        flash("Vous n'êtes pas un participant", category = 'error')
     return render_template("login.html")
