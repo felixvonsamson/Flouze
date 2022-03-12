@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, pages_by_round, gameState, players, socketio, log
+from . import pages, pages_by_round, gameState, players, socketio, log, theme_colors
 import random
 import pickle
 import datetime
@@ -26,8 +26,8 @@ def end_waiting():
     gameState['done'] = 0
 
 def check_action_allowed(gameNb):
-    if players[session["ID"]]["done"]: return render_template("en_attente.html", done=gameState['done'], user=players[session["ID"]], players=players)
-    if pages[gameState['iterator']]['round'][0] != gameNb: return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState)
+    if players[session["ID"]]["done"]: return render_template("en_attente.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], done=gameState['done'], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
+    if pages[gameState['iterator']]['round'][0] != gameNb: return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
     return None
 
 def game1_logic():
@@ -42,6 +42,10 @@ def game1_logic():
         players[lotteryWinnerID]["flouze"] += prize
         players[lotteryWinnerID]["message"] = Markup("Vous avez gagné la lotterie ! <br> Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">')
         log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Le gagnant de la lotterie est " + players[lotteryWinnerID]["name"] + " qui a reçu " + str(prize) + " Pièces")
+        if pages[gameState['iterator']]['round'][1] == 3:
+            players[lotteryWinnerID]["stars"] += pages[gameState['iterator']]["stars"]
+            players[lotteryWinnerID]["message"] = Markup("Vous avez gagné la lotterie ! <br> Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">.\n En plus vous recevez ' + str(pages[gameState['iterator']]["stars"]) + ' <i class="fa fa-star"></i> car vous avez remporté la dernière manche.')
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[lotteryWinnerID]["name"] + " a recu " + str(pages[gameState['iterator']]["stars"]) + " étoile(s) car iel a gagné la dernière manche")
     else:
         log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Il n'y a pas de gagnant à la lotterie car personne n'a participé")
 
@@ -61,6 +65,11 @@ def game2_logic():
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + "Pièces")
             for p in players:
                 p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+            if pages[gameState['iterator']]['round'][1] == 3:
+                player["stars"] += pages[gameState['iterator']]["stars"]
+                for p in players:
+                    p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">.\n En plus iel recoit ' + str(pages[gameState['iterator']]["stars"]) + ' <i class="fa fa-star"></i> car iel a remporté la dernière manche.')
+                log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a recu " + str(pages[gameState['iterator']]["stars"]) + " étoile(s) car iel a gagné la dernière manche")
             break
     else:
         log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Personne n'a remporté de lot a cette manche")
@@ -69,20 +78,38 @@ def game2_logic():
 
 
 def game3_init():
+    sum = 0
     for p in players:
         p["saved_flouze"] = max(0, p["flouze" ]- pages[gameState['iterator']]['initial_flouze'])
+        sum += p["saved_flouze"]
         p["flouze"] = pages[gameState['iterator']]['initial_flouze']
+    if sum > 1500:
+        gameState['sabotage'] = True
     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "L'argent des joueurs à été mis de coté. Ils leur restent tous " + str(pages[gameState['iterator']]['initial_flouze']) + " Pièces")
 
 def game3_logic():
     assert check_all_done()
     pot_commun = 0
     pot_commun = sum(p["choix"] for p in players)
+    if gameState['sabotage']:
+        mises = [p['choix'] for p in players]
+        pot_commun = 1.2 * np.argmax(mises)
+        log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Cette manche a été sabotée car les participans on été trop coopératifs. Le contenu du pot commun avant l'ajout de la banque à été fixé à" + str(pot_commun))
     prize = int(pot_commun * pages[gameState['iterator']]["gain"] // 5)
     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + str(prize*5) + " Pièces ont été redistribué équitablement à tous les joueurs ce qui fait " + str(prize) + " Pièces par joueur")
     for p in players:
         p["flouze"] += prize
         p["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
+    if pages[gameState['iterator']]['round'][1] == 3:
+        flouzes = [p['flouze'] for p in players]
+        starWinnerID = np.argmax(flouzes)
+        if flouzes.count(max(flouzes)) == 1:
+            players[starWinnerID]['stars'] += pages[gameState['iterator']]["stars"]
+            players[starWinnerID]['message'] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">.\nEn plus vous recevez ' + str(pages[gameState['iterator']]["stars"]) + " <i class='fa fa-star'></i> car vous avez gagné le plus d'argent durant ce jeu.")
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[starWinnerID]['name'] + " a recu " + str(pages[gameState['iterator']]["stars"]) + " étoile(s) car iel a gagné le plus d'argent durant ce jeu")
+        else:
+            log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Dû à une égalité aucune étoile n'a été distribuée")
+
 
 def game3_done():
     for p in players:
@@ -163,7 +190,7 @@ def home():
 
             if request.form['boutton'] == 'page précedente' and gameState['iterator'] > 0:
                 send_message(players[0], "kikou")
-                return render_template("monitoring.html" , players=players, pages=pages, iterator=gameState['iterator'], log=log, imax=min(len(log),10))
+                return render_template("monitoring.html" , players=players, pages=pages, iterator=gameState['iterator'], log=log, imax=min(len(log),10), background=pages[gameState['iterator']]['background'])
 
                 for p in players:
                     p["choix"] = False
@@ -178,25 +205,28 @@ def home():
     if request.method == 'POST':
 
         if request.form['boutton'] == 'don':
-            return render_template("faire_un_don.html", user=players[session["ID"]], players=players)
+            return render_template("faire_un_don.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
+
+        if request.form['boutton'] == 'en fait non':
+            return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], secondary_theme_color=theme_colors[pages[gameState['iterator']]['background']][1], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
 
         if request.form['boutton'] == "envoyer don":
             destinataire_level = request.form.get('destinataire')
             montant = request.form.get('montant')
             if destinataire_level == None:
                 flash('Veuiller choisir un destinataire', category='error')
-                return render_template("faire_un_don.html", user=players[session["ID"]], players=players)
+                return render_template("faire_un_don.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             if montant == '':
                 flash('Veuiller indiquer un montant', category='error')
-                return render_template("faire_un_don.html", user=players[session["ID"]], players=players)
+                return render_template("faire_un_don.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             destinataire_level = int(destinataire_level)
             montant = int(montant)
             if montant < 1:
                 flash('Le montant à envoyer ne peut pas être negatif ou nul', category='error')
-                return render_template("faire_un_don.html", user=players[session["ID"]], players=players)
+                return render_template("faire_un_don.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             if montant > players[session["ID"]]["flouze"]:
                 flash('Le montant indiqué dépasse votre solde', category='error')
-                return render_template("faire_un_don.html", user=players[session["ID"]], players=players)
+                return render_template("faire_un_don.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             players[session["ID"]]["flouze"] -= montant
             otherPlayers = players[session["ID"]]['otherPlayers']
             destinataireID = otherPlayers[destinataire_level]
@@ -204,7 +234,7 @@ def home():
             flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> à ' + players[destinataireID]["name"]), category='success')
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a fait un don de " + str(montant) + " Pièces à " + players[destinataireID]["name"])
             update_data()
-            return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState)
+            return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
 
         if request.form['boutton'] == "jeu1-choix":
             action = check_action_allowed(1)
@@ -212,7 +242,7 @@ def home():
             tickets = request.form.get('tickets')
             if tickets == None:
                 flash('Veuiller faire un choix', category='error')
-                return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players)
+                return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             players[session["ID"]]["choix"] = int(tickets)
             players[session["ID"]]["done"] = True
             gameState['done'] += 1
@@ -229,7 +259,7 @@ def home():
             if request.form['boutton'] == "validate num":
                 if players[session["ID"]]["choix"] == None:
                     flash('Veuiller choisir un nombre', category='error')
-                    return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players)
+                    return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
                 players[session["ID"]]["done"] = True
                 gameState['done'] += 1
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a choisis le nombre " + str(players[session["ID"]]["choix"]))
@@ -247,14 +277,14 @@ def home():
             montant = request.form.get('montant')
             if montant == '':
                 flash(Markup('Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir)'), category='error')
-                return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players)
+                return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             montant = int(montant)
             if montant < 0:
                 flash('Le montant à investir ne peut pas être negatif', category='error')
-                return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players)
+                return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             if montant > players[session["ID"]]["flouze"]:
                 flash('Le montant indiqué dépasse votre solde', category='error')
-                return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players)
+                return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             players[session["ID"]]["flouze"] -= montant
             players[session["ID"]]["choix"] = montant
             players[session["ID"]]["done"] = True
@@ -272,7 +302,7 @@ def home():
             if request.form['boutton'] == "Jeu4-choix":
                 if players[session["ID"]]["choix"] == None:
                     flash('Veuiller choisir un nombre', category='error')
-                    return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState)
+                    return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
                 players[session["ID"]]["done"] = True
                 gameState['done'] += 1
                 prize = pages[gameState['iterator']]['prize'][gameState["game4_bonus"]]
@@ -294,18 +324,18 @@ def home():
             montant = request.form.get('quantité')
             if destinataire_level == None:
                 flash('Veuiller choisir un destinataire', category='error')
-                return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
+                return render_template("don_etoiles.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             if montant == '':
                 flash('Veuiller indiquer un montant', category='error')
-                return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
+                return render_template("don_etoiles.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             destinataire_level = int(destinataire_level)
             montant = int(montant)
             if montant < 1:
                 flash('Le montant à envoyer ne peut pas être negatif ou nul', category='error')
-                return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
+                return render_template("don_etoiles.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             if montant > players[session["ID"]]["stars"]:
                 flash("Vous n'avez pas assez d'étoiles", category='error')
-                return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
+                return render_template("don_etoiles.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
             players[session["ID"]]["stars"] -= montant
             otherPlayers = players[session["ID"]]['otherPlayers']
             destinataireID = otherPlayers[destinataire_level]
@@ -313,10 +343,10 @@ def home():
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a légué une étoile à " + players[destinataireID]["name"])
             flash(Markup('Vous avez envoyé ' + str(montant) + ' <i class="fa fa-star"></i> à ' + players[destinataireID]["name"]), category='success')
             update_data()
-            return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
+            return render_template("don_etoiles.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
 
         if request.form['boutton'] == "léguer etoiles":
-            return render_template("don_etoiles.html", user=players[session["ID"]], players=players)
+            return render_template("don_etoiles.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
 
         if request.form['boutton'] == "terminer":
             players[session["ID"]]["done"] = True
@@ -347,12 +377,12 @@ def home():
                     montant = request.form.get(p['name'])
                     if montant == '':
                         flash('Veuiller indiquer un montant pour tous les joueurs', category='error')
-                        return render_template("Jeu5-proposition.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
+                        return render_template("Jeu5-proposition.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], otherPlayers=gameState['otherPlayers'], background=pages[gameState['iterator']]['background'])
                     montant = int(montant)
                     total += montant
                 if total > gameState['starMaster']['flouze']:
                     flash('Les propositions que vous avez faites dépasse vos moyens', category='error')
-                    return render_template("Jeu5-proposition.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
+                    return render_template("Jeu5-proposition.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], otherPlayers=gameState['otherPlayers'], background=pages[gameState['iterator']]['background'])
                 for p in gameState['otherPlayers']:
                     montant = int(request.form.get(p['name']))
                     p["proposition"] = montant
@@ -394,25 +424,25 @@ def home():
 
     if pages[gameState['iterator']]['url'] == "Jeu 5":
         if players[session["ID"]]["done"]:
-            return render_template("en_attente_jeu5.html", done=gameState['done'], user=players[session["ID"]], players=players)
+            return render_template("en_attente_jeu5.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], done=gameState['done'], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
 
         if pages[gameState['iterator']]["phase"] == "proposition":
             if players[session['ID']] == gameState['starMaster']:
-                return render_template("Jeu5-proposition.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
+                return render_template("Jeu5-proposition.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], otherPlayers=gameState['otherPlayers'], background=pages[gameState['iterator']]['background'])
             else:
-                return render_template("results.html", user=players[session["ID"]], players=players)
+                return render_template("results.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
         elif pages[gameState['iterator']]["phase"] == "validation":
             if players[session['ID']] == gameState['starMaster']:
-                return render_template("en_attente_jeu5.html", user=players[session["ID"]], done=gameState['done'])
+                return render_template("en_attente_jeu5.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], done=gameState['done'], background=pages[gameState['iterator']]['background'])
             else:
-                return render_template("Jeu5-Valider.html", user=players[session["ID"]])
+                return render_template("Jeu5-Valider.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], background=pages[gameState['iterator']]['background'])
         elif pages[gameState['iterator']]["phase"] == "reveal":
             if players[session['ID']] == gameState['starMaster']:
-                return render_template("Jeu5-reveal.html", user=players[session["ID"]], otherPlayers=gameState['otherPlayers'])
+                return render_template("Jeu5-reveal.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], otherPlayers=gameState['otherPlayers'], background=pages[gameState['iterator']]['background'])
             else:
-                return render_template("results.html", user=players[session["ID"]], players=players)
+                return render_template("results.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
 
     if players[session["ID"]]["done"]:
-        return render_template("en_attente.html", done=gameState['done'], user=players[session["ID"]], players=players)
+        return render_template("en_attente.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], done=gameState['done'], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
 
-    return render_template(pages[gameState['iterator']]['url'], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState)
+    return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], secondary_theme_color=theme_colors[pages[gameState['iterator']]['background']][1], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])

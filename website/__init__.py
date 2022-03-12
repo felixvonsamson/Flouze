@@ -6,7 +6,7 @@ from flask_socketio import SocketIO
 
 
 
-def init_player(ID, prenom, mdp):
+def init_player(ID, prenom, mdp, color1, color2):
     player = {}
     player["ID"] = ID
     player["name"] = prenom
@@ -14,7 +14,8 @@ def init_player(ID, prenom, mdp):
     player["flouze"] = 0
     player["saved_flouze"] = 0 # Dans le jeu 3 l'argent est mis de coté
     player["stars"] = 0
-    player["color"] = "#ffffff"
+    player["color"] = color1
+    player["secColor"] = color2
     player["choix"] = None
     player["done"] = False # Indique si le joueur a fait son choix
     player["otherPlayers"] = list(range(5))
@@ -23,50 +24,58 @@ def init_player(ID, prenom, mdp):
     return player
 
 pages = [      # Liste des pages a afficher dans l'ordre / round est de la forme [jeu, manche]
-    { "url": "Jeu1-title.html",  "round": [1, 0]},
-    { "url": "Jeu1-choix.html",  "round": [1, 1], "prize": 200},
-    { "url": "results.html",     "round": [1, 1]},
-    { "url": "Jeu1-choix.html",  "round": [1, 2], "prize": 400},
-    { "url": "results.html",     "round": [1, 2]},
-    { "url": "Jeu1-choix.html",  "round": [1, 3], "prize": 600},
-    { "url": "results.html",     "round": [1, 3]},
-    { "url": "Jeu2-title.html",  "round": [2, 0]},
-    { "url": "Jeu2-choix.html",  "round": [2, 1], "prize": 50},
-    { "url": "Jeu2-reveal.html", "round": [2, 1]},
-    { "url": "results.html",     "round": [2, 1]},
-    { "url": "Jeu2-choix.html",  "round": [2, 2], "prize": 100},
-    { "url": "Jeu2-reveal.html", "round": [2, 2]},
-    { "url": "results.html",     "round": [2, 2]},
-    { "url": "Jeu2-choix.html",  "round": [2, 3], "prize": 150},
-    { "url": "Jeu2-reveal.html", "round": [2, 3]},
-    { "url": "results.html",     "round": [2, 3]},
-    { "url": "Jeu3-title.html",  "round": [3, 0], "initial_flouze": 100},
-    { "url": "Jeu3-choix.html",  "round": [3, 1], "gain": 1.2},
-    { "url": "results.html",     "round": [3, 1]},
-    { "url": "Jeu3-choix.html",  "round": [3, 2], "gain": 1.5},
-    { "url": "results.html",     "round": [3, 2]},
-    { "url": "Jeu3-choix.html",  "round": [3, 3], "gain": 2},
-    { "url": "results.html",     "round": [3, 3]},
-    { "url": "Jeu4-title.html",  "round": [4, 0]},
-    { "url": "Jeu4-choix.html",  "round": [4, 1], "prize": [[150, 100, 50, 0, "star"]]},
-    { "url": "Jeu4-reveal.html", "round": [4, 1], "prize": [[150, 100, 50, 0, "star"]]},
-    { "url": "results.html",     "round": [4, 1]},
-    { "url": "Jeu4-choix.html",  "round": [4, 2], "prize": [[250, 150, 0, -150, "star"], [400, 250, 0, -250, "star"]]},
-    { "url": "Jeu4-reveal.html", "round": [4, 2], "prize": [[250, 150, 0, -150, "star"], [400, 250, 0, -250, "star"]]},
-    { "url": "results.html",     "round": [4, 2]},
-    { "url": "Jeu4-choix.html",  "round": [4, 3], "prize": [[400, 200, -250, "star", "star"], [600, 250, -300, "star", "star"], [1000, 300, -400, "star", "star"]]},
-    { "url": "Jeu4-reveal.html", "round": [4, 3], "prize": [[400, 200, -250, "star", "star"], [600, 250, -300, "star", "star"], [1000, 300, -400, "star", "star"]]},
-    { "url": "results.html",     "round": [4, 3]},
-    { "url": "donner_des_etoiles.html", "round": [0, 0]},
-    { "url": "results.html",     "round": [0, 1]},
-    { "url": "Jeu5-title.html",  "round": [5, 0], "prize": 2500, "bonus": 500},
-    { "url": "Jeu 5",            "round": [5, 1], "phase": "proposition"},
-    { "url": "Jeu 5",            "round": [5, 1], "phase": "validation"},
-    { "url": "Jeu 5",            "round": [5, 1], "phase": "reveal"},
-    { "url": "results.html",     "round": [5, 3]}
+    { "url": "title.html",       "round": [1, 0], "background": "10.jpg"},
+    { "url": "Jeu1-choix.html",  "round": [1, 1], "background": "10.jpg", "prize": 200},
+    { "url": "results.html",     "round": [1, 1], "background": "10.jpg"},
+    { "url": "Jeu1-choix.html",  "round": [1, 2], "background": "10.jpg", "prize": 400},
+    { "url": "results.html",     "round": [1, 2], "background": "10.jpg"},
+    { "url": "Jeu1-choix.html",  "round": [1, 3], "background": "10.jpg", "prize": 600, "stars": 1},
+    { "url": "results.html",     "round": [1, 3], "background": "10.jpg"},
+    { "url": "title.html",       "round": [2, 0], "background": "9.jpg"},
+    { "url": "Jeu2-choix.html",  "round": [2, 1], "background": "9.jpg", "prize": 50},
+    { "url": "Jeu2-reveal.html", "round": [2, 1], "background": "9.jpg"},
+    { "url": "results.html",     "round": [2, 1], "background": "9.jpg"},
+    { "url": "Jeu2-choix.html",  "round": [2, 2], "background": "9.jpg", "prize": 100},
+    { "url": "Jeu2-reveal.html", "round": [2, 2], "background": "9.jpg"},
+    { "url": "results.html",     "round": [2, 2], "background": "9.jpg"},
+    { "url": "Jeu2-choix.html",  "round": [2, 3], "background": "9.jpg", "prize": 150, "stars": 2},
+    { "url": "Jeu2-reveal.html", "round": [2, 3], "background": "9.jpg"},
+    { "url": "results.html",     "round": [2, 3], "background": "9.jpg"},
+    { "url": "title.html",       "round": [3, 0], "background": "8.jpg", "initial_flouze": 100},
+    { "url": "Jeu3-choix.html",  "round": [3, 1], "background": "8.jpg", "gain": 1.2},
+    { "url": "results.html",     "round": [3, 1], "background": "8.jpg"},
+    { "url": "Jeu3-choix.html",  "round": [3, 2], "background": "8.jpg", "gain": 1.5},
+    { "url": "results.html",     "round": [3, 2], "background": "8.jpg"},
+    { "url": "Jeu3-choix.html",  "round": [3, 3], "background": "8.jpg", "gain": 2, "stars": 2},
+    { "url": "results.html",     "round": [3, 3], "background": "8.jpg"},
+    { "url": "title.html",       "round": [4, 0], "background": "6.jpg"},
+    { "url": "Jeu4-choix.html",  "round": [4, 1], "background": "6.jpg", "prize": [[150, 100, 50, 0, "star"]]},
+    { "url": "Jeu4-reveal.html", "round": [4, 1], "background": "6.jpg", "prize": [[150, 100, 50, 0, "star"]]},
+    { "url": "results.html",     "round": [4, 1], "background": "6.jpg"},
+    { "url": "Jeu4-choix.html",  "round": [4, 2], "background": "6.jpg", "prize": [[250, 150, 0, -150, "star"], [400, 250, 0, -250, "star"]]},
+    { "url": "Jeu4-reveal.html", "round": [4, 2], "background": "6.jpg", "prize": [[250, 150, 0, -150, "star"], [400, 250, 0, -250, "star"]]},
+    { "url": "results.html",     "round": [4, 2], "background": "6.jpg"},
+    { "url": "Jeu4-choix.html",  "round": [4, 3], "background": "6.jpg", "prize": [[400, 200, -250, "star", "star"], [600, 250, -300, "star", "star"], [1000, 300, -400, "star", "star"]]},
+    { "url": "Jeu4-reveal.html", "round": [4, 3], "background": "6.jpg", "prize": [[400, 200, -250, "star", "star"], [600, 250, -300, "star", "star"], [1000, 300, -400, "star", "star"]]},
+    { "url": "results.html",     "round": [4, 3], "background": "6.jpg"},
+    { "url": "donner_des_etoiles.html", "round": [0, 0], "background": "6.jpg"},
+    { "url": "results.html",     "round": [0, 1], "background": "6.jpg"},
+    { "url": "title.html",       "round": [5, 0], "background": "7.jpg", "prize": 2500, "bonus": 500},
+    { "url": "Jeu 5",            "round": [5, 1], "background": "7.jpg", "phase": "proposition"},
+    { "url": "Jeu 5",            "round": [5, 1], "background": "7.jpg", "phase": "validation"},
+    { "url": "Jeu 5",            "round": [5, 1], "background": "7.jpg", "phase": "reveal"},
+    { "url": "results.html",     "round": [5, 3], "background": "7.jpg"}
 ]
 
 pages_by_round = { tuple(page['round']) : page for page in pages }
+
+theme_colors = {
+    "10.jpg":["#b65612","#dfaa84"],
+    "9.jpg": ["#017e68","#6ecdbc"],
+    "8.jpg": ["#3f6203","#a6ca68"],
+    "6.jpg": ["#024b66","#60a7c1"],
+    "7.jpg": ["#6b017f","#c470d4"]
+}
 
 def load_data():
     with open("data.pck", 'rb') as file:
@@ -79,7 +88,7 @@ def init_game():
     with open("players.txt", "r") as file:
         for p in range(5):
             line = file.readline().split()
-            players.append(init_player(p, line[0], line[1]))
+            players.append(init_player(p, line[0], line[1], line[2], line[3]))
     gameState = { # évolution des status du jeu
         'iterator': 0, # pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
         'done': 0,  # Nombre de joueurs qui ont fait leur choix
@@ -87,7 +96,8 @@ def init_game():
         'masterPrizeBonus': False,  # bonus pour le jeu 5
         'starMaster': None, # joueur ayant le plus d'étoiles à la fin du jeu 4
         'otherPlayers': players.copy(), # Liste des autres joueurs pour le jeu 5
-        'remaining_trials': 3
+        'remaining_trials': 3,
+        'sabotage': False # Sabotage du 3ème jeu si les participants sont trop coopératifs
     }
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]
 

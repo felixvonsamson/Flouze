@@ -4,43 +4,39 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
     body {
-      background-image: url({{url_for('static', filename="images/6.jpg")}});
+      background-image: url({{url_for('static', filename="images/"+background)}});
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
     }
     .circle {
        border-radius: 50%;
-       width: 50px;
-       height: 50px;
-       border: 5px solid #009688;
+       width: 55px;
+       height: 55px;
      }
+
      .w3-lobster {
        font-family: "Lobster", serif;
      }
+
+     body, h1, h2, h3, h4, h5, h6  {
+       font-family: 'Baloo 2', cursive;
+     }
+
     </style>
+    <link rel = "icon" href ="{{url_for('static', filename="images/coin.png")}}" type = "image/x-icon">
     <title>{% block title %}Home{% endblock %}</title>
   </head>
-<body>
-  <div class="w3-display-topleft" style="width:150px">
-  <ul class="w3-ul w3-border w3-light-blue w3-border-light-blue w3-card-2">
-    <li class="w3-center w3-border-white"><h4>Participants</h4></li>
-    <li class="w3-border-0">{{players[0]["name"]}}<i class="fa fa-star w3-right"> {{players[0]["stars"]}}</i></li>
-    <li class="w3-border-0">{{players[1]["name"]}}<i class="fa fa-star w3-right"> {{players[1]["stars"]}}</i></li>
-    <li class="w3-border-0">{{players[2]["name"]}}<i class="fa fa-star w3-right"> {{players[2]["stars"]}}</i></li>
-    <li class="w3-border-0">{{players[3]["name"]}}<i class="fa fa-star w3-right"> {{players[3]["stars"]}}</i></li>
-    <li class="w3-border-0">{{players[4]["name"]}}<i class="fa fa-star w3-right"> {{players[4]["stars"]}}</i></li>
-  </ul>
-  </div>
 
-  <div class="w3-container w3-teal" style="height:80px">
-    <h3 class="w3-right w3-xxlarge">{{user["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:40px" alt="Coin"></h3>
+<body>
+  <div class="w3-container w3-text-white" style="height:72px; background-color:{{theme_color}}">
+    <h3 class="w3-right w3-xxlarge">{{user["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:32px" alt="Coin"></h3>
   </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %} {% if

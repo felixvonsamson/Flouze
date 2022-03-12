@@ -1,14 +1,14 @@
 {% extends "base+don.html" %} {% block title %}Flouze - Jeu 3{% endblock %} {% block content%}
 {% if user["saved_flouze"] != 0 %}
-<h2 class="w3-text-white w3-teal w3-padding-large" style="position:absolute; top:50px; right:0px">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
+<h2 class="w3-text-white w3-padding-large  w3-text-white" style="position:absolute; top:50px; right:0px; background-color:{{theme_color}}">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
 {% endif %}
 
-<form method="POST" class="w3-card-4 w3-display-middle w3-center w3-white">
-<header class="w3-container w3-teal">
+<form method="POST" class="w3-card-4 w3-display-middle w3-center w3-white w3-text-white">
+<header class="w3-container" style="background-color:{{theme_color}}">
     <h4>Combien shouaitez vous investir ?</h4>
 </header>
 <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name="montant" type="number" style="width:100px; display:inline-block;"></p>
-<button type="submit" name="boutton" value="Jeu3-choix" class="w3-button w3-teal">Valider</button>
+<button type="submit" name="boutton" value="Jeu3-choix" class="w3-button" style="background-color:{{theme_color}}">Valider</button>
 <p>
 </form>
 

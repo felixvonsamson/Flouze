@@ -2,57 +2,77 @@
 %}
 <div class="w3-display-middle w3-center" style="width:500px;">
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
+    <div class="w3-card w3-margin w3-padding w3-half" style="width:200px; height:150px; background-color:{{players[0]['color']}}">
       <h3><b>{{players[0]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         {% if page['prize'][gameState["game4_bonus"]][players[0]["choix"]] == "star" %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+          {% if i == 3 %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-light-grey" style="white-space:nowrap; background-color:{{players[0]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% else %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[0]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% endif %}
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][gameState["game4_bonus"]][players[0]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap;  background-color:{{players[0]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[0]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
+    <div class="w3-card w3-margin w3-padding w3-half" style="width:200px; height:150px; background-color:{{players[1]['color']}}">
       <h3><b>{{players[1]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         {% if page['prize'][gameState["game4_bonus"]][players[1]["choix"]] == "star" %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+          {% if i == 3 %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-light-grey" style="white-space:nowrap; background-color:{{players[1]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% else %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[1]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% endif %}
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][gameState["game4_bonus"]][players[1]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[1]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[1]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
   </div>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
+    <div class="w3-card w3-margin w3-padding w3-half" style="width:200px; height:150px; background-color:{{players[2]['color']}}">
       <h3><b>{{players[2]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         {% if page['prize'][gameState["game4_bonus"]][players[2]["choix"]] == "star" %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+          {% if i == 3 %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-light-grey" style="white-space:nowrap; background-color:{{players[2]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% else %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[2]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% endif %}
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][gameState["game4_bonus"]][players[2]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[2]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[2]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
+    <div class="w3-card w3-margin w3-padding w3-half" style="width:200px; height:150px; background-color:{{players[3]['color']}}">
       <h3><b>{{players[3]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         {% if page['prize'][gameState["game4_bonus"]][players[3]["choix"]] == "star" %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+          {% if i == 3 %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-light-grey" style="white-space:nowrap; background-color:{{players[3]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% else %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[3]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% endif %}
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][gameState["game4_bonus"]][players[3]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[3]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[3]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
   </div>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
-    <div class="w3-card w3-margin w3-padding w3-teal" style="width:200px; height:150px;">
+    <div class="w3-card w3-margin w3-padding" style="width:200px; height:150px; background-color:{{players[4]['color']}}">
       <h3><b>{{players[4]["name"]}}</b></h3>
       <div class="w3-display-container" style="height:50px;">
         {% if page['prize'][gameState["game4_bonus"]][players[4]["choix"]] == "star" %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+          {% if i == 3 %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-light-grey" style="white-space:nowrap; background-color:{{players[4]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% else %}
+            <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[4]['secColor']}}"><i class="fa fa-star"></i></div>
+          {% endif %}
         {% else %}
-        <div class="w3-xlarge w3-padding w3-white w3-margin" style="white-space:nowrap;">{{page['prize'][gameState["game4_bonus"]][players[4]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
+        <div class="w3-xlarge w3-padding w3-margin w3-text-white" style="white-space:nowrap; background-color:{{players[4]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[4]["choix"]]}} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
         {% endif %}
       </div>
     </div>
