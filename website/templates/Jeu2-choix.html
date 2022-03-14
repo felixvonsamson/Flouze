@@ -10,7 +10,7 @@
     {% for i in range(5) %}
     <div class="w3-cell w3-padding-small">
       {% if user["choix"] == i+1 %}
-      <div class="circle w3-xlarge w3-cell w3-cell-middle w3-grayscale" style="background-color: #bff5ea; border:5px solid #009688;">{{i+1}}</div>
+      <button type="submit" name="boutton" value={{i+1}} class="circle w3-xlarge w3-cell w3-cell-middle w3-grayscale" style="background-color: #bff5ea; border:5px solid #009688;" disabled>{{i+1}}</button>
       {% else %}
       <button type="submit" name="boutton" value={{i+1}} class="circle w3-xlarge w3-hover-opacity w3-cell w3-cell-middle" style="background-color: #bff5ea;  border:5px solid #009688;">{{i+1}}</button>
       {% endif %}
