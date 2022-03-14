@@ -21,6 +21,7 @@ def init_player(ID, prenom, mdp, color1, color2):
     player["otherPlayers"] = list(range(5))
     player["otherPlayers"].remove(ID)
     player["namespace"] = None
+    player["gain_a_partager"] = 0 # Quantitée a partager dans 'partager.htlm'
     return player
 
 pages = [      # Liste des pages a afficher dans l'ordre / round est de la forme [jeu, manche]
@@ -97,7 +98,7 @@ def init_game():
         'starMaster': None, # joueur ayant le plus d'étoiles à la fin du jeu 4
         'otherPlayers': players.copy(), # Liste des autres joueurs pour le jeu 5
         'remaining_trials': 3,
-        'sabotage': False # Sabotage du 3ème jeu si les participants sont trop coopératifs
+        'sabotage': False, # Sabotage du 3ème jeu si les participants sont trop coopératifs
     }
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]
 

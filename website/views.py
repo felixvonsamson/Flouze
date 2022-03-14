@@ -40,6 +40,7 @@ def game1_logic():
         lotteryWinnerID = random.choice(lottery)
         prize = pages[gameState['iterator']]["prize"] // len(lottery)
         players[lotteryWinnerID]["flouze"] += prize
+        players[lotteryWinnerID]['gain_a_partager'] = prize
         players[lotteryWinnerID]["message"] = Markup("Vous avez gagné la lotterie ! <br> Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin">')
         log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Le gagnant de la lotterie est " + players[lotteryWinnerID]["name"] + " qui a reçu " + str(prize) + " Pièces")
         if pages[gameState['iterator']]['round'][1] == 3:
@@ -62,6 +63,7 @@ def game2_logic():
         if count == 1:
             prize = pages[gameState['iterator']]["prize"]*i
             player["flouze"] += prize
+            player['gain_a_partager'] = prize
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + "Pièces")
             for p in players:
                 p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
@@ -139,6 +141,7 @@ def game4_logic():
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a gagné une étoile")
             else:
                 player["flouze"] += prize
+                player['gain_a_partager'] = prize
                 player["message"] = Markup("Vous avez remporté le prix : " + str(prize) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin">')
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + " Pièces")
     if uniqueChoices == 5:
@@ -174,6 +177,7 @@ def home():
                 if pages[gameState['iterator']]['url'] == "results.html":
                     for p in players: #reinitialiser le statut et les choix des joueurs
                         p["choix"] = None
+                        p["gain_a_partager"] = 0
                 gameState['iterator'] += 1
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Passage à la page suivante : " + pages[gameState['iterator']]['url'] + " (jeu " + str(pages[gameState['iterator']]['round'][0]) + ", manche " + str(pages[gameState['iterator']]['round'][1]) + ")")
 
@@ -204,6 +208,9 @@ def home():
 
     if request.method == 'POST':
 
+        if request.form['boutton'] == 'partager':
+            return render_template("partager.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
+
         if request.form['boutton'] == 'don':
             return render_template("faire_un_don.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
 
@@ -231,8 +238,33 @@ def home():
             otherPlayers = players[session["ID"]]['otherPlayers']
             destinataireID = otherPlayers[destinataire_level]
             players[destinataireID]["flouze"] += montant
-            flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:30px" alt="Coin"> à ' + players[destinataireID]["name"]), category='success')
+            flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin"> &nbsp; à ' + players[destinataireID]["name"]), category='success')
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a fait un don de " + str(montant) + " Pièces à " + players[destinataireID]["name"])
+            update_data()
+            return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
+
+        if request.form['boutton'] == "envoi partager":
+            montants = []
+            for i in range(4):
+                montants.append(request.form.get(players[players[session["ID"]]['otherPlayers'][i]]['name']))
+                if montants[i] == '':
+                    montants[i] = 0
+                else :
+                    montants[i] = int(montants[i])
+                if montants[i] < 0:
+                    flash('Vous ne pouvez pas envoiyer des montants négatifs', category='error')
+                    return render_template("partager.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
+            if sum(montants) > players[session["ID"]]["gain_a_partager"]:
+                flash('Vous ne pouvez pas donner plus que ce que vous avez reçu', category='error')
+                return render_template("partager.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
+            players[session["ID"]]["gain_a_partager"] = 0
+            for i in range(4):
+                if montants[i] != 0:
+                    players[session["ID"]]["flouze"] -= montants[i]
+                    otherPlayers = players[session["ID"]]['otherPlayers']
+                    players[otherPlayers[i]]["flouze"] += montants[i]
+                    flash(Markup('Vous avez envoyé ' + str(montants[i]) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin"> &nbsp; à ' + players[otherPlayers[i]]["name"]), category='success')
+                    log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[session["ID"]]["name"] + " a fait un don de " + str(montants[i]) + " Pièces à " + players[otherPlayers[i]]["name"])
             update_data()
             return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
 

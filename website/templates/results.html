@@ -4,7 +4,12 @@
 {% endif %}
 
 <div class="w3-panel w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-display-container w3-display-middle w3-padding">
-  <h5>{{user["message"]}}</h5>
+  <p class="w3-large">{{user["message"]}}</p>
+  {% if user['gain_a_partager'] != 0 %}
+    <form method="POST">
+      <p><button type="submit" class="w3-btn w3-large w3-green" name="boutton" value="partager">Partager</button></p>
+    </form>
+  {% endif %}
 </div>
 
 {% endblock %}
