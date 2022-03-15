@@ -78,6 +78,24 @@ theme_colors = {
     "7.jpg": ["#6b017f","#c470d4"]
 }
 
+quiz = [
+["_______ _______ _ a-t-il __ __ drapeau ______ ?",
+ "_______ d’étoiles _ ____ sur __ ______ valaisan ?",
+ "Combien _______ y ____ __ le _______ ______ ?"],
+["Quel ____ __ enclavé ____ le _______ ?",
+ "___ pays ___ ______ dans __ _______ ?",
+ "___ ____ est ______ ____ __ Sénégal ?"],
+["Combien _ ___ de _____ __ tram _ ________ ?",
+ "_______ y ___ __ lignes __ ____ à ________ ?",
+ "_______ _ a-t-il __ ____ de ____ _ Bordeaux ?"],
+["Quel ____ ___ pseudo ___ ____ of ____ ?",
+ "____ était ___ ______ sur ____ __ clans ?",
+ "____ ____ mon _____ ___ clash __ ____ ?"],
+["Comment _______ __ parc ______ _ l’université __ _______ ?",
+ "________ s’appelle __ ___ adjacent _ ________ de _______ ?",
+ "________ _______ le ____ ______ à _________ __ Montréal ?"],
+]
+
 def load_data():
     with open("data.pck", 'rb') as file:
         gameState, players, log = pickle.load(file)
@@ -99,6 +117,7 @@ def init_game():
         'otherPlayers': players.copy(), # Liste des autres joueurs pour le jeu 5
         'remaining_trials': 3,
         'sabotage': False, # Sabotage du 3ème jeu si les participants sont trop coopératifs
+        'questions': 0, # Indique a quel question du quiz on est
     }
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]
 

@@ -1,4 +1,4 @@
-{% extends "bese.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
+{% extends "base.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
 
   <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white" style="width:350px;">
   <header class="w3-container" style="background-color:{{theme_color}}">
@@ -7,7 +7,7 @@
   <form class="w3-container" method="POST">
   <p>
     <button type="submit" name="boutton" value=0 class="w3-margin-right w3-button w3-red" style="width:120px;">Refuser</button>
-    <button type="submit" name="boutton" value=1 class="w3-margin-left w3-button w3-teal" style="width:120px;">Accpeter</button>
+    <button type="submit" name="boutton" value=1 class="w3-margin-left w3-button" style="width:120px; background-color:{{theme_color}}">Accpeter</button>
   </p>
   <p>
 </form>

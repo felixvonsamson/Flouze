@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, pages_by_round, gameState, players, socketio, log, theme_colors
+from . import pages, pages_by_round, gameState, players, socketio, log, theme_colors, quiz
 import random
 import pickle
 import datetime
@@ -155,7 +155,11 @@ def game4_logic():
 
 def game5_init():
     for p in gameState['otherPlayers']:
-        p['message'] = f"Veuillez attendre la proposition de {gameState['starMaster']['name']} ..."
+        p['message'] = f"Veuillez attendre la nouvelle proposition de {gameState['starMaster']['name']} ..."
+    op = gameState['otherPlayers'].copy()
+    op.remove(gameState['otherPlayers'][0])
+    for i in range(3):
+        op[i]['question'] = quiz[0][i]
 
 def game5_done():
     gameState['iterator'] = len(pages) - 1
@@ -403,6 +407,14 @@ def home():
             update_data()
 
         if pages[gameState['iterator']]['url'] == "Jeu 5":
+            if request.form['boutton'] == 'quiz':
+                log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + f'{players[session["ID"]]["name"]} a donner la réponse "{request.form.get("réponse")}" au quiz')
+                gameState['questions'] += 1
+                op = gameState['otherPlayers'].copy()
+                op.remove(gameState['otherPlayers'][gameState['questions']])
+                for i in range(3):
+                    op[i]['question'] = quiz[gameState['questions']][i]
+
             if request.form['boutton'] == 'proposition':
                 total = 0
                 for p in gameState['otherPlayers']:
@@ -461,6 +473,11 @@ def home():
         if pages[gameState['iterator']]["phase"] == "proposition":
             if players[session['ID']] == gameState['starMaster']:
                 return render_template("Jeu5-proposition.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], otherPlayers=gameState['otherPlayers'], background=pages[gameState['iterator']]['background'])
+            elif gameState['remaining_trials'] == 3 and gameState['questions'] < 4:
+                if players[session["ID"]]['name'] == gameState['otherPlayers'][gameState['questions']]['name']:
+                    return render_template("quiz.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], secondary_theme_color=theme_colors[pages[gameState['iterator']]['background']][1], user=players[session["ID"]], background=pages[gameState['iterator']]['background'], input=True)
+                else:
+                    return render_template("quiz.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], secondary_theme_color=theme_colors[pages[gameState['iterator']]['background']][1], user=players[session["ID"]], background=pages[gameState['iterator']]['background'], input=False)
             else:
                 return render_template("results.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=players[session["ID"]], players=players, background=pages[gameState['iterator']]['background'])
         elif pages[gameState['iterator']]["phase"] == "validation":
