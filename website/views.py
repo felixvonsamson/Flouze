@@ -38,7 +38,11 @@ def reveal_card(card_id):
 
 def next_frame():
     gameState['frameId'] += 1
-    print(gameState['frameId'])
+    socketio.emit('move_to_frame', gameState['frameId'], broadcast=True)
+    save_data()
+
+def previous_frame():
+    gameState['frameId'] -= 1
     socketio.emit('move_to_frame', gameState['frameId'], broadcast=True)
     save_data()
 
@@ -208,10 +212,16 @@ def home():
 
     if session["ID"] == "admin":
         if request.method == 'POST':
-            assert 'boutton' in request.form and request.form['boutton'] in ['page suivante', "page précedente"] or\
-                   'reveal' in request.form and request.form['reveal'] in map(str, range(5))
+            assert 'boutton' in request.form and request.form['boutton'] in ['page suivante', 'page précedente'] or\
+                   'reveal' in request.form and request.form['reveal'] in map(str, range(5)) or\
+                   'diapo' in request.form and request.form['diapo'] in ['suivant', 'précedent']
             if 'reveal' in request.form:
                 reveal_card(int(request.form['reveal']))
+            elif 'diapo' in request.form:
+                if request.form['diapo'] == 'suivant':
+                    next_frame()
+                if request.form['diapo'] == 'précedent':
+                    previous_frame()
             elif request.form['boutton'] == 'page suivante' and gameState['iterator'] < len(pages)-1:
                 if pages[gameState['iterator']]['url'] == "results.html":
                     for p in players: #reinitialiser le statut et les choix des joueurs

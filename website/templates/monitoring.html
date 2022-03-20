@@ -17,34 +17,51 @@
 <body>
   <div class="container" style="display:flex; justify-content:space-evenly;">
     {% for p in players %}
-    <div class="container w3-center w3-margin-top" style="width:360px; background-color:{{p['color']}}">
-      <p class="w3-xlarge"><b>{{p["name"]}}</b></p>
-      <p class="w3-xlarge"><i class="fa fa-star"> {{p["stars"]}}</i></p>
-      <p class="w3-xlarge">{{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:25px" alt="Coin"></p>
-      {% if pages[gameState['iterator']]['round'][0] == 3 %}
-        <p class="w3-xlarge">({{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:25px" alt="Coin">)</p>
-      {% endif %}
-      <p class="w3-xlarge">choix : {{p["choix"]}}</p>
-      <div class="w3-text-white w3-margin" style="background-color:{{p['secColor']}}">
-        <p class="w3-large">message : {{p["message"]}}</p>
+    <div class="container w3-center w3-margin-top w3-xlarge" style="width:360px; background-color:{{p['color']}}">
+      <p><b>{{p["name"]}}</b></p>
+      <div class="w3-row w3-margin">
+        <div class="w3-half">
+          {{p["stars"]}} <i class="fa fa-star"></i><br>
+        </div>
+        <div class="w3-half">
+          {{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin"><br>
+          {% if pages[gameState['iterator']]['round'][0] == 3 %}
+            ({{p["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin">)<br>
+          {% endif %}
+        </div>
       </div>
-      <p class="w3-xlarge">done : {{p["done"]}}</p>
-      <form class="w3-center" method="POST">
+      <div class="w3-text-white w3-margin w3-large" style="background-color:{{p['secColor']}}">
+        message : {{p["message"]}}
+      </div>
+      choix : {{p["choix"]}}<br>
+      done : {{p["done"]}}<br>
+      <form class="w3-center w3-margin w3-large" method="POST">
         <button type="submit" class="w3-button" style="background-color:{{p['secColor']}}" name="reveal" value="{{p["ID"]}}" {% if gameState['reveal'][p['ID']] %}disabled{% endif %}>Révéler</button>
       </form>
     </div>
     {% endfor %}
   </div>
-  <form class="w3-center" method="POST">
-    <p>Page actuelle : {{pages[gameState['iterator']]['url']}}</p>
-    <p><button type="submit" class="w3-button w3-blue" name="boutton" value="page précedente">Page précedante</button>
-      <button type="submit" class="w3-button w3-blue" name="boutton" value="page suivante">Page suivante</button></p>
-  </form>
 
-  <div class="w3-margin w3-large">
-    {% for i in range(imax) %}
-    {{log[-i-1]}}<br>
-    {% endfor %}
+
+  <div class="w3-row w3-margin">
+    <div class="w3-right w3-large w3-light-gray w3-padding" style="max-width:50%">
+      {% for i in range(imax) %}
+      {{log[-i-1]}}<br>
+      {% endfor %}
+    </div>
+    <div class="w3-rest">
+      <form class="w3-center w3-xlarge" method="POST">
+        <p>Page actuelle : {{pages[gameState['iterator']]['url']}}</p>
+        <p>Jeu {{pages[gameState['iterator']]['round'][0]}}, manche {{pages[gameState['iterator']]['round'][1]}}</p>
+        <p><button type="submit" class="w3-button w3-red w3-margin" name="boutton" value="page précedente">Page précedante</button>
+          <button type="submit" class="w3-button w3-teal w3-margin" name="boutton" value="page suivante">Page suivante</button></p>
+        {% if pages[gameState['iterator']]['round'][1] == 0 %}
+          <p>Explications</p>
+          <p><button type="submit" class="w3-button w3-green w3-margin-right" name="diapo" value="précedent">Diapo précedante</button>
+            <button type="submit" class="w3-button w3-green w3-margin-left" name="diapo" value="suivant">Diapo suivante</button></p>
+        {% endif %}
+      </form>
+    </div>
   </div>
 
 

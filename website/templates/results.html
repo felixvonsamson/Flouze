@@ -3,7 +3,7 @@
 <h2 class="w3-text-white w3-padding-large  w3-text-white" style="position:absolute; top:50px; right:0px; background-color:{{theme_color}}">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
 {% endif %}
 
-<div class="w3-panel w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-display-container w3-display-middle w3-padding">
+<div class="w3-panel w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-display-container w3-display-middle w3-padding animate__animated animate__fadeIn">
   <p class="w3-large">{{user["message"]}}</p>
   {% if user['gain_a_partager'] != 0 %}
     <form method="POST">
