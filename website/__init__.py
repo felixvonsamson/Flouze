@@ -2,6 +2,7 @@ from flask import Flask, Markup, request
 import os.path
 import pickle
 import datetime
+import config
 from flask_socketio import SocketIO
 
 
@@ -18,8 +19,6 @@ def init_player(ID, prenom, mdp, color1, color2):
     player["secColor"] = color2
     player["choix"] = None
     player["done"] = False # Indique si le joueur a fait son choix
-    player["otherPlayers"] = list(range(5))
-    player["otherPlayers"].remove(ID)
     player["namespace"] = None
     player["gain_a_partager"] = 0 # Quantitée a partager dans 'partager.htlm'
     return player
@@ -108,6 +107,9 @@ def init_game():
         for p in range(5):
             line = file.readline().split()
             players.append(init_player(p, line[0], line[1], line[2], line[3]))
+        for i, player in enumerate(players):
+            player["otherPlayers"] = players.copy()
+            player["otherPlayers"].pop(i)
     gameState = { # évolution des status du jeu
         'iterator': 0, # pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
         'done': 0,  # Nombre de joueurs qui ont fait leur choix
@@ -118,23 +120,28 @@ def init_game():
         'remaining_trials': 3,
         'sabotage': False, # Sabotage du 3ème jeu si les participants sont trop coopératifs
         'questions': 0, # Indique a quel question du quiz on est
+        'reveal': [False]*5
     }
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]
 
 gameState, players, log = load_data() if os.path.isfile("data.pck") else init_game()
 
-players_by_name = { p['name']: p for p in players}
+players_by_name = { p['name']: p for p in players }
 
+config.admin_sid = None
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+
     global socketio
     socketio = SocketIO(app)
     @socketio.on('give_identity')
     def give_identity(name):
-        print(f"{name} connected")
-        players_by_name[name]['sid'] = request.sid
+        if name == "admin":
+            config.admin_sid = request.sid
+        else:
+            players_by_name[name]['sid'] = request.sid
 
     from .views import views
     from .auth import auth

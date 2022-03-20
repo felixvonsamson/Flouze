@@ -4,8 +4,9 @@
   <div class="w3-margin-bottom" style="display:flex; justify-content:space-around;">
 
     {% for i in range(2) %}
+
     <div class="flip-card w3-half" style="width:150px; height:120px;">
-      <div class="flip-card-inner">
+      <div id="card{{i}}" {% if gameState['reveal'][i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{players[i]['color']}};">
           <h4><b>{{players[i]["name"]}}</b></h4>
         </div>
@@ -24,7 +25,7 @@
 
     {% for i in range(2) %}
     <div class="flip-card w3-half" style="width:150px; height:120px;">
-      <div class="flip-card-inner">
+      <div id="card{{i+2}}" {% if gameState['reveal'][i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{players[i+2]['color']}};">
           <h4><b>{{players[i+2]["name"]}}</b></h4>
         </div>
@@ -41,7 +42,7 @@
   </div>
   <div style="display:flex; justify-content:space-around;">
     <div class="flip-card w3-half" style="width:150px; height:120px;">
-      <div class="flip-card-inner">
+      <div id="card4" {% if gameState['reveal'][4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{players[4]['color']}};">
           <h4><b>{{players[4]["name"]}}</b></h4>
         </div>

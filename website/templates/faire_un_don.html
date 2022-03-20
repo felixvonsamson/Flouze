@@ -1,6 +1,6 @@
 {% extends "base+etoiles.html" %} {% block title %}Faire un don{% endblock %} {% block inside2%}
 {% if user["saved_flouze"] != 0 %}
-<h2 class="w3-text-white w3-teal w3-padding-large" style="position:absolute; top:50px; right:0px">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
+<h2 class="w3-text-white w3-padding-large" style="position:absolute; top:50px; right:0px; background-color:{{theme_color}}">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
 {% endif %}
 
   <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white" style="width:250px;">
@@ -10,10 +10,10 @@
   <form class="w3-container" method="POST">
   <select name="destinataire" class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:120px;">
     <option value="" disabled="" selected="">Destinataire</option>
-  <option value=0>{{players[user['otherPlayers'][0]]["name"]}}</option>
-  <option value=1>{{players[user['otherPlayers'][1]]["name"]}}</option>
-  <option value=2>{{players[user['otherPlayers'][2]]["name"]}}</option>
-  <option value=3>{{players[user['otherPlayers'][3]]["name"]}}</option>
+  <option value=0>{{user['otherPlayers'][0]["name"]}}</option>
+  <option value=1>{{user['otherPlayers'][1]["name"]}}</option>
+  <option value=2>{{user['otherPlayers'][2]["name"]}}</option>
+  <option value=3>{{user['otherPlayers'][3]["name"]}}</option>
   </select>
   <input name="montant" class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" type="number" style="width:120px; display:inline-block;">
   <p>

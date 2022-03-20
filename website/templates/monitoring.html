@@ -21,7 +21,7 @@
       <p class="w3-xlarge"><b>{{p["name"]}}</b></p>
       <p class="w3-xlarge"><i class="fa fa-star"> {{p["stars"]}}</i></p>
       <p class="w3-xlarge">{{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:25px" alt="Coin"></p>
-      {% if pages[iterator]['round'][0] == 3 %}
+      {% if pages[gameState['iterator']]['round'][0] == 3 %}
         <p class="w3-xlarge">({{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:25px" alt="Coin">)</p>
       {% endif %}
       <p class="w3-xlarge">choix : {{p["choix"]}}</p>
@@ -29,18 +29,21 @@
         <p class="w3-large">message : {{p["message"]}}</p>
       </div>
       <p class="w3-xlarge">done : {{p["done"]}}</p>
+      <form class="w3-center" method="POST">
+        <button type="submit" class="w3-button" style="background-color:{{p['secColor']}}" name="reveal" value="{{p["ID"]}}" {% if gameState['reveal'][p['ID']] %}disabled{% endif %}>Révéler</button>
+      </form>
     </div>
     {% endfor %}
   </div>
   <form class="w3-center" method="POST">
-    <p>Page actuelle : {{pages[iterator]['url']}}</p>
+    <p>Page actuelle : {{pages[gameState['iterator']]['url']}}</p>
     <p><button type="submit" class="w3-button w3-blue" name="boutton" value="page précedente">Page précedante</button>
       <button type="submit" class="w3-button w3-blue" name="boutton" value="page suivante">Page suivante</button></p>
   </form>
 
-  <div class="w3-center">
+  <div class="w3-margin w3-large">
     {% for i in range(imax) %}
-    <p>{{log[-i-1]}}</p>
+    {{log[-i-1]}}<br>
     {% endfor %}
   </div>
 
@@ -48,10 +51,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
    <script type="text/javascript" charset="utf-8">
      var socket = io();
-     socket.on('changed', function() {
+     socket.on('connect', function() {
+         socket.emit('give_identity', 'admin');
+     });
+     socket.on('refresh', function() {
          window.location = window.location;
      });
-
      function disableBack() { window.history.forward(); }
      setTimeout("disableBack()", 0);
      window.onunload = function () { null };
