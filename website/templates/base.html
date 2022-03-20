@@ -13,7 +13,7 @@
     <title>{% block title %}Home{% endblock %}</title>
   </head>
 
-<body style="background-image: url({{url_for('static', filename="images/"+background)}});">
+<body style="background-image: url({{url_for('static', filename="images/"+background)}}); min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start;">
   <div class="w3-container w3-text-white" style="height:72px; background-color:{{theme_color}}">
     <h3 class="w3-right w3-xxlarge"><span id="flouze">{{user["flouze"]}}</span> <img src="{{url_for('static', filename="images/coin.png")}}" style="width:32px" alt="Coin"></h3>
   </div>
@@ -69,6 +69,12 @@
         if (card != null) {
           card.style.transform = "rotateY(180deg)";
         }
+    });
+    socket.on('move_to_frame', function(frame_id) {
+        var frame     = document.querySelector("iframe");
+        if (frame == null) return;
+        var player = frame.contentWindow.sozi.player;
+        player.moveToFrame(frame_id % player.presentation.frames.length);
     });
     socket.on('refresh', function() {
         window.location = window.location;

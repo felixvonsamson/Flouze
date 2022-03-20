@@ -120,6 +120,7 @@ def init_game():
         'remaining_trials': 3,
         'sabotage': False, # Sabotage du 3ème jeu si les participants sont trop coopératifs
         'questions': 0, # Indique a quel question du quiz on est
+        'frameId': 0,
         'reveal': [False]*5
     }
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]

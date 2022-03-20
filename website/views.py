@@ -36,6 +36,12 @@ def reveal_card(card_id):
     socketio.emit('reveal_card', card_id, broadcast=True)
     save_data()
 
+def next_frame():
+    gameState['frameId'] += 1
+    print(gameState['frameId'])
+    socketio.emit('move_to_frame', gameState['frameId'], broadcast=True)
+    save_data()
+
 def update_waiting_count(count, total):
     update_data([("count", f"{count} / {total}")], players=(p  for p in players if p["done"]))
 
@@ -212,6 +218,8 @@ def home():
                         p["choix"] = None
                         p["gain_a_partager"] = 0
                         p["reveal"] = False
+                if pages[gameState['iterator']]['url'] == "title.html":
+                    gameState["frameId"] = 0
                 gameState['iterator'] += 1
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Passage à la page suivante : " + pages[gameState['iterator']]['url'] + " (jeu " + str(pages[gameState['iterator']]['round'][0]) + ", manche " + str(pages[gameState['iterator']]['round'][1]) + ")")
 
@@ -225,7 +233,7 @@ def home():
                 refresh_all_pages()
 
             elif request.form['boutton'] == 'page précedente' and gameState['iterator'] > 0:
-                reveal_card(2)
+                next_frame()
                 return render_template("monitoring.html" , players=players, pages=pages, gameState=gameState, log=log, imax=min(len(log),20))
 
                 for p in players:
