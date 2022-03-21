@@ -1,4 +1,7 @@
 import datetime
+from flask import Markup, flash
+
+from .html_icons import icons
 
 class Player(object):
     def __init__(player, ID, name, password, main_color, sec_color, engine):
@@ -27,7 +30,7 @@ class Player(object):
         socketio.emit('message', message, room=player.sid)
     
     def send_money(player, receiver, amount):
-        assert(player.flouze >= amount)
+        assert (player.flouze >= amount)
 
         player.flouze -= amount
         receiver.flouze += amount
@@ -38,21 +41,19 @@ class Player(object):
         updates = [("flouze", receiver.flouze)]
         player.game.update_fields(updates, [receiver])
         
-        message = f'Vous avez envoyé {amount} '\
-                   '<img src="/static/images/coin.png" style="width:22px" '\
-                  f'alt="Coin"> &nbsp; à {receiver.name}.'
+        message = f"Vous avez envoyé {amount} {icons['coin']}"\
+                   " &nbsp; à {receiver.name}."
         flash(Markup(message, category='success'))
         
-        message = f'Vous avez reçu {amount} <img src="/static/images/coin.png"'\
-                   ' style="width:22px" alt="Coin"> &nbsp;  de la part de '\
-                  f'{player["name"]}.'
+        message = f"Vous avez reçu {amount} {icons['coin']} &nbsp; "\
+                  f"de la part de {player['name']}."
         receiver.send_message(message)
 
         player.game.save_data()
         
     
     def send_star(player, receiver, sent_stars):
-        assert(player.stars >= sent_stars)
+        assert (player.stars >= sent_stars)
 
         player.stars -= sent_stars
         receiver.stars += sent_stars
@@ -65,21 +66,21 @@ class Player(object):
                    (f"player{receiver.ID}_star", f" {receiver.stars}")] 
         player.game.update_fields(updates)
         
-        message = f'Vous avez envoyé {sent_stars} <i class="fa fa-star"></i> '\
-                  f'à {receiver.name}.'
+        message = f"Vous avez envoyé {sent_stars} {icons['star']} "\
+                  f"à {receiver.name}."
         flash(Markup(message, category='success'))
         
-        message = f'Vous avez reçu {sent_stars} <i class="fa fa-star"></i> '\
-                  f'de la part de {player.name}.'
+        message = f"Vous avez reçu {sent_stars} {icons['star']}"\
+                  f"de la part de {player.name}."
         receiver.send_message(message)
 
         player.game.save_data()
 
 
     def share_profit(player, amounts):
-        assert(player.last_profit)
-        assert(sum(amounts) <= player.last_profit)
-        assert(sum(amounts) <= player.flouze)
+        assert player.last_profit
+        assert (sum(amounts) <= player.last_profit)
+        assert (sum(amounts) <= player.flouze)
         for receiver, amount in zip(player.other_players, amounts):
             if amount:
                 player.send_money(receiver, amount)

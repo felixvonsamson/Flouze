@@ -1,8 +1,9 @@
 import datetime
 import pickle
+from flask import Markup, flash
 
 from .players import Player
-from .games import *
+from .games import Game1, Game2, Game3, Game4, Game5
 from .pages_ordering import pages
 
 class gameEngine(object):
@@ -25,7 +26,7 @@ class gameEngine(object):
                         Game4(engine), 
                         Game5(engine)]
 
-        # pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
+        # pointeur pour indiquer sur quelle page on est (l'array 'pages')
         engine.iterator = 0
 
     @property
@@ -34,7 +35,7 @@ class gameEngine(object):
 
     @property
     def current_stage(engine):
-        return gameEngine.pages[engine.iterator]["round"]
+        return gameEngine.pages[engine.iterator]["stage"]
     
     @property
     def current_game(engine):

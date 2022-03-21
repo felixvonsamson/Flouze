@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-from . import pages, pages_by_round, gameState, players, socketio, log, theme_colors, quiz
+from . import pages, pages_by_round, gameState, players, log, theme_colors, quiz
 
-from flask_socketio import send, emit
 
 views = Blueprint('views', __name__)
 
