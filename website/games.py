@@ -4,19 +4,74 @@ from abc import ABC, abstractmethod
 
 class Game(ABC):
     @abstractmethod
-    def game(self):
-        pass
+    def __init__(game, engine):
+        game.engine = engine
+        game.is_done = [[False]*5 for _ in range(3)]
+        game.frame_id = 0
+    
+    def is_allowed_to_play(game, player):
+        return 
 
     @abstractmethod
     def logic(self):
         pass
 
 class Game1(Game):
-    def __init__():
+    def __init__(game, engine):
+        game.engine = engine
+
+    def logic(self):
         pass
 
-    def logic(self)
+class Game2(Game):
+    def __init__(game, engine):
+        game.engine = engine
+        game.reveal = [[False]*5 for _ in range(3)]
 
+    def logic(self):
+        pass
+
+class Game3(Game):
+    def __init__(game, engine):
+        game.engine = engine
+        # Sabotage du 3ème jeu si les participants sont trop coopératifs
+        game.sabotage = False
+
+    def logic(self):
+        pass
+
+class Game4(Game):
+    def __init__(game, engine):
+        game.engine = engine
+        # combien de fois les joueurs ont tous choisis des objets differents
+        game.bonuses = 0
+        game.reveal = [[False]*5 for _ in range(3)]
+
+    def logic(self):
+        pass
+
+class Game5(Game):
+    def __init__(game, engine, master, bonus):
+        game.engine = engine
+        # joueur ayant le plus d'étoiles à la fin du jeu 4
+        game.master = master
+        # reste des joueurs
+        game.other_players = engine.players.copy()
+        game.other_players.pop(master.ID)
+        # bonus pour le jeu 5
+        game.master_prize_bonus = bonus
+        game.remaining_trials = 3
+
+    def logic(self):
+        pass
+
+class Quiz(Game):
+    def __init__(game, engine, master, bonus):
+        game.engine = engine
+        game.question_id = 0
+
+    def logic(self):
+        pass
 
 def end_waiting():
     gameState['iterator'] += 1
