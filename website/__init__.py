@@ -32,32 +32,13 @@ quiz = [
 def init_game():
     players = []
     with open("players.txt", "r") as file:
-        for p in range(5):
-            line = file.readline().split()
-            players.append(init_player(p, line[0], line[1], line[2], line[3]))
-        for i, player in enumerate(players):
-            player["otherPlayers"] = players.copy()
-            player["otherPlayers"].pop(i)
-    gameState = { # évolution des status du jeu
-        'iterator': 0, # pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
-        'done': 0,  # Nombre de joueurs qui ont fait leur choix
-        'game4_bonus': 0, # combien de fois les joueurs ont tous choisis des objets differents
-        'masterPrizeBonus': False,  # bonus pour le jeu 5
-        'starMaster': None, # joueur ayant le plus d'étoiles à la fin du jeu 4
-        'otherPlayers': players.copy(), # Liste des autres joueurs pour le jeu 5
-        'remaining_trials': 3, 
-        'sabotage': False, # Sabotage du 3ème jeu si les participants sont trop coopératifs
-        'questions': 0, # Indique a quel question du quiz on est
-        'frameId': 0, 
-        'reveal': [False]*5
-    }
+        players_raw = [(player_id, *file.readline().split()) for player_id in range(5)]
+
     return gameState, players, [datetime.datetime.now().strftime('%H:%M:%S : ') + "LE JEU A COMMENCÉ"]
 
 gameState, players, log = load_data() if os.path.isfile("data.pck") else init_game()
 
-players_by_name = { p['name']: p for p in players }
-
-config.admin_sid = None
+players_by_name = { player.name for player in players }
 
 def create_app():
     app = Flask(__name__)
