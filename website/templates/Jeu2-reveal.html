@@ -1,11 +1,11 @@
 {% extends "base+don.html" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content
 %}
-<div class="w3-display-middle w3-center animate__animated animate__fadeIn" style="width:340px;">
-  <div class="w3-margin-bottom" style="display:flex; justify-content:space-around;">
+<div class="w3-display-middle w3-center animate__animated animate__fadeIn" style="width:320px;">
+  <div class="w3-margin-bottom" style="display:flex; justify-content:space-between;">
 
     {% for i in range(2) %}
 
-    <div class="flip-card w3-half" style="width:150px; height:120px;">
+    <div class="flip-card" style="width:150px; height:120px;">
       <div id="card{{i}}" {% if gameState['reveal'][i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{players[i]['color']}};">
           <h4><b>{{players[i]["name"]}}</b></h4>
@@ -21,10 +21,10 @@
     {% endfor %}
 
   </div>
-  <div class="w3-margin-bottom" style="display:flex; justify-content:space-around; ">
+  <div class="w3-margin-bottom" style="display:flex; justify-content:space-between;">
 
     {% for i in range(2) %}
-    <div class="flip-card w3-half" style="width:150px; height:120px;">
+    <div class="flip-card" style="width:150px; height:120px;">
       <div id="card{{i+2}}" {% if gameState['reveal'][i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{players[i+2]['color']}};">
           <h4><b>{{players[i+2]["name"]}}</b></h4>
@@ -41,7 +41,7 @@
 
   </div>
   <div style="display:flex; justify-content:space-around;">
-    <div class="flip-card w3-half" style="width:150px; height:120px;">
+    <div class="flip-card" style="width:150px; height:120px;">
       <div id="card4" {% if gameState['reveal'][4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{players[4]['color']}};">
           <h4><b>{{players[4]["name"]}}</b></h4>

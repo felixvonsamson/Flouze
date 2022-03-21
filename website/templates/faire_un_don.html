@@ -3,12 +3,12 @@
 <h2 class="w3-text-white w3-padding-large" style="position:absolute; top:50px; right:0px; background-color:{{theme_color}}">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
 {% endif %}
 
-  <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:250px;">
-  <header class="w3-container" style="background-color:{{theme_color}}">
-      <h4>Faire un don</h4>
+  <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:240px;">
+  <header class="w3-container w3-padding" style="background-color:{{theme_color}}; font-size:22px">
+      Faire un don
   </header>
   <form class="w3-container" method="POST">
-  <select name="destinataire" class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:120px;">
+  <select name="destinataire" class="w3-select w3-border w3-round-large w3-center" style="width:120px; margin-top:16px; margin-bottom:8px">
     <option value="" disabled="" selected="">Destinataire</option>
   <option value=0>{{user['otherPlayers'][0]["name"]}}</option>
   <option value=1>{{user['otherPlayers'][1]["name"]}}</option>
@@ -20,7 +20,6 @@
     <button type="submit" name="boutton" value="en fait non" class="w3-button w3-margin-right w3-red">en fait non</button>
     <button type="submit" name="boutton" value="envoyer don" class="w3-button" style="background-color:{{theme_color}}">Envoyer</button>
   </p>
-  <p>
 </form>
   </div>
 

@@ -64,7 +64,7 @@ pages = [      # Liste des pages a afficher dans l'ordre / round est de la forme
     { "url": "Jeu 5",            "round": [5, 1], "background": "7.jpg", "phase": "proposition"},
     { "url": "Jeu 5",            "round": [5, 1], "background": "7.jpg", "phase": "validation"},
     { "url": "Jeu 5",            "round": [5, 1], "background": "7.jpg", "phase": "reveal"},
-    { "url": "results.html",     "round": [5, 3], "background": "7.jpg"}
+    { "url": "final-result.html","round": [5, 3], "background": "7.jpg"}
 ]
 
 pages_by_round = { tuple(page['round']) : page for page in pages }

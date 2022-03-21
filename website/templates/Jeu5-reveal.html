@@ -5,52 +5,34 @@
       <h4>{{user['message']}}</h4>
   </header>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{otherPlayers[0]["name"]}}</b></h3>
-      <div class="w3-display-container" style="height:50px;">
-        <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[0]['proposition']}}</div>
-        {% if otherPlayers[0]['choix'] == 0 %}
-        <p class="w3-text-red w3-xlarge">Refusé</p>
+    {% for i in range(2) %}
+    <div class="w3-card w3-xlarge w3-margin w3-padding w3-half w3-teal" style="width:150px; height:150px; background-color:{{players[i]['color']}};">
+      <p><b>{{otherPlayers[i]["name"]}}</b></p>
+      <div class="w3-padding w3-text-white w3-margin" style="background-color:{{players[i]['secColor']}};">{{otherPlayers[i]['proposition']}}</div>
+      <div class="w3-padding w3-white w3-margin">
+        {% if otherPlayers[i]['choix'] == 0 %}
+        <p class="w3-text-red">Refusé</p>
         {% else %}
-        <p class="w3-text-green w3-xlarge">Accepté</p>
+        <p class="w3-text-green">Accepté</p>
         {% endif %}
       </div>
     </div>
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{otherPlayers[1]["name"]}}</b></h3>
-      <div class="w3-display-container" style="height:50px;">
-        <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[1]['proposition']}}</div>
-        {% if otherPlayers[1]['choix'] == 0 %}
-        <p class="w3-text-red w3-xlarge">Refusé</p>
-        {% else %}
-        <p class="w3-text-green w3-xlarge">Accepté</p>
-        {% endif %}
-      </div>
-    </div>
+    {% endfor %}
   </div>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{otherPlayers[2]["name"]}}</b></h3>
-      <div class="w3-display-container" style="height:50px;">
-        <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[2]['proposition']}}</div>
-        {% if otherPlayers[2]['choix'] == 0 %}
-        <p class="w3-text-red w3-xlarge">Refusé</p>
+    {% for i in range(2) %}
+    <div class="w3-card w3-xlarge w3-margin w3-padding w3-half w3-teal" style="width:150px; height:150px; background-color:{{players[i+2]['color']}};">
+      <p><b>{{otherPlayers[i+2]["name"]}}</b></p>
+      <div class="w3-padding w3-text-white w3-margin" style="background-color:{{players[i+2]['secColor']}};">{{otherPlayers[i+2]['proposition']}}</div>
+      <div class="w3-padding w3-white w3-margin">
+        {% if otherPlayers[i+2]['choix'] == 0 %}
+        <p class="w3-text-red">Refusé</p>
         {% else %}
-        <p class="w3-text-green w3-xlarge">Accepté</p>
+        <p class="w3-text-green">Accepté</p>
         {% endif %}
       </div>
     </div>
-    <div class="w3-card w3-margin w3-padding w3-half w3-teal" style="width:200px; height:150px;">
-      <h3><b>{{otherPlayers[3]["name"]}}</b></h3>
-      <div class="w3-display-container" style="height:50px;">
-        <div class="w3-xlarge w3-padding w3-white w3-margin">{{otherPlayers[3]['proposition']}}</div>
-        {% if otherPlayers[3]['choix'] == 0 %}
-        <p class="w3-text-red w3-xlarge">Refusé</p>
-        {% else %}
-        <p class="w3-text-green w3-xlarge">Accepté</p>
-        {% endif %}
-      </div>
-    </div>
+    {% endfor %}
   </div>
   <div class="w3-container w3-center">
       <form method="POST">

@@ -101,11 +101,11 @@ def game2_logic():
             player['gain_a_partager'] = prize
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + "Pièces")
             for p in players:
-                p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin">')
+                p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin">')
             if pages[gameState['iterator']]['round'][1] == 3:
                 player["stars"] += pages[gameState['iterator']]["stars"]
                 for p in players:
-                    p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin">.\n En plus iel recoit ' + str(pages[gameState['iterator']]["stars"]) + ' <i class="fa fa-star"></i> car iel a remporté la dernière manche.')
+                    p["message"] = Markup(player["name"] + " a gagné et a remporté " + str(prize) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin">.<br> En plus iel recoit ' + str(pages[gameState['iterator']]["stars"]) + ' <i class="fa fa-star"></i> car iel a remporté la dernière manche.')
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a recu " + str(pages[gameState['iterator']]["stars"]) + " étoile(s) car iel a gagné la dernière manche")
             break
     else:
@@ -136,13 +136,13 @@ def game3_logic():
     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + str(prize*5) + " Pièces ont été redistribué équitablement à tous les joueurs ce qui fait " + str(prize) + " Pièces par joueur")
     for p in players:
         p["flouze"] += prize
-        p["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin">')
+        p["message"] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin">')
     if pages[gameState['iterator']]['round'][1] == 3:
         flouzes = [p['flouze'] for p in players]
         starWinnerID = np.argmax(flouzes)
         if flouzes.count(max(flouzes)) == 1:
             players[starWinnerID]['stars'] += pages[gameState['iterator']]["stars"]
-            players[starWinnerID]['message'] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin">.\nEn plus vous recevez ' + str(pages[gameState['iterator']]["stars"]) + " <i class='fa fa-star'></i> car vous avez gagné le plus d'argent durant ce jeu.")
+            players[starWinnerID]['message'] = Markup("Vous avez reçu " + str(prize) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin">.<br>En plus vous recevez ' + str(pages[gameState['iterator']]["stars"]) + " <i class='fa fa-star'></i> car vous avez gagné le plus d'argent durant ce jeu.")
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + players[starWinnerID]['name'] + " a recu " + str(pages[gameState['iterator']]["stars"]) + " étoile(s) car iel a gagné le plus d'argent durant ce jeu")
         else:
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Dû à une égalité aucune étoile n'a été distribuée")
@@ -177,7 +177,7 @@ def game4_logic():
             else:
                 player["flouze"] += prize
                 player['gain_a_partager'] = prize
-                player["message"] = Markup("Vous avez remporté le prix : " + str(prize) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin">')
+                player["message"] = Markup("Vous avez remporté le prix : " + str(prize) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin">')
                 log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a remporté " + str(prize) + " Pièces")
     if uniqueChoices == 5:
         if pages[gameState['iterator']]['round'][1] == 3:
@@ -292,8 +292,8 @@ def home():
             receiver = otherPlayers[receiver_level]
             receiver["flouze"] += montant
             update_data([("flouze", receiver["flouze"])], [receiver])
-            send_message(f'Vous avez reçu {montant} <img src="/static/images/coin.png" style="width:22px" alt="Coin"> &nbsp;  de la part de {player["name"]}.', receiver);
-            flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin"> &nbsp; à ' + receiver["name"]), category='success')
+            send_message(f'Vous avez reçu {montant} <img src="/static/images/coin.png" style="width:20px" alt="Coin"> &nbsp;  de la part de {player["name"]}.', receiver);
+            flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin"> &nbsp; à ' + receiver["name"]), category='success')
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a fait un don de " + str(montant) + " Pièces à " + receiver["name"])
             save_data()
             return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=player, players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
@@ -316,7 +316,7 @@ def home():
                     player["flouze"] -= montant
                     receiver["flouze"] += montant
                     update_data([("flouze", receiver["flouze"])], [receiver])
-                    send_message(f'Vous avez reçu {montant} <img src="/static/images/coin.png" style="width:22px" alt="Coin"> &nbsp;  de la part de {player["name"]}.', receiver);
+                    send_message(f'Vous avez reçu {montant} <img src="/static/images/coin.png" style="width:20px" alt="Coin"> &nbsp;  de la part de {player["name"]}.', receiver);
                     flash(Markup('Vous avez envoyé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:25px" alt="Coin"> &nbsp; à ' + receiver["name"]), category='success')
                     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a fait un don de " + str(montant) + " Pièces à " + receiver["name"])
             save_data()
@@ -380,7 +380,7 @@ def home():
             player["done"] = True
             gameState['done'] += 1
             log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + player["name"] + " a versé " + str(montant) + " Pièces dans le pot commun")
-            flash(Markup('Vous avez versé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin"> dans le pot commun'), category='success')
+            flash(Markup('Vous avez versé ' + str(montant) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin"> dans le pot commun'), category='success')
             if gameState['done'] < 5:
                 update_waiting_count(gameState["done"], 5)
             else:
@@ -491,7 +491,7 @@ def home():
                 for p in gameState['otherPlayers']:
                     montant = int(request.form.get(p['name']))
                     p["proposition"] = montant
-                    p["message"] = Markup(player['name'] + ' vous fait une proposition de ' + str(montant) + ' <img src="/static/images/coin.png" style="width:22px" alt="Coin">')
+                    p["message"] = Markup(player['name'] + ' vous fait une proposition de ' + str(montant) + ' <img src="/static/images/coin.png" style="width:20px" alt="Coin">')
                 gameState['iterator'] += 1
                 refresh_all_pages()
 
@@ -506,11 +506,11 @@ def home():
                     update_waiting_count(gameState["done"], 4)
                 else:
                     if sum(p['choix'] for p in gameState['otherPlayers']) >= 3:
-                        gameState['starMaster']['message'] = "Votre proposition a été acceptée par la majorité"
+                        gameState['starMaster']['message'] = Markup(f"Votre proposition a été acceptée par la majorité.<br>Vous repartez donc avec {gameState['starMaster']['flouze']} <img src='/static/images/coin.png' style='width:20px' alt='Coin'> ce qui correspond à {gameState['starMaster']['flouze']/10} €")
                         for p in gameState['otherPlayers']:
                             gameState['starMaster']['flouze'] -= p['proposition']
                             p['flouze'] += p['proposition']
-                            p['message'] = Markup(f'La proposition à été acceptée par la majorité des joueurs.\n Vous avez recu {p["proposition"]} <img src="/static/images/coin.png" style="width:22px" alt="Coin">')
+                            p['message'] = Markup(f"La proposition à été acceptée par la majorité des joueurs.<br>Vous avez recu {p['proposition']} <img src='/static/images/coin.png' style='width:20px' alt='Coin'> de {gameState['starMaster']['name']} <br>Vous repartez donc avec {gameState['starMaster']['flouze']} <img src='/static/images/coin.png' style='width:20px' alt='Coin'> ce qui correspond à {gameState['starMaster']['flouze']/10} €")
                         game5_done()
                     else:
                         gameState['remaining_trials'] -= 1
@@ -523,7 +523,7 @@ def home():
                         else:
                             gameState['starMaster']['message'] = "Votre proposition a été refusée par la majorité"
                             for p in gameState['otherPlayers']:
-                                p['message'] = Markup(f"La proposition à été refusée par au moins 2 joueurs.\nEn attente d'une nouvelle proposition.")
+                                p['message'] = Markup(f"La proposition à été refusée par au moins 2 joueurs.<br>En attente d'une nouvelle proposition.")
                             end_waiting()
             elif request.form['boutton'] == 'nouvelle proposition':
                 gameState['iterator'] -= 2

@@ -12,7 +12,7 @@
       {% if user["choix"] == i %}
         {% if page['prize'][gameState["game4_bonus"]][i] == "star" %}
           {% if i == 3 %}
-            <div class="w3-card w3-xlarge w3-padding-small w3-light-gray w3-text-gray" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
+            <div class="w3-card w3-xlarge w3-padding-small w3-light-gray w3-text-teal" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
           {% else %}
             <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
           {% endif %}
@@ -22,7 +22,7 @@
       {% else %}
         {% if page['prize'][gameState["game4_bonus"]][i] == "star" %}
           {% if i == 3 %}
-            <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white w3-text-gray" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
+            <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white w3-text-teal" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
           {% else %}
             <button type="submit" name="boutton" value={{i}} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
           {% endif %}
