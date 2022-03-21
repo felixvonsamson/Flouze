@@ -15,9 +15,9 @@ class Player(object):
         player.last_profit = 0       # Quantitée a partager dans 'partager.htlm'
         return player
     
-    def send_message(player, message, to):
+    def send_message(player, message):
         socketio = player.engine.socketio
-        socketio.emit('message', message, room=to.sid)
+        socketio.emit('message', message, room=player.sid)
     
     def send_money(player, receiver, amount):
         assert(player.flouze >= amount)
@@ -39,7 +39,7 @@ class Player(object):
         message = f'Vous avez reçu {amount} <img src="/static/images/coin.png"'\
                    ' style="width:22px" alt="Coin"> &nbsp;  de la part de '\
                   f'{player["name"]}.'
-        player.send_message(message, receiver)
+        receiver.send_message(message)
 
         player.game.save_data()
         
@@ -64,14 +64,17 @@ class Player(object):
         
         message = f'Vous avez reçu {sent_stars} <i class="fa fa-star"></i> '\
                   f'de la part de {player.name}.'
-        player.send_message(message, receiver)
+        receiver.send_message(message)
 
         player.game.save_data()
 
 
     def share_profit(player, amounts):
+        assert(player.last_profit)
         assert(sum(amounts) <= player.last_profit)
+        assert(sum(amounts) <= player.flouze)
         for receiver, amount in zip(player.other_players, amounts):
             if amount:
                 player.send_money(receiver, amount)
+        player.last_profit = None
     
