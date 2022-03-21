@@ -268,10 +268,10 @@ class Game4(Game):
         if uniqueChoices == 5:
             if pages[gameState['iterator']]['round'][1] == 3:
                 gameState["masterPrizeBonus"] = True
-                game.engine.log(f"Tous les joueurs ont choisis un prix différent donc le gros lot passe de {pages_by_round[(5, 0)]['prize']} à {pages_by_round[(5, 0)]['prize'] + pages_by_round[(5, 0)]['bonus']} Pièces")
+                game.engine.log(f"Tous les joueurs ont choisis un prix différent donc le gros lot passe de {games_config['game5']['prize']} à {games_config['game5']['prize'] + games_config['game5']['bonus']} Pièces")
             else:
                 game.engine.log("Tous les joueurs ont choisis un prix différent donc un bonus s'applique pour la manche suivante")
-                gameState["game4_bonus"] += 1
+                game.bonus += 1
 
 class Game5(Game):
     def __init__(game, engine, master, with_bonus):
