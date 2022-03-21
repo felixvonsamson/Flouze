@@ -19,22 +19,41 @@ class gameEngine(object):
             player.other_players = engine.players.copy()
             player.other_players.pop(i)
         
-        engine.iterator = 0                  # pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
-        engine.waiting_count = 0             # Nombre de joueurs qui ont fait leur choix
-        engine.game4_bonus = 0               # combien de fois les joueurs ont tous choisis des objets differents
-        engine.masterPrizeBonus = False      # bonus pour le jeu 5
-        engine.starMaster = None             # joueur ayant le plus d'étoiles à la fin du jeu 4
-        engine.other_players = engine.players.copy() # Liste des autres joueurs pour le jeu 5
-        engine.remaining_trials = 3
-        engine.sabotage = False              # Sabotage du 3ème jeu si les participants sont trop coopératifs
-        engine.questions = 0                 # Indique a quel question du quiz on est
-        engine.frameId = 0
-        engine.reveal = [False]*5
+        engine.games = [Game1(engine), 
+                        Game2(engine), 
+                        Game3(engine), 
+                        Game4(engine), 
+                        Game5(engine)]
 
+        # pointeur pour indiquer sur quel page on est (fait réference a l'array 'pages')
+        engine.iterator = 0
 
-        
+    @property
+    def current_page(engine):
+        return gameEngine.pages[engine.iterator]
+
+    @property
+    def current_round(engine):
+        return gameEngine.pages[engine.iterator]["round"]
     
-    def step(game):
+    @property
+    def current_game(engine):
+        return engine.games[engine.current_round[0]]
+    
+    @property
+    def current_waiting_count(engine):
+        if engine.current_round[1] not in [1, 2, 3]:
+            return None
+        round_id = engine.current_round[1] - 1
+        return sum(engine.current_game.is_done[round_id])
+    
+    @property
+    def current_presentation_frame(engine):
+        if engine.current_round not in [(1, 0)]:
+            return None
+        return engine.current_game.current_frame_id
+    
+    def step(engine):
         pass
     
     def force_refresh(engine):
@@ -71,19 +90,21 @@ class gameEngine(object):
         return all(p.done for p in engine.players)
 
     def reveal_card(engine, card_id):
-        if engine.reveal[card_id]: return
-        engine.reveal[card_id] = True
+        round_id = engine.current_round[1] - 1
+        reveal_state = engine.current_game[round_id]
+        if reveal_state[card_id]: return
+        reveal_state[card_id] = True
         socketio = engine.socketio
         socketio.emit('reveal_card', card_id, broadcast=True)
         engine.save_data()
 
-    def next_frame(engine):
+    def next_frame(monitor):
         engine.frameId += 1
         socketio = engine.socketio
         socketio.emit('move_to_frame', engine.frameId, broadcast=True)
         engine.save_data()
 
-    def previous_frame(engine):
+    def previous_frame(monitor):
         engine.frameId -= 1
         socketio = engine.socketio
         socketio.emit('move_to_frame', engine.frameId, broadcast=True)

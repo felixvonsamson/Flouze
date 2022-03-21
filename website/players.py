@@ -1,3 +1,5 @@
+import datetime
+
 class Player(object):
     def __init__(player, ID, name, password, main_color, sec_color, engine):
         player.engine
@@ -6,17 +8,22 @@ class Player(object):
         player.name = name
         player.password = password
         player.flouze = 0
-        player.saved_flouze = 0      # Dans le jeu 3 l'argent est mis de coté
+        # Dans le jeu 3 l'argent est mis de coté
+        player.saved_flouze = 0
         player.stars = 0
         player.color = main_color
         player.sec_color = sec_color
         player.choix = None
-        player.done = False          # Indique si le joueur a fait son choix
-        player.last_profit = 0       # Quantitée a partager dans 'partager.htlm'
+        # Indique si le joueur est en attente
+        player.is_done = False
+        # Quantitée a partager dans 'partager.htlm'
+        player.last_profit = 0
+        player.messages = []
         return player
     
     def send_message(player, message):
         socketio = player.engine.socketio
+        player.messages.append((datetime.datetime.now(), message))
         socketio.emit('message', message, room=player.sid)
     
     def send_money(player, receiver, amount):
