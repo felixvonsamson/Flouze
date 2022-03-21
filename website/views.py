@@ -1,10 +1,6 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup
-import config
 from . import pages, pages_by_round, gameState, players, socketio, log, theme_colors, quiz
-import random
-import pickle
-import datetime
-import numpy as np
+
 from flask_socketio import send, emit
 
 views = Blueprint('views', __name__)
