@@ -7,13 +7,7 @@ from flask_socketio import SocketIO
 
 
 
-theme_colors = {
-    "10.jpg":["#b65612","#dfaa84"], 
-    "9.jpg": ["#017e68","#6ecdbc"], 
-    "8.jpg": ["#3f6203","#a6ca68"], 
-    "6.jpg": ["#024b66","#60a7c1"], 
-    "7.jpg": ["#6b017f","#c470d4"]
-}
+
 
 quiz = [
     ["_______ _______ _ a-t-il __ __ drapeau ______ ?", 
