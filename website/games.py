@@ -63,7 +63,7 @@ class Game(ABC):
         return game.engine.current_stage
     
     @property
-    def current_round_id(game):
+    def current_round(game):
         return game.current_stage[1] - 1
     
     def is_everyone_done(engine):
@@ -71,7 +71,7 @@ class Game(ABC):
 
     def reveal_card(game, card_id):
         assert "reveal_states" in game.__dict__
-        reveal_state = game.reveal_state[game.current_round_id]
+        reveal_state = game.reveal_state[game.current_round]
         if reveal_state[card_id]: return
         reveal_state[card_id] = True
         socketio = game.engine.socketio
@@ -93,7 +93,7 @@ class Game(ABC):
         game.engine.save_data()
 
     def update_waiting_count(game):
-        is_done = game.is_done[game.current_round_id]
+        is_done = game.is_done[game.current_round]
         waiting_players = [p 
             for p, is_done in zip(game.players, is_done) 
             if p["done"]
@@ -111,7 +111,7 @@ class Game1(Game):
     
     def logic(game):
         assert game.is_everyone_done()
-        choices = game.choices[game.current_round_id]
+        choices = game.choices[game.current_round]
         lottery = []
         for player, choice in zip(game.engine.players, choices):
             lottery += [player.ID] * choice
@@ -120,7 +120,7 @@ class Game1(Game):
         if len(lottery) > 0:
             winner_id = random.choice(lottery)
             winner = game.engine.players[winner_id]
-            prize = game.config["prizes"][game.current_round_id] 
+            prize = game.config["prizes"][game.current_round] 
             prize //= len(lottery)
             winner.flouze += prize
             winner.last_profit = prize
@@ -132,7 +132,7 @@ class Game1(Game):
                 f"Vous avez gagné la lotterie !<br>Vous avez reçu {prize} "\
                  + icons['coin'])
             
-            if game.current_round_id == 3:
+            if game.current_round == 3:
                 won_stars = game.config["stars"]
                 winner.stars += won_stars
                 
@@ -266,7 +266,7 @@ class Game4(Game):
                     player["message"] = Markup("Vous avez remporté le prix : {prize} {icons['coin']}")
                     game.engine.log(player["name"] + " a remporté {prize} Pièces")
         if uniqueChoices == 5:
-            if pages[gameState['iterator']]['round'][1] == 3:
+            if game.current_round == 3:
                 gameState["masterPrizeBonus"] = True
                 game.engine.log(f"Tous les joueurs ont choisis un prix différent donc le gros lot passe de {games_config['game5']['prize']} à {games_config['game5']['prize'] + games_config['game5']['bonus']} Pièces")
             else:
