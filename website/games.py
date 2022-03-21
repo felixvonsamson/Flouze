@@ -2,67 +2,146 @@ import random
 import numpy as np
 from abc import ABC, abstractmethod
 
+config = {
+    "game1": {
+        "prizes": [200, 400, 600], 
+        "stars": 1
+    }, 
+    "game2": {
+        "prizes": [50, 100, 150], 
+        "stars": 2
+    }, 
+    "game3": {
+        "initial_flouze": 100, 
+        "gains": [1.2, 1.5, 2], 
+        "stars": 2
+    }, 
+    "game4": {
+        "prizes": [[[150, 100, 50, 0, "star"]], 
+                   [[250, 150, 0, -150, "star"], 
+                    [400, 250, 0, -250, "star"]], 
+                   [[400, 200, -250, "star", "star"], 
+                    [600, 250, -300, "star", "star"], 
+                    [1000, 300, -400, "star", "star"]]], 
+    }, 
+    "game5": {
+        "prize": 2500, 
+        "bonus": 500
+    }
+}
+
 class Game(ABC):
     @abstractmethod
     def __init__(game, engine):
         game.engine = engine
         game.is_done = [[False]*5 for _ in range(3)]
-        game.frame_id = 0
     
     def is_allowed_to_play(game, player):
         return 
 
     @abstractmethod
-    def logic(self):
+    def logic(game):
         pass
+    
+    @property
+    def current_stage(game):
+        return game.engine.current_stage
+    
+    @property
+    def current_round_id(game):
+        return game.current_stage[1] - 1
+    
+    def is_everyone_done(engine):
+        return all(p.done for p in engine.players)
+
+    def reveal_card(game, card_id):
+        assert "reveal_states" in game.__dict__
+        reveal_state = game.reveal_state[game.current_round_id]
+        if reveal_state[card_id]: return
+        reveal_state[card_id] = True
+        socketio = game.engine.socketio
+        socketio.emit('reveal_card', card_id, broadcast=True)
+        game.engine.save_data()
+
+    def next_frame(game):
+        assert "frame_id" in game.__dict__
+        game.frameId += 1
+        socketio = game.engine.socketio
+        socketio.emit('move_to_frame', game.frameId, broadcast=True)
+        game.engine.save_data()
+
+    def previous_frame(game):
+        assert "frame_id" in game.__dict__
+        game.frameId -= 1
+        socketio = game.engine.socketio
+        socketio.emit('move_to_frame', game.frameId, broadcast=True)
+        game.engine.save_data()
+
+    def update_waiting_count(game):
+        is_done = game.is_done[game.current_round_id]
+        waiting_players = [p 
+            for p, is_done in zip(game.players, is_done) 
+            if p["done"]
+        ]
+        total = 5 if game.game_id < 5 else 4
+        updates = [("count", f"{len(waiting_players)} / {total}")]
+        game.engine.update_fields(updates, waiting_players)
 
 class Game1(Game):
     def __init__(game, engine):
         game.engine = engine
-
-    def logic(self):
+        game.game_id = 1
+        game.frame_id = 0
+    
+    def logic(game):
         pass
 
 class Game2(Game):
     def __init__(game, engine):
         game.engine = engine
-        game.reveal = [[False]*5 for _ in range(3)]
+        game.game_id = 2
+        game.reveal_state = [[False]*5 for _ in range(3)]
 
-    def logic(self):
+    def logic(game):
         pass
 
 class Game3(Game):
     def __init__(game, engine):
         game.engine = engine
+        game.game_id = 3
+        
         # Sabotage du 3ème jeu si les participants sont trop coopératifs
         game.sabotage = False
 
-    def logic(self):
+    def logic(game):
         pass
 
 class Game4(Game):
     def __init__(game, engine):
         game.engine = engine
+        game.game_id = 4
         # combien de fois les joueurs ont tous choisis des objets differents
         game.bonuses = 0
-        game.reveal = [[False]*5 for _ in range(3)]
+        game.reveal_state = [[False]*5 for _ in range(3)]
 
-    def logic(self):
+    def logic(game):
         pass
 
 class Game5(Game):
-    def __init__(game, engine, master, bonus):
+    def __init__(game, engine, master, with_bonus):
         game.engine = engine
+        game.game_id = 5
         # joueur ayant le plus d'étoiles à la fin du jeu 4
         game.master = master
         # reste des joueurs
         game.other_players = engine.players.copy()
         game.other_players.pop(master.ID)
         # bonus pour le jeu 5
-        game.master_prize_bonus = bonus
+        game.with_bonus = with_bonus
         game.remaining_trials = 3
 
-    def logic(self):
+
+    def logic(game):
         pass
 
 class Quiz(Game):
@@ -70,7 +149,7 @@ class Quiz(Game):
         game.engine = engine
         game.question_id = 0
 
-    def logic(self):
+    def logic(game):
         pass
 
 def end_waiting():

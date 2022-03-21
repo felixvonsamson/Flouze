@@ -33,23 +33,23 @@ class gameEngine(object):
         return gameEngine.pages[engine.iterator]
 
     @property
-    def current_round(engine):
+    def current_stage(engine):
         return gameEngine.pages[engine.iterator]["round"]
     
     @property
     def current_game(engine):
-        return engine.games[engine.current_round[0]]
+        return engine.games[engine.current_stage[0]]
     
     @property
     def current_waiting_count(engine):
-        if engine.current_round[1] not in [1, 2, 3]:
+        if engine.current_stage[1] not in [1, 2, 3]:
             return None
-        round_id = engine.current_round[1] - 1
+        round_id = engine.current_stage[1] - 1
         return sum(engine.current_game.is_done[round_id])
     
     @property
     def current_presentation_frame(engine):
-        if engine.current_round not in [(1, 0)]:
+        if engine.current_stage not in [(1, 0)]:
             return None
         return engine.current_game.current_frame_id
     
@@ -86,32 +86,4 @@ class gameEngine(object):
             engine = pickle.load(file)
         return engine
 
-    def is_everyone_done(engine):
-        return all(p.done for p in engine.players)
-
-    def reveal_card(engine, card_id):
-        round_id = engine.current_round[1] - 1
-        reveal_state = engine.current_game[round_id]
-        if reveal_state[card_id]: return
-        reveal_state[card_id] = True
-        socketio = engine.socketio
-        socketio.emit('reveal_card', card_id, broadcast=True)
-        engine.save_data()
-
-    def next_frame(monitor):
-        engine.frameId += 1
-        socketio = engine.socketio
-        socketio.emit('move_to_frame', engine.frameId, broadcast=True)
-        engine.save_data()
-
-    def previous_frame(monitor):
-        engine.frameId -= 1
-        socketio = engine.socketio
-        socketio.emit('move_to_frame', engine.frameId, broadcast=True)
-        engine.save_data()
-
-    def update_waiting_count(engine, count, total):
-        updates = [("count", f"{count} / {total}")]
-        waiting_players = (p  for p in engine.players if p["done"])
-        engine.update_fields(updates, waiting_players)
 
