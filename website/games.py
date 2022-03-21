@@ -212,9 +212,9 @@ class Game3(Game):
             game.engine.log("Cette manche a été sabotée car les participans on été trop coopératifs. Le contenu du pot commun avant l'ajout de la banque à été fixé à" + str(pot_commun))
         prize = int(pot_commun * game.config["gain"] // 5)
         game.engine.log(str(prize*5) + " Pièces ont été redistribué équitablement à tous les joueurs ce qui fait {prize} Pièces par joueur")
-        for p in game.engine.players:
-            p["flouze"] += prize
-            p["message"] = Markup(f"Vous avez reçu {prize} {icons['coin']}")
+        for player in game.engine.players:
+            player["flouze"] += prize
+            player["message"] = Markup(f"Vous avez reçu {prize} {icons['coin']}")
         if game.config['round'][1] == 3:
             flouzes = [player['flouze'] for player in game.engine.players]
             winner_id = np.argmax(flouzes)
