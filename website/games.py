@@ -3,7 +3,7 @@ import numpy as np
 from abc import ABC, abstractmethod
 from flask import Markup, flash
 
-from .html_icon import icons
+from .html_icons import icons
 
 
 games_config = {
@@ -175,7 +175,7 @@ class Game2(Game):
                 if game.config['round'][1] == 3:
                     player["stars"] += game.config["stars"]
                     for player in game.engine.players:
-                        player["message"] = Markup(f"{player['name']} a gagné et a remporté {icons['coin']}.<br>En plus iel recoit {game.config['stars']}  {icons['star']} car iel a remporté la dernière manche.")
+                        player["message"] = Markup(f"{player['name']} a gagné et a remporté {icons['coin']}.<br>En plus iel recoit {game.config['stars']} {icons['star']} car iel a remporté la dernière manche.")
                     game.engine.log(player["name"] + " a reçu " + str(game.config["stars"]) + " étoile(s) car iel a gagné la dernière manche")
                 break
         else:
