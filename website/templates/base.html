@@ -17,26 +17,26 @@
   <div class="w3-container w3-text-white" style="height:50px; background-color:{{theme_color}}">
     <div class="w3-right" style="font-size:33px"><span id="flouze">{{user["flouze"]}}</span> <img src="{{url_for('static', filename="images/coin.png")}}" style="width:27px; position:relative; bottom:2px" alt="Coin"></div>
   </div>
+  
+{% block inside %} {% endblock %}
 
   <div id="messages" style="position:absolute; bottom:5px; display:flex; flex-direction: column; align-items:center; width:100%; font-size:16px;">
   {% with messages = get_flashed_messages(with_categories=true) %} {% if
    messages %} {% for category, message in messages %}
     {% if category == 'error' %}
-    <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-display-container w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
       <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
       <div class="w3-center">{{ message }}</div>
       <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
     </div>
     {% else %}
-   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-display-container w3-large w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-large w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
      <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
      <div class="w3-center">{{ message }}</div>
      <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
    </div>
   {% endif %} {% endfor %} {% endif %} {% endwith %}
   </div>
-
- {% block inside %} {% endblock %}
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
   <script type="text/javascript" charset="utf-8">
@@ -46,7 +46,7 @@
     });
     socket.on('message', function(msg) {
         document.getElementById('messages').innerHTML += `
-  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-display-container w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">` + msg + `</div>
     <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
