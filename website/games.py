@@ -115,7 +115,7 @@ class Game1(Game):
         lottery = []
         for player, choice in zip(game.engine.players, choices):
             lottery += [player.ID] * choice
-            player["message"] = Markup("Vous n'avez pas gagné la lotterie !"\
+            player.message = Markup("Vous n'avez pas gagné la lotterie !"\
                                        + icons['sad'])
         if len(lottery) > 0:
             winner_id = random.choice(lottery)
@@ -167,16 +167,16 @@ class Game2(Game):
                     player = p # joueur gagnant
             if count == 1:
                 prize = game.config["prize"]*i
-                player["flouze"] += prize
-                player['gain_a_partager'] = prize
-                game.engine.log(player["name"] + " a remporté {prize} Pièces.")
+                player.flouze += prize
+                player.last_profit = prize
+                game.engine.log(f"{player.name} a remporté {prize} Pièces.")
                 for p in game.engine.players:
-                    p["message"] = Markup(f"{player['name']} a gagné et a remporté {prize} {icons['coin']}")
+                    p["message"] = Markup(f"{player.name} a gagné et a remporté {prize} {icons['coin']}")
                 if game.config['round'][1] == 3:
-                    player["stars"] += game.config["stars"]
+                    player.stars += game.config["stars"]
                     for player in game.engine.players:
-                        player["message"] = Markup(f"{player['name']} a gagné et a remporté {icons['coin']}.<br>En plus iel recoit {game.config['stars']} {icons['star']} car iel a remporté la dernière manche.")
-                    game.engine.log(player["name"] + " a reçu " + str(game.config["stars"]) + " étoile(s) car iel a gagné la dernière manche")
+                        player.message = Markup(f"{player.name} a gagné et a remporté {icons['coin']}.<br>En plus iel recoit {game.config['stars']} {icons['star']} car iel a remporté la dernière manche.")
+                    game.engine.log(f"{player.name} a reçu " + str(game.config["stars"]) + " étoile(s) car iel a gagné la dernière manche")
                 break
         else:
             game.engine.log("Personne n'a remporté de lot a cette manche")
@@ -193,12 +193,12 @@ class Game3(Game):
         game.sabotage = False
     
     def start(game):
-        sum = 0
+        total_saved = 0
         for player in game.engine.players:
-            player.saved_flouze = max(0, player["flouze" ] - game.config['initial_flouze'])
-            sum += player["saved_flouze"]
-            player["flouze"] = game.config['initial_flouze']
-        if sum > 1500:
+            player.saved_flouze = max(0, player.flouze - game.config['initial_flouze'])
+            total_saved += player.saved_flouze
+            player.flouze = game.config['initial_flouze']
+        if total_saved > 1500:
             game.sabotage = True
         game.engine.log(f"L'argent des joueurs à été mis de coté. Ils leur restent tous {game.config['initial_flouze']} Pièces")
 
@@ -209,14 +209,14 @@ class Game3(Game):
         if game.sabotage:
             mises = [p['choix'] for p in game.engine.players]
             pot_commun = 1.2 * np.argmax(mises)
-            game.engine.log("Cette manche a été sabotée car les participans on été trop coopératifs. Le contenu du pot commun avant l'ajout de la banque à été fixé à" + str(pot_commun))
+            game.engine.log(f"Cette manche a été sabotée car les participans on été trop coopératifs. Le contenu du pot commun avant l'ajout de la banque à été fixé à {pot_commun}")
         prize = int(pot_commun * game.config["gain"] // 5)
-        game.engine.log(str(prize*5) + " Pièces ont été redistribué équitablement à tous les joueurs ce qui fait {prize} Pièces par joueur")
+        game.engine.log(f"{5 * prize} Pièces ont été redistribué équitablement à tous les joueurs ce qui fait {prize} Pièces par joueur")
         for player in game.engine.players:
-            player["flouze"] += prize
-            player["message"] = Markup(f"Vous avez reçu {prize} {icons['coin']}")
+            player.flouze += prize
+            player.message = Markup(f"Vous avez reçu {prize} {icons['coin']}")
         if game.config['round'][1] == 3:
-            flouzes = [player['flouze'] for player in game.engine.players]
+            flouzes = [player.flouze for player in game.engine.players]
             winner_id = np.argmax(flouzes)
             winner = game.engine.players[winner_id]
             if flouzes.count(max(flouzes)) == 1:
@@ -257,14 +257,14 @@ class Game4(Game):
                 uniqueChoices += 1
                 prize = game.config['prize'][game.bonuses][i]
                 if prize == "star":
-                    player["stars"] += 1
-                    player["message"] = Markup("Vous avez remporté le prix : {icons['star']}")
-                    game.engine.log(player["name"] + " a gagné une étoile")
+                    player.stars += 1
+                    player.message = Markup("Vous avez remporté le prix : {icons['star']}")
+                    game.engine.log(f"{player.name} a gagné une étoile")
                 else:
-                    player["flouze"] += prize
-                    player['gain_a_partager'] = prize
-                    player["message"] = Markup("Vous avez remporté le prix : {prize} {icons['coin']}")
-                    game.engine.log(player["name"] + " a remporté {prize} Pièces")
+                    player.flouze += prize
+                    player.last_profit = prize
+                    player.message = Markup("Vous avez remporté le prix : {prize} {icons['coin']}")
+                    game.engine.log(f"{player.name} a remporté {prize} Pièces")
         if uniqueChoices == 5:
             if game.current_round == 3:
                 gameState["masterPrizeBonus"] = True
@@ -320,7 +320,7 @@ def end_waiting():
     refresh_all_pages()
 
 def check_action_allowed(player, gameNb):
-    if player["done"]: return render_template("en_attente.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], done=gameState['done'], user=player, players=players, background=pages[gameState['iterator']]['background'])
+    if player.done: return render_template("en_attente.html", theme_color=theme_colors[pages[gameState['iterator']]['background']][0], done=gameState['done'], user=player, players=players, background=pages[gameState['iterator']]['background'])
     if pages[gameState['iterator']]['round'][0] != gameNb: return render_template(pages[gameState['iterator']]['url'], theme_color=theme_colors[pages[gameState['iterator']]['background']][0], user=player, players=players, page=pages[gameState['iterator']], gameState=gameState, background=pages[gameState['iterator']]['background'])
     return None
 
