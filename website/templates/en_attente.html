@@ -1,9 +1,6 @@
 {% extends "base+don.html" %} {% block title %}Flouze{% endblock %} {% block content%}
-{% if user["saved_flouze"] != 0 %}
-<h2 class="w3-text-white w3-padding-large" style="position:absolute; top:50px; right:0px; background-color:{{theme_color}}">( {{user["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:30px" alt="Coin"> )</h2>
-{% endif %}
 
-<div class="w3-panel w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-display-container w3-display-middle w3-padding animate__animated animate__fadeIn">
+<div class="w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding animate__animated animate__fadeIn">
   <h5>En attente des autres joueurs</h5>
   <h4 id="count">{{done}} / 5</h4>
 </div>

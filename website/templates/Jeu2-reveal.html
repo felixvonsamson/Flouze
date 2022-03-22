@@ -1,6 +1,6 @@
 {% extends "base+don.html" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content
 %}
-<div class="w3-display-middle w3-center animate__animated animate__fadeIn" style="width:320px;">
+<div class="w3-center animate__animated animate__fadeIn" style="width:320px;">
   <div class="w3-margin-bottom" style="display:flex; justify-content:space-between;">
 
     {% for i in range(2) %}
@@ -13,7 +13,7 @@
         <div class="flip-card-back" style="background-color:{{players[i]['color']}};">
           <h4><b>{{players[i]["name"]}}</b></h4>
           <div class="w3-display-container" style="height:50px;">
-            <div class="circle w3-lobster w3-xxlarge w3-cell w3-display-middle w3-text-white" style="background-color:{{players[i]['secColor']}};">{{players[i]["choix"]}}</div>
+            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{players[i]['secColor']}};">{{players[i]["choix"]}}</div>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
         <div class="flip-card-back" style="background-color:{{players[i+2]['color']}};">
           <h4><b>{{players[i+2]["name"]}}</b></h4>
           <div class="w3-display-container" style="height:50px;">
-            <div class="circle w3-lobster w3-xxlarge w3-cell w3-display-middle w3-text-white" style="background-color:{{players[i+2]['secColor']}};">{{players[i+2]["choix"]}}</div>
+            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{players[i+2]['secColor']}};">{{players[i+2]["choix"]}}</div>
           </div>
         </div>
       </div>
@@ -49,7 +49,7 @@
         <div class="flip-card-back" style="background-color:{{players[4]['color']}};">
           <h4><b>{{players[4]["name"]}}</b></h4>
           <div class="w3-display-container" style="height:50px;">
-            <div class="circle w3-lobster w3-xxlarge w3-cell w3-display-middle w3-text-white" style="background-color:{{players[4]['secColor']}};">{{players[4]["choix"]}}</div>
+            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{players[4]['secColor']}};">{{players[4]["choix"]}}</div>
           </div>
         </div>
       </div>
