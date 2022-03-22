@@ -1,8 +1,6 @@
 from flask import Flask, Markup, request
 import os.path
-import pickle
 import datetime
-import config
 from flask_socketio import SocketIO
 
 
@@ -49,7 +47,7 @@ def create_app():
     @socketio.on('give_identity')
     def give_identity(name):
         if name == "admin":
-            config.admin_sid = request.sid
+            admin_sid = request.sid
         else:
             players_by_name[name]['sid'] = request.sid
 
