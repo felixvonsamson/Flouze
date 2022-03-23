@@ -1,13 +1,11 @@
 {% extends "base.html" %}{% block inside%}
 
-<div class="w3-display-topleft" style="width:150px">
-<ul class="w3-ul">
-  <li class="w3-border-0" style="height:38px; background-color:{{players[0]['color']}}">{{players[0]["name"]}}<i id="player0_stars" class="fa fa-star w3-right"> {{players[0]["stars"]}}</i></li>
-  <li class="w3-border-0" style="height:38px; background-color:{{players[1]['color']}}">{{players[1]["name"]}}<i id="player1_stars" class="fa fa-star w3-right"> {{players[1]["stars"]}}</i></li>
-  <li class="w3-border-0" style="height:38px; background-color:{{players[2]['color']}}">{{players[2]["name"]}}<i id="player2_stars" class="fa fa-star w3-right"> {{players[2]["stars"]}}</i></li>
-  <li class="w3-border-0" style="height:38px; background-color:{{players[3]['color']}}">{{players[3]["name"]}}<i id="player3_stars" class="fa fa-star w3-right"> {{players[3]["stars"]}}</i></li>
-  <li class="w3-border-0" style="height:38px; background-color:{{players[4]['color']}}">{{players[4]["name"]}}<i id="player4_stars" class="fa fa-star w3-right"> {{players[4]["stars"]}}</i></li>
-</ul>
+<div class="w3-display-topleft" style="width:115px">
+  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[0]['color']}}">{{players[0]["name"]}}<i id="player0_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[0]["stars"]}}</i></div>
+  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[1]['color']}}">{{players[1]["name"]}}<i id="player1_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[1]["stars"]}}</i></div>
+  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[2]['color']}}">{{players[2]["name"]}}<i id="player2_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[2]["stars"]}}</i></div>
+  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[3]['color']}}">{{players[3]["name"]}}<i id="player3_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[3]["stars"]}}</i></div>
+  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[4]['color']}}">{{players[4]["name"]}}<i id="player4_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[4]["stars"]}}</i></div>
 </div>
 
 {% block inside2 %} {% endblock %}

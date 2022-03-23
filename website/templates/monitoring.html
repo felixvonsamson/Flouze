@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
+    <link rel="stylesheet" href="{{url_for('static', filename="flouze.css")}}" type="text/css">
     <style>
       body, h1, h2, h3, h4, h5, h6  {
         font-family: 'Baloo 2', cursive;
@@ -15,23 +15,26 @@
     <title>Flouze-Admin</title>
   </head>
 <body>
-  <div class="container" style="display:flex; justify-content:space-evenly;">
+  <div style="display:flex; justify-content:space-evenly;">
     {% for p in players %}
-    <div class="container w3-center w3-margin-top w3-xlarge" style="width:360px; background-color:{{p['color']}}">
+    <div class="w3-center w3-margin w3-xlarge" style="width:360px; background-color:{{p['color']}}">
       <p><b>{{p["name"]}}</b></p>
-      <div class="w3-row w3-margin">
+      <div class="w3-row large">
         <div class="w3-half">
           {{p["stars"]}} <i class="fa fa-star"></i><br>
         </div>
         <div class="w3-half">
-          {{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin"><br>
+          {{p["flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" class="coin-medium" alt="Coin"><br>
           {% if pages[gameState['iterator']]['round'][0] == 3 %}
-            ({{p["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin">)<br>
+            ({{p["saved_flouze"]}} <img src="{{url_for('static', filename="images/coin.png")}}" class="coin-medium" alt="Coin">)<br>
           {% endif %}
         </div>
       </div>
-      <div class="w3-text-white w3-margin w3-large" style="background-color:{{p['secColor']}}">
-        message : {{p["message"]}}
+      <div class="w3-large w3-margin-left" style="text-align:left;">
+        message :
+      </div>
+      <div class="w3-text-white w3-large" style="margin:0 16px 16px; background-color:{{p['secColor']}}">
+        {{p["message"]}}
       </div>
       choix : {{p["choix"]}}<br>
       done : {{p["done"]}}<br>

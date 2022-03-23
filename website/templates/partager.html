@@ -1,25 +1,25 @@
 {% extends "base+etoiles.html" %} {% block title %}Partager{% endblock %} {% block inside2%}
 
-  <div class="w3-card-4 w3-display-middle w3-white w3-center animate__animated animate__fadeIn" style="width:263px;">
-  <header class="w3-container w3-text-white" style="background-color:{{theme_color}}">
-      <h4 id="total"> <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin"> &nbsp; à partager</h4>
+  <div class="w3-card-4 w3-display-middle w3-white w3-center animate__animated animate__fadeIn" style="width:240px;">
+  <header id="total" class="w3-container w3-text-white w3-xlarge w3-padding" style="background-color:{{theme_color}}">
+      <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin"> &nbsp; à partager
   </header>
-  <form class="w3-container w3-large" method="POST">
+  {% if user['gain_a_partager'] < 0 %}
+  <div class="w3-text-red w3-large"> <i class="fa fa-info-circle"></i> votre demande peut être refusée par les joueurs</div>
+  {% endif %}
+  <form style="font-size:16px" method="POST">
   {% for i in range(4) %}
-  <div class="w3-row w3-margin-top" style="background-color:{{user['otherPlayers'][i]['color']}}">
+  <div class="w3-row" style="background-color:{{user['otherPlayers'][i]['color']}}; margin:8px">
     <div class="w3-col w3-padding" style="width:120px;"><b>{{user['otherPlayers'][i]["name"]}}</b></div>
-    <div class="w3-rest"><input id={{i}} onchange="update_rest()" name={{user['otherPlayers'][i]["name"]}} class="w3-input w3-border w3-round-large w3-center" value={{user['gain_a_partager']//5}} type="number" style="width:107px; height:35px; position:absolute; top:{{i*59+70}}px;"></div>
+    <div class="w3-rest"><input id={{i}} onchange="update_rest()" name={{user['otherPlayers'][i]["name"]}} class="w3-input w3-border w3-round-large w3-center" value={{user['gain_a_partager']//5}} type="number" style="width:99px; height:30px; margin-top:5px"></div>
   </div>
   {% endfor %}
-  <div class="w3-row w3-margin-top" style="background-color:{{user['color']}}">
+  <div class="w3-row" style="background-color:{{user['color']}}; margin:8px">
     <div class="w3-col w3-padding" style="width:120px;"><b>{{user['name']}}</b></div>
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>
-  <p>
-    <button type="submit" name="boutton" value="en fait non" class="w3-button w3-margin-right w3-red">en fait non</button>
-    <button type="submit" name="boutton" value="envoi partager" class="w3-button w3-text-white" style="background-color:{{theme_color}}">Envoyer</button>
-  </p>
-  <p>
+    <button type="submit" name="boutton" value="en fait non" class="w3-button w3-red" style="margin:10px">en fait non</button>
+    <button type="submit" name="boutton" value="envoi partager" class="w3-button w3-text-white" style="margin:10px; background-color:{{theme_color}}">{% if user['gain_a_partager'] < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
 </form>
   </div>
 
