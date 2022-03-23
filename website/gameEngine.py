@@ -8,14 +8,15 @@ from .pages_ordering import pages
 
 class gameEngine(object):
     pages = pages
-    pages_by_round = { tuple(page['round']) : page for page in pages }
-    def __init__(engine, socketio, players_raw):
-        engine.socketio = socketio
+    
+    def __init__(engine, players_raw):
+        engine.socketio = None
         engine.admin_sid = None
         
         engine.logs = []
         
-        engine.players = [Player(*player_raw) for player_raw in players_raw]
+        engine.players = [Player(*player_raw, engine) 
+                          for player_raw in players_raw]
         for i, player in enumerate(engine.players):
             player.other_players = engine.players.copy()
             player.other_players.pop(i)
@@ -28,6 +29,8 @@ class gameEngine(object):
 
         # pointeur pour indiquer sur quelle page on est (l'array 'pages')
         engine.iterator = 0
+
+        engine.log("LE JEU A COMMENCÉ !")
 
     @property
     def current_page(engine):
@@ -85,6 +88,9 @@ class gameEngine(object):
     def load_data():
         with open("data.pck", 'rb') as file:
             engine = pickle.load(file)
+        engine.admin_sid = None
+        for player in engine.players:
+            player.sid = None
         return engine
 
 

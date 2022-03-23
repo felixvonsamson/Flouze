@@ -5,7 +5,7 @@ from .html_icons import icons
 
 class Player(object):
     def __init__(player, ID, name, password, main_color, sec_color, engine):
-        player.engine
+        player.engine = engine
         player.ID = ID
         player.sid = None
         player.name = name
