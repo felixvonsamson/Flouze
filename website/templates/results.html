@@ -2,7 +2,7 @@
 
 <div class="w3-panel w3-large w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding w3-margin animate__animated animate__fadeIn">
   {{player["message"]}}
-  {% if player.last_profit != 0 %}
+  {% if player.last_profit != None %}
     <form method="POST">
       <p><button type="submit" class="w3-btn w3-green" name="boutton" value="partager">Partager</button></p>
     </form>

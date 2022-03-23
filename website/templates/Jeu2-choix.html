@@ -2,7 +2,7 @@
 %}
 
 <div id="card2" class="w3-card-4 w3-center w3-white animate__animated animate__fadeIn">
-<header class="w3-text-white medium w3-padding" style="background-color:{{engine.current_game.config["theme_color"][0]}}">
+<header class="w3-text-white medium w3-padding" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">
     Choisissez un nombre
 </header>
 <form method="POST">
@@ -15,7 +15,7 @@
       {% endif %}
     {% endfor %}
   </div>
-  <p><button type="submit" name="boutton" value="validate num" class="w3-button w3-text-white w3-large" style="background-color:{{engine.current_game.config["theme_color"][0]}}">Valider</button></p>
+  <p><button type="submit" name="boutton" value="validate num" class="w3-button w3-text-white w3-large" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">Valider</button></p>
   </form>
 </div>
 

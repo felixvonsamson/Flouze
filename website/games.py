@@ -3,8 +3,8 @@ import numpy as np
 from abc import ABC, abstractmethod
 from flask import Markup
 
-from .html_icons import icons
-from .pages_ordering import pages
+#from .html_icons import icons
+#from .pages_ordering import pages
 
 
 games_config = {
@@ -71,6 +71,7 @@ class Game(ABC):
     game.engine = engine
     game.choices = [[None]*5 for _ in range(3)]
     game.is_done = [[False]*5 for _ in range(3)]
+    game.frame_id = 0
 
 
   @abstractmethod
@@ -96,8 +97,8 @@ class Game(ABC):
 
   @property
   def current_reveal_state(game):
-    assert "reveal_state" in game.__dict__
-    return game.reveal_state[game.current_round_id]
+    assert "reveal_states" in game.__dict__
+    return game.reveal_states[game.current_round_id]
 
   @property
   def current_waiting_count(engine):
@@ -150,7 +151,7 @@ class Game1(Game):
     game.engine = engine
     game.game_nb = 1
     game.config = games_config["game1"]
-    game.frame_id = 0
+    
 
   def logic(game):
     assert game.is_everyone_done
@@ -176,7 +177,7 @@ class Game1(Game):
         f"Vous avez gagné la lotterie !<br>Vous avez reçu {prize} "\
         f"{icons['coin']}")
 
-      if game.current_round_id == 3:
+      if game.current_round_id == 2:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
 
@@ -205,7 +206,8 @@ class Game2(Game):
     game.engine = engine
     game.game_nb = 2
     game.config = games_config["game2"]
-    game.reveal_state = [[False]*5 for _ in range(3)]
+    
+    game.reveal_states = [[False]*5 for _ in range(3)]
 
   def logic(game):
     assert game.is_everyone_done()
@@ -255,7 +257,7 @@ class Game3(Game):
     game.engine = engine
     game.game_nb = 3
     game.config = games_config["game3"]
-
+    
     game.done_stars = [False] * 5
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
@@ -331,7 +333,7 @@ class Game4(Game):
     game.config = games_config["game4"]
     # combien de fois les joueurs ont tous choisis des objets differents
     game.bonuses = [False] * 3
-    game.reveal_state = [[False]*5 for _ in range(3)]
+    game.reveal_states = [[False]*5 for _ in range(3)]
 
   @property
   def current_bonuses(game):
@@ -505,3 +507,4 @@ class Game5(Game):
   def end(game):
     game.engine.iterator = len(pages) - 1
     game.engine.refresh_all_pages()
+

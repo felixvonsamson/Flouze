@@ -1,13 +1,13 @@
 {% extends "base.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
 
   <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:350px;">
-  <header class="w3-container" style="background-color:{{engine.current_game.config["theme_color"][0]}}">
+  <header class="w3-container" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">
       <h4>{{player["message"]}}</h4>
   </header>
   <form class="w3-container" method="POST">
   <p>
     <button type="submit" name="boutton" value=0 class="w3-margin-right w3-button w3-red" style="width:120px;">Refplayer</button>
-    <button type="submit" name="boutton" value=1 class="w3-margin-left w3-button" style="width:120px; background-color:{{engine.current_game.config["theme_color"][0]}}">Accpeter</button>
+    <button type="submit" name="boutton" value=1 class="w3-margin-left w3-button" style="width:120px; background-color:{{engine.current_game.config["theme_colors"][0]}}">Accpeter</button>
   </p>
   <p>
 </form>

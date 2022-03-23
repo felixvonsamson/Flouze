@@ -6,7 +6,7 @@
     {% for i in range(2) %}
 
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{i}}" {% if engine.current_game.current_reveal[i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+      <div id="card{{i}}" {% if engine.current_game.current_reveal_state[i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{engine.players[i].color}};">
           <h4><b>{{engine.players[i].name}}</b></h4>
         </div>
@@ -25,7 +25,7 @@
 
     {% for i in range(2) %}
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{i+2}}" {% if engine.current_game.current_reveal[i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+      <div id="card{{i+2}}" {% if engine.current_game.current_reveal_state[i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{engine.players[i+2].color}};">
           <h4><b>{{engine.players[i+2].name}}</b></h4>
         </div>
@@ -42,7 +42,7 @@
   </div>
   <div style="display:flex; justify-content:space-around;">
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card4" {% if engine.current_game.current_reveal[4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+      <div id="card4" {% if engine.current_game.current_reveal_state[4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{engine.players[4].color}};">
           <h4><b>{{engine.players[4].name}}</b></h4>
         </div>

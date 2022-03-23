@@ -1,17 +1,17 @@
 {% extends "base+don.html" %} {% block title %}Flouze - Jeu 1{% endblock %} {% block content%}
 
 
-<div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{engine.current_game.config["theme_color"][1]}}">
-  <div class="w3-container w3-text-white" style="background-color:{{engine.current_game.config["theme_color"][0]}}; margin:10px">
-    {% if background == "10.jpg" %}
+<div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{engine.current_game.config["theme_colors"][1]}}">
+  <div class="w3-container w3-text-white" style="background-color:{{engine.current_game.config["theme_colors"][0]}}; margin:10px">
+    {% if engine.current_game_nb == 1 %}
       <h2>Premier jeu</h2>
-    {% elif background == "9.jpg" %}
+    {% elif engine.current_game_nb == 2 %}
       <h2>Deuxième jeu</h2>
-    {% elif background == "8.jpg" %}
+    {% elif engine.current_game_nb == 3 %}
       <h2>Troisième jeu</h2>
-    {% elif background == "6.jpg" %}
+    {% elif engine.current_game_nb == 4 %}
       <h2>Quatrième jeu</h2>
-    {% elif background == "7.jpg" %}
+    {% elif engine.current_game_nb == 5 %}
       <h2>Cinquième jeu</h2>
     {% endif %}
   </div>

@@ -41,7 +41,12 @@ class gameEngine(object):
   @property
   def current_stage(engine):
     return gameEngine.pages[engine.iterator]["stage"]
-
+  
+  @property
+  def current_game_nb(engine):
+    assert (engine.current_stage[0] in [1, 2, 3, 4, 5])
+    return engine.current_stage[0]
+  
   @property
   def current_game(engine):
     assert (engine.current_stage[0] in [1, 2, 3, 4, 5])

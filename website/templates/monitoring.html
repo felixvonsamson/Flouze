@@ -40,7 +40,7 @@
       choix : {{p.choice}}<br>
       done : {{p.is_done}}<br>
       {% endif %}
-      {% if engine.current_game_nb in [2, 4]  %}
+      {% if engine.current_game_nb in [2, 4] and "reveal" in engine.current_page %}
       <form class="w3-center w3-margin w3-large" method="POST">
         <button type="submit" class="w3-button" style="background-color:{{p.sec_color}}" name="reveal" value="{{p["ID"]}}" {% if engine.current_game.current_reveal_state[p['ID']] %}disabled{% endif %}>Révéler</button>
       </form>

@@ -27,7 +27,7 @@ def home():
       elif request.form["boutton"] == "page suivante" and engine.iterator < len(engine.pages)-1:
         if engine.current_page["url"] == "results.html":
           for player in engine.players:
-            player.last_profit = 0
+            player.last_profit = None
 
         engine.next_page()
         engine.save_data()
@@ -145,12 +145,13 @@ def home():
         if player.choice == None:
           flash("Veuiller choisir un nombre !", category="error")
           return render_template(engine.current_page["url"], engine=engine, player=player)
-        player.done = True
         engine.log(f"{player.name} a choisis le nombre {player.choice}.")
+        player.is_done = True
         flash(f"Vous avez choisis le nombre {player.choice}.", category="success")
         engine.save_data()
       else:
         player.choice = int(request.form["boutton"])
+        engine.refresh_monitoring()
 
     if request.form["boutton"] == "Jeu3-choix":
       #action = check_action_allowed(player, 3)
@@ -168,7 +169,7 @@ def home():
         return render_template(engine.current_page["url"], engine=engine, player=player)
       player.flouze -= amount
       player.choice = amount
-      player.done = True
+      player.is_done = True
       engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
       flash(Markup(f"Vous avez versé {amount} {icons['coin']} dans le pot commun"), category="success")
       engine.save_data()
@@ -198,8 +199,8 @@ def home():
 
 
     if request.form["boutton"] == "terminer":
-      game.done_stars[player.ID] = True
-      if all(game.done_stars[player.ID]):
+      game.is_done_stars[player.ID] = True
+      if all(game.is_done_stars[player.ID]):
         engine.next_page()
       engine.save_data()
 

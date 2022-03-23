@@ -18,7 +18,7 @@ class Player(object):
     player.saved_flouze = 0
     player.stars = 0
 
-    player.last_profit = 0
+    player.last_profit = None
     player.messages = []
 
   @property

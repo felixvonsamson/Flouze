@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
 
 <form method="POST" class="w3-card-4 w3-display-middle w3-center w3-white animate__animated animate__fadeIn" style="width:400px;">
-<header class="w3-container w3-text-white" style="background-color:{{engine.current_game.config["theme_color"][0]}}">
+<header class="w3-container w3-text-white" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">
     <h4>Veuillez faire une offre aux autres joueurs</h4>
 </header>
 <div class="w3-margin-right w3-margin-left" style="display:flex;">
@@ -25,7 +25,7 @@
   </div>
 </div>
 <p>
-<button type="submit" name="boutton" value="proposition" class="w3-button w3-text-white" style="background-color:{{engine.current_game.config["theme_color"][0]}}">Faire une proposition</button>
+<button type="submit" name="boutton" value="proposition" class="w3-button w3-text-white" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">Faire une proposition</button>
 <p>
 </form>
 
