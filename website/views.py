@@ -130,9 +130,7 @@ def game3_logic():
     pot_commun = sum(p["choix"] for p in players)
     if gameState['sabotage']:
         mises = [p['choix'] for p in players]
-        print(mises)
-        print(f"mise maximale : {np.argmax(mises)}")
-        pot_commun = 1.2 * np.argmax(mises)
+        pot_commun = 1.2 * np.max(mises)
         log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + "Cette manche a été sabotée car les participans on été trop coopératifs. Le contenu du pot commun avant l'ajout de la banque à été fixé à " + str(pot_commun))
     prize = int(pot_commun * pages[gameState['iterator']]["gain"] // 5)
     log.append(datetime.datetime.now().strftime('%H:%M:%S : ') + str(prize*5) + " Pièces ont été redistribué équitablement à tous les joueurs ce qui fait " + str(prize) + " Pièces par joueur")
