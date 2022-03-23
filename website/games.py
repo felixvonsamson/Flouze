@@ -3,8 +3,8 @@ import numpy as np
 from abc import ABC, abstractmethod
 from flask import Markup
 
-#from .html_icons import icons
-#from .pages_ordering import pages
+from .html_icons import icons
+from .pages_ordering import pages
 
 
 games_config = {
@@ -210,18 +210,19 @@ class Game2(Game):
     game.reveal_states = [[False]*5 for _ in range(3)]
 
   def logic(game):
-    assert game.is_everyone_done()
+    assert game.is_everyone_done
     choices = game.current_choices
-    unique_choices = np.unique(choices)
-    if unique_choices:
-      winning_value = np.min(unique_choices)
+    unique_choices, counts = np.unique(choices, return_counts=True)
+    if 1 in counts:
+      winning_value = unique_choices[counts.index(1)]
       for player, choice in zip(game.engine.players, choices):
+        round_id = game.current_round_id
         if choice == winning_value:
           winner = player
-          prize = game.config["prize"] * choice
+          prize = game.config["prizes"][round_id] * choice
           player.flouze += prize
           player.last_profit = prize
-          if game.config['round'][1] in [0, 1]:
+          if round_id in [0, 1]:
             game.engine.log(
               f"{player.name} a remporté {prize} Pièces.")
           else:
@@ -230,7 +231,7 @@ class Game2(Game):
             game.engine.log(
               f"{player.name} a reçu {won_stars} étoile(s) "\
                "car iel a gagné la dernière manche")
-      if game.config['round'][1] in [0, 1]:
+      if round_id in [0, 1]:
         for player in game.engine.players:
           player.message = Markup(
             f"{winner.name} a gagné et a remporté "\
@@ -277,7 +278,7 @@ class Game3(Game):
       f"Ils leur restent tous {initial_flouze} Pièces")
 
   def logic(game):
-    assert game.is_everyone_done()
+    assert game.is_everyone_done
 
     inputs = game.current_choices
     common_pot = sum(inputs)
@@ -354,7 +355,7 @@ class Game4(Game):
     return game.config['prize'][game.bonuses]
   
   def logic(game):
-    assert game.is_everyone_done()
+    assert game.is_everyone_done
     # compte le nombre de choix uniques
     choices = game.current_choices
     unique_choices = set(np.unique(choices))
