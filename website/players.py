@@ -10,12 +10,13 @@ class Player(object):
         player.sid = None
         player.name = name
         player.password = password
+        player.color = main_color
+        player.sec_color = sec_color
         player.flouze = 0
         # Dans le jeu 3 l'argent est mis de coté
         player.saved_flouze = 0
         player.stars = 0
-        player.color = main_color
-        player.sec_color = sec_color
+
         player.choix = None
         # Indique si le joueur est en attente
         player.is_done = False
