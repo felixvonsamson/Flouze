@@ -1,7 +1,7 @@
 import random
 import numpy as np
 from abc import ABC, abstractmethod
-from flask import Markup, flash
+from flask import Markup
 
 from .html_icons import icons
 from .pages_ordering import pages
@@ -10,26 +10,26 @@ from .pages_ordering import pages
 games_config = {
     "game1": {
         "background": "10.jpg", 
-        "theme": ["#b65612","#dfaa84"], 
+        "theme_colors": ["#b65612","#dfaa84"], 
         "prizes": [200, 400, 600], 
         "3rd_round_stars": 1
     }, 
     "game2": {
         "background": "9.jpg", 
-        "theme": ["#017e68","#6ecdbc"], 
+        "theme_colors": ["#017e68","#6ecdbc"], 
         "prizes": [50, 100, 150], 
         "3rd_round_stars": 2
     }, 
     "game3": {
         "background": "8.jpg", 
-        "theme": ["#3f6203","#a6ca68"], 
+        "theme_colors": ["#3f6203","#a6ca68"], 
         "initial_flouze": 100, 
         "interests": [1.2, 1.5, 2], 
         "3rd_round_stars": 2
     }, 
     "game4": {
         "background": "6.jpg", 
-        "theme": ["#024b66","#60a7c1"], 
+        "theme_colors": ["#024b66","#60a7c1"], 
         "prizes": [[[150, 100, 50, 0, "star"]], 
                    [[250, 150, 0, -150, "star"], 
                     [400, 250, 0, -250, "star"]], 
@@ -39,7 +39,7 @@ games_config = {
     }, 
     "game5": {
         "background": "7.jpg", 
-        "theme": ["#6b017f","#c470d4"], 
+        "theme_colors": ["#6b017f","#c470d4"], 
         "prize": 2500, 
         "bonus": 500
     }
@@ -72,8 +72,6 @@ class Game(ABC):
         game.choices = [[None]*5 for _ in range(3)]
         game.is_done = [[False]*5 for _ in range(3)]
     
-    def is_allowed_to_play(game, player):
-        return 
 
     @abstractmethod
     def logic(game):
@@ -84,26 +82,35 @@ class Game(ABC):
         return game.engine.current_stage
     
     @property
-    def current_round(game):
+    def current_round_id(game):
+        assert (game.current_stage[1] in [1, 2, 3])
         return game.current_stage[1] - 1
     
     @property
-    def current_choice(game):
-        return game.choices[game.current_round]
+    def current_choices(game):
+        return game.choices[game.current_round_id]
     
     @property
     def current_done(game):
-        return game.is_done[game.current_round]
+        return game.is_done[game.current_round_id]
     
-    def check_action_allowed(game, player, game_id):
-        return game_id == game.game_id and not player.is_done
-
+    @property
+    def current_reveal_state(game):
+        return game.reveal_state[game.current_round_id]
+    
+    @property
+    def current_waiting_count(engine):
+        return sum(engine.current_done)
+    
     def is_everyone_done(game):
-        return all(game.is_done[game.current_round])
+        return all(game.current_done)   
+    
+    def is_allowed_to_play(game, player, game_id):
+        return game_id == game.game_id and not player.is_done
 
     def reveal_card(game, card_id):
         assert "reveal_states" in game.__dict__
-        reveal_state = game.reveal_state[game.current_round]
+        reveal_state = game.current_reveal_state
         if reveal_state[card_id]: return
         reveal_state[card_id] = True
         socketio = game.engine.socketio
@@ -125,7 +132,7 @@ class Game(ABC):
         game.engine.save_data()
 
     def update_waiting_count(game):
-        is_done = game.is_done[game.current_round]
+        is_done = game.current_done
         waiting_players = [player
             for player, is_done in zip(game.players, is_done) 
             if is_done
@@ -133,14 +140,11 @@ class Game(ABC):
         total = 5 if game.game_id < 5 else 4
         updates = [("count", f"{len(waiting_players)} / {total}")]
         game.engine.update_fields(updates, waiting_players)
-    
-    def end_waiting(game):
-        game.engine.iterator += 1
-        game.engine.refresh_all_pages()
 
 
 class Game1(Game):
     def __init__(game, engine):
+        super().__init__(engine)
         game.engine = engine
         game.game_id = 1
         game.config = games_config["game1"]
@@ -150,7 +154,7 @@ class Game1(Game):
     
     def logic(game):
         assert game.is_everyone_done()
-        choices = game.choices[game.current_round]
+        choices = game.current_choices
         lottery = []
         for player, nb_tickets in zip(game.engine.players, choices):
             lottery += [player.ID] * nb_tickets
@@ -159,7 +163,7 @@ class Game1(Game):
         if len(lottery) > 0:
             winner_id = random.choice(lottery)
             winner = game.engine.players[winner_id]
-            prize = game.config["prizes"][game.current_round] 
+            prize = game.config["prizes"][game.current_round_id] 
             prize //= len(lottery)
             winner.flouze += prize
             winner.last_profit = prize
@@ -172,7 +176,7 @@ class Game1(Game):
                 f"Vous avez gagné la lotterie !<br>Vous avez reçu {prize} "\
                 f"{icons['coin']}")
             
-            if game.current_round == 3:
+            if game.current_round_id == 3:
                 won_stars = game.config["3rd_round_stars"]
                 winner.stars += won_stars
                 
@@ -190,10 +194,14 @@ class Game1(Game):
             game.gameEngine.log(
                 "Il n'y a pas de gagnant à la lotterie "\
                 "car personne n'a participé.")
+    
+    def end(game):
+        game.engine.games[2] = Game2(game.engine)
 
 
 class Game2(Game):
     def __init__(game, engine):
+        super().__init__(engine)
         game.engine = engine
         game.game_id = 2
         game.config = games_config["game2"]
@@ -203,7 +211,7 @@ class Game2(Game):
 
     def logic(game):
         assert game.is_everyone_done()
-        choices = game.choices[game.current_round]
+        choices = game.current_choices
         unique_choices = np.unique(choices)
         if unique_choices:
             winning_value = np.min(unique_choices)
@@ -238,16 +246,22 @@ class Game2(Game):
             game.engine.log("Personne n'a remporté de lot a cette manche.")
             for player in game.engine.players:
                 player.message = "Personne n'a remporté de lot a cette manche."
+    
+    def end(game):
+        game.engine.games[3] = Game3(game.engine)
 
 
 class Game3(Game):
     def __init__(game, engine):
+        super().__init__(engine)
         game.engine = engine
         game.game_id = 3
         game.config = games_config["game3"]
         
+        game.done_stars = [False] * 5
         # Sabotage du 3ème jeu si les participants sont trop coopératifs
         game.sabotage = False
+        game.start()
     
     def start(game):
         total_saved = 0
@@ -265,7 +279,7 @@ class Game3(Game):
     def logic(game):
         assert game.is_everyone_done()
         
-        inputs = game.choices[game.current_round]
+        inputs = game.current_choices
         common_pot = sum(inputs)
         if game.sabotage:
             common_pot = 1.2 * np.argmax(common_pot)
@@ -274,7 +288,7 @@ class Game3(Game):
                  "coopératifs. Le contenu du pot commun avant l'ajout de la "\
                 f"banque à été fixé à {common_pot}")
         
-        interest = game.config["interests"][game.current_round]
+        interest = game.config["interests"][game.current_round_id]
         prize = int(common_pot * interest  // 5)
         game.engine.log(
             f"{5 * prize} Pièces ont été redistribué équitablement à "\
@@ -284,7 +298,7 @@ class Game3(Game):
             player.flouze += prize
             player.message = Markup(f"Vous avez reçu {prize} {icons['coin']}.")
         
-        if game.current_round == 2:
+        if game.current_round_id == 2:
             flouzes = [player.flouze for player in game.engine.players]
             winner_id = np.argmax(flouzes)
             winner = game.engine.players[winner_id]
@@ -308,9 +322,12 @@ class Game3(Game):
             player.saved_flouze = None
         game.engine.log("L'argent mis de coté à été remis en jeu")
 
+        game.engine.games[4] = Game4(game.engine)
+
 
 class Game4(Game):
     def __init__(game, engine):
+        super().__init__(engine)
         game.engine = engine
         game.game_id = 4
         game.config = games_config["game4"]
@@ -321,7 +338,7 @@ class Game4(Game):
     def logic(game):
         assert game.is_everyone_done()
         # compte le nombre de choix uniques
-        choices = game.choices[game.current_round]
+        choices = game.current_choices
         unique_choices = set(np.unique(choices))
         for player, choice in zip(game.engine.players, choices):
             if choice in unique_choices:
@@ -341,7 +358,7 @@ class Game4(Game):
                 player.message = "Vous n'avez pas remporté le prix."
         
         if len(unique_choices) == 5:
-            if game.current_round in [0, 1]:
+            if game.current_round_id in [0, 1]:
                 game.engine.log(
                     "Tous les joueurs ont choisis un prix différent "\
                     "donc un bonus s'applique pour la manche suivante")
@@ -354,10 +371,44 @@ class Game4(Game):
                     f"Tous les joueurs ont choisis un prix différent "\
                     f"donc le gros lot passe de {master_prize} "\
                     f"à {master_prize_with_bonus} Pièces.")
-                
+    
+    def end(game):
+        stars = [player.stars for player in game.engine.players]
+        game.engine.log(
+             "Le nombre d'etoiles pour chaque joueur est "\
+            f"respectivement : {stars}")
+        if stars.count(max(stars)) == 1:
+            master = np.argmax(stars)
+            master = game.engine.player()
+            prize = games_config["game5"]["prize"] + \
+                    (game.bonuses == 3) * games_config["game5"]["bonus"]
+            master.flouze += prize
+            game.engine.log(
+                f"{master.name} a le plus d'étoiles et remporte ainsi "\
+                f"la somme de {prize} pièces pour le cinquième jeu.")
+            game.engine.games[5] = Game5(game.engine, master)
+            for player in game.engine.games[5].other_players:
+                player.message = Markup(
+                    f"{master.name} a le plus d'étoiles et est ainsi "\
+                    f"en possesion de la somme de {prize} {icons['coin']}."\
+                     "pour le 5ème jeu")
+            master.message = Markup(
+                 "Vous avez le plus d'étoiles et êtes ainsi en possesion de "\
+                f"la somme de {prize} {icons['coin']} pour le 5ème jeu.")
+            
+        else:
+            game.engine.log(
+                "Dû à une égalité en terme d'étoiles, personne ne remporte "\
+                "le gros lot et le cinquième jeu est annulé")
+            for player in game.engine.players:
+                player.message = "Dû à une égalité en terme d'étoiles, "\
+                    "personne ne remporte le gros lot"\
+                    "et le cinquième jeu est annulé"
+
 
 class Game5(Game):
     def __init__(game, engine, master, with_bonus):
+        super().__init__(engine)
         game.engine = engine
         game.game_id = 5
         game.config = games_config["game5"]
@@ -366,32 +417,72 @@ class Game5(Game):
         # reste des joueurs
         game.other_players = engine.players.copy()
         game.other_players.pop(master.ID)
-        # bonus pour le jeu 5
-        game.with_bonus = with_bonus
-        game.remaining_trials = 3
+        game.propositions = [[0]*5 for _ in range(3)]
+        game.question_id = -1
 
-    def start(game):
+    @property
+    def current_proposition(game):
+        round_id = game.current_round_id
+        return game.propositions[round_id]
+    @property
+    def current_proposition(game, proposition):
+        round_id = game.current_round_id
+        game.propositions[round_id] = proposition
+    
+    @property
+    def current_guesser(game):
+        return game.other_players[game.question_id]
+
+    def start_round(game):
         for players in game.other_players:
             players.message = f"Veuillez attendre la nouvelle proposition "\
-                               "de {game.master.name} ..."
-
+                              f"de {game.master.name} ..."
+        game.next_question()
+    
+    def next_question(game):
+        game.question_id += 1
         guessers = game.other_players.copy()
-        guessers.pop(0)
-        for player, question in zip(guessers, quiz[0]):
+        guessers.pop(game.question_id)
+        for player, question in zip(guessers, quiz[game.question_id]):
             player.question = question
+        
     
     def logic(game):
-        pass
+        if sum(game.current_choices) >= 3:
+            game.master.message = "Votre proposition a été acceptée "\
+                                  "par la majorité !"
+            for i, player in enumerate(game.other_players):
+                offer = game.current_proposition[i]
+                game.master.flouze -= offer
+                player.flouze += offer
+                player.message = Markup(
+                    f"La proposition à été acceptée par la majorité des "\
+                    f"joueurs.<br>Vous avez recu {offer} {icons['coin']}.")
+            game.end()
+        else:
+            if game.current_round_id == 2:
+                prize = games_config["game5"]["prize"] + \
+                        (game.bonuses == 3) * games_config["game5"]["bonus"]
+                game.master.flouze -= prize
+                game.master.message = Markup(
+                    f"Votre dernière proposition a été refusée par "\
+                    f"la majorité. Les {prize} vous sont donc retirés.")
+                for player in game.other_players:
+                    player.message = Markup(
+                        f"Auccun accord à été trouvé apprès ces 3 essais donc "\
+                        f"{game.master.name} ne remporte pas les "\
+                        f"{prize} {icons['coin']}")
+                game.end()
+            else:
+                game.master.message = "Votre proposition a été refusée "\
+                                      "par la majorité !"
+                for player in game.other_players:
+                    player.message = Markup(
+                        "La proposition à été refusée par au moins 2 joueurs."\
+                        "<br>En attente d'une nouvelle proposition...")
+                game.engine.next_page()
 
     def end(game):
         game.engine.iterator = len(pages) - 1
         game.engine.refresh_all_pages()
-
-class Quiz(Game):
-    def __init__(game, engine, master, bonus):
-        game.engine = engine
-        game.question_id = 0
-
-    def logic(game):
-        pass
 

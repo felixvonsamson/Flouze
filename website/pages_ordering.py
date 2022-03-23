@@ -32,13 +32,19 @@ pages = [      # Liste des pages a afficher dans l'ordre / stage est de la forme
     { "url": "results.html",            "round": [4, 2] }, 
     { "url": "Jeu4-choix.html",         "round": [4, 3] }, 
     { "url": "Jeu4-reveal.html",        "round": [4, 3] }, 
-    { "url": "results.html",            "round": [4, None] }, 
+    { "url": "results.html",            "round": [4, 3] }, 
     { "url": "donner_des_etoiles.html", "round": [4, None] }, 
     { "url": "results.html",            "round": [4, None] }, 
     { "url": "title.html",              "round": [5, 0] }, 
     { "url": "Jeu 5",                   "round": [5, 1], "phase": "proposition" }, 
     { "url": "Jeu 5",                   "round": [5, 1], "phase": "validation" }, 
     { "url": "Jeu 5",                   "round": [5, 1], "phase": "reveal" }, 
-    { "url": "results.html",            "round": [5, 3] }
+    { "url": "Jeu 5",                   "round": [5, 2], "phase": "proposition" }, 
+    { "url": "Jeu 5",                   "round": [5, 2], "phase": "validation" }, 
+    { "url": "Jeu 5",                   "round": [5, 2], "phase": "reveal" }, 
+    { "url": "Jeu 5",                   "round": [5, 3], "phase": "proposition" }, 
+    { "url": "Jeu 5",                   "round": [5, 3], "phase": "validation" }, 
+    { "url": "Jeu 5",                   "round": [5, 3], "phase": "reveal" }, 
+    { "url": "results.html",            "round": [5, None] }
 ]
 

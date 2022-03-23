@@ -21,11 +21,13 @@ class gameEngine(object):
             player.other_players.pop(i)
         engine.players_by_name = { p.name: p for p in engine.players }
         
-        engine.games = [Game1(engine), 
-                        Game2(engine), 
-                        Game3(engine), 
-                        Game4(engine), 
-                        Game5(engine)]
+        engine.games = {
+            1: Game1(engine), 
+            2: None, 
+            3: None, 
+            4: None, 
+            5: None
+        }
 
         # pointeur pour indiquer sur quelle page on est (l'array 'pages')
         engine.iterator = 0
@@ -42,23 +44,32 @@ class gameEngine(object):
     
     @property
     def current_game(engine):
+        assert (engine.current_stage[0] in [1, 2, 3, 4, 5])
         return engine.games[engine.current_stage[0]]
     
-    @property
-    def current_waiting_count(engine):
-        if engine.current_stage[1] not in [1, 2, 3]:
-            return None
-        round_id = engine.current_stage[1] - 1
-        return sum(engine.current_game.is_done[round_id])
     
     @property
     def current_presentation_frame(engine):
-        if engine.current_stage not in [(1, 0)]:
-            return None
+        assert (engine.current_stage in [(1, 0)])
         return engine.current_game.current_frame_id
     
-    def step(engine):
-        pass
+    def next_page(engine):
+        engine.iterator += 1
+        stage = engine.current_stage
+        engine.log(
+            f"Passage à la page suivante : {engine.current_page['url']} "\
+            f"(jeu {stage[0]}, manche {stage[1]})")
+        
+        if engine.current_stage == [2, 0]:
+            engine.games[1].end()
+        if engine.current_stage == [3, 0]: # mettre de coté le Flouze
+            engine.games[2].end()
+        if engine.current_stage == [4, 0]: # rassembler le Flouze
+            engine.games[3].end()
+        if engine.current_stage == [5, 0]:
+            engine.games[4].end()
+        
+        engine.force_refresh()
     
     def force_refresh(engine):
         engine.socketio.emit('refresh', None, broadcast=True)
@@ -94,5 +105,4 @@ class gameEngine(object):
         for player in engine.players:
             player.sid = None
         return engine
-
 

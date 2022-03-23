@@ -24,11 +24,22 @@ class Player(object):
     @property
     def choice(player):
         return player.engine.current_game.current_choice[player.ID]
+    @choice.setter
+    def choice(player, choice):
+        player.engine.current_game.current_choice[player.ID] = choice
     
     @property
     def is_done(player):
         return player.engine.current_game.current_done[player.ID]
-    
+    @is_done.setter
+    def is_done(player, is_done):
+        player.engine.current_game.current_done[player.ID] = is_done
+        current_game = player.engine.current_game
+        if not current_game.is_everyone_done:
+            current_game.update_waiting_count()
+        else:
+            current_game.logic()
+            current_game.end_waiting()
     
     def send_message(player, message):
         socketio = player.engine.socketio

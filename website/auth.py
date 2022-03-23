@@ -2,9 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 
 from . import engine
 
-
 auth = Blueprint("auth", __name__)
-
 
 @auth.route("/login", methods = ["GET", "POST"])
 def login():
