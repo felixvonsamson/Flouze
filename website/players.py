@@ -1,4 +1,5 @@
 import datetime
+from platform import platform
 from flask import Markup, flash
 
 from .html_icons import icons
@@ -19,18 +20,18 @@ class Player(object):
 
     player.last_profit = 0
     player.messages = []
-    return player
 
   @property
   def choice(player):
-    return player.engine.current_game.current_choice[player.ID]
+    return player.engine.current_game.current_choices[player.ID]
   @choice.setter
   def choice(player, choice):
-    player.engine.current_game.current_choice[player.ID] = choice
+    player.engine.current_game.current_choices[player.ID] = choice
 
   @property
   def is_done(player):
-    return player.engine.current_game.current_done[player.ID]
+    return player.engine.current_stage[1] in [1, 2, 3] \
+           and player.engine.current_game.current_done[player.ID]
   @is_done.setter
   def is_done(player, is_done):
     player.engine.current_game.current_done[player.ID] = is_done
@@ -38,7 +39,8 @@ class Player(object):
     if not current_game.is_everyone_done:
       current_game.update_waiting_count()
     else:
-      current_game.next_page()
+      player.engine.next_page()
+    player.engine.refresh_monitoring()
 
   def send_message(player, message):
     socketio = player.engine.socketio
@@ -51,21 +53,21 @@ class Player(object):
     player.flouze -= amount
     receiver.flouze += amount
 
-    player.game.log(f"{player.name} a fait un don de {amount} Pièces à "\
-            f"{receiver.name}.")
+    player.engine.log(f"{player.name} a fait un don de {amount} Pièces à "\
+                      f"{receiver.name}.")
 
     updates = [("flouze", receiver.flouze)]
-    player.game.update_fields(updates, [receiver])
+    player.engine.update_fields(updates, [receiver])
 
-    message = f"Vous avez envoyé {amount} {icons['coin']}"\
-           " &nbsp; à {receiver.name}."
-    flash(Markup(message, category='success'))
+    flash(Markup(
+      f"Vous avez envoyé {amount} {icons['coin']}"\
+      f" &nbsp; à {receiver.name}."), category="success")
+    
+    receiver.send_message(
+      f"Vous avez reçu {amount} {icons['coin']} &nbsp; "\
+      f"de la part de {player.name}.")
 
-    message = f"Vous avez reçu {amount} {icons['coin']} &nbsp; "\
-          f"de la part de {player['name']}."
-    receiver.send_message(message)
-
-    player.game.save_data()
+    player.engine.save_data()
 
 
   def send_star(player, receiver, sent_stars):
@@ -74,23 +76,23 @@ class Player(object):
     player.stars -= sent_stars
     receiver.stars += sent_stars
 
-    player.game.log(f"{player.name} a légué {sent_stars} "\
-            f"étoile{'s' if sent_stars > 1 else ''} "\
-            f"à {receiver.name}.")
+    player.engine.log(
+      f"{player.name} a légué {sent_stars} "\
+      f"étoile({'s' if sent_stars > 1 else ''}) à {receiver.name}.")
 
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
            (f"player{receiver.ID}_star", f" {receiver.stars}")]
-    player.game.update_fields(updates)
+    player.engine.update_fields(updates)
 
-    message = f"Vous avez envoyé {sent_stars} {icons['star']} "\
-          f"à {receiver.name}."
-    flash(Markup(message, category='success'))
+    flash(Markup(
+      f"Vous avez envoyé {sent_stars} {icons['star']} "\
+      f"à {receiver.name}."), category="success")
 
-    message = f"Vous avez reçu {sent_stars} {icons['star']}"\
-          f"de la part de {player.name}."
-    receiver.send_message(message)
+    receiver.send_message(
+      f"Vous avez reçu {sent_stars} {icons['star']}"\
+      f"de la part de {player.name}.")
 
-    player.game.save_data()
+    player.engine.save_data()
 
 
   def share_profit(player, amounts):

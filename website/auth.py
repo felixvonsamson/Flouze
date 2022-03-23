@@ -15,7 +15,7 @@ def login():
         if first_name in engine.players_by_name.keys():
             player = engine.players_by_name[first_name]
             if player.password == password:
-                engine.log("{first_name} s'est connecté.")
+                engine.log(f"{first_name} s'est connecté.")
                 flash("Vous êtes connecté !", category = "success")
                 session["ID"] = player.ID
                 return redirect(url_for("views.home"))

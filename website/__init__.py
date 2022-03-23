@@ -2,7 +2,7 @@ import os.path
 from flask import Flask, request
 from flask_socketio import SocketIO
 
-from gameEngine import gameEngine
+from website.gameEngine import gameEngine
 
 def init_engine():
     with open("players.txt", "r") as file:
@@ -15,6 +15,7 @@ def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "hjshjhdjah kjshkjdhjs"
 
+    global engine
     engine = gameEngine.load_data() if os.path.isfile("data.pck")  \
              else init_engine()
     
@@ -23,7 +24,7 @@ def create_app():
     @socketio.on("give_identity")
     def give_identity(name):
         if name == "admin":
-            admin_sid = request.sid
+            engine.admin_sid = request.sid
         else:
             engine.players_by_name[name].sid = request.sid
 
@@ -33,4 +34,4 @@ def create_app():
     app.register_blueprint(views, url_prefix="/")
     app.register_blueprint(auth, url_prefix="/")
 
-    return engine, socketio, app
+    return socketio, app

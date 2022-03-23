@@ -1,42 +1,42 @@
 {% extends "base+etoiles.html" %} {% block title %}Partager{% endblock %} {% block inside2%}
 
-  <div class="w3-card-4 w3-display-middle w3-white w3-center animate__animated animate__fadeIn" style="width:240px;">
-  <header id="total" class="w3-container w3-text-white w3-xlarge w3-padding" style="background-color:{{theme_color}}">
+  <div class="w3-large w3-card-4 w3-display-middle w3-white w3-center animate__animated animate__fadeIn" style="width:260px;">
+  <header id="total" class="w3-container w3-text-white w3-xlarge w3-padding" style="background-color:{{engine.current_game.config["theme_color"][0]}}">
       <img src="{{url_for('static', filename="images/coin.png")}}" style="width:22px" alt="Coin"> &nbsp; à partager
   </header>
-  {% if user['gain_a_partager'] < 0 %}
-  <div class="w3-text-red w3-large"> <i class="fa fa-info-circle"></i> votre demande peut être refusée par les joueurs</div>
+  {% if player.last_profit < 0 %}
+  <div class="w3-text-red"> <i class="fa fa-info-circle"></i> votre demande peut être refusée par les joueurs</div>
   {% endif %}
-  <form style="font-size:16px" method="POST">
+  <form method="POST">
   {% for i in range(4) %}
-  <div class="w3-row" style="background-color:{{user['otherPlayers'][i]['color']}}; margin:8px">
-    <div class="w3-col w3-padding" style="width:120px;"><b>{{user['otherPlayers'][i]["name"]}}</b></div>
-    <div class="w3-rest"><input id={{i}} onchange="update_rest()" name={{user['otherPlayers'][i]["name"]}} class="w3-input w3-border w3-round-large w3-center" value={{user['gain_a_partager']//5}} type="number" style="width:99px; height:30px; margin-top:5px"></div>
+  <div class="w3-row" style="background-color:{{player.other_players[i].color}}; margin:8px">
+    <div class="w3-col w3-padding" style="width:120px;"><b>{{player.other_players[i].name}}</b></div>
+    <div class="w3-rest"><input id=sent{{i}} onchange="update_rest()" name={{player.other_players[i].name}} class="w3-input w3-border w3-round-large w3-center" value={{player.last_profit // 5}} type="number" style="width:99px; height:30px; margin-top:5px"></div>
   </div>
   {% endfor %}
-  <div class="w3-row" style="background-color:{{user['color']}}; margin:8px">
-    <div class="w3-col w3-padding" style="width:120px;"><b>{{user['name']}}</b></div>
+  <div class="w3-row" style="background-color:{{player.color}}; margin:8px">
+    <div class="w3-col w3-padding" style="width:120px;"><b>{{player.name}}</b></div>
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>
     <button type="submit" name="boutton" value="en fait non" class="w3-button w3-red" style="margin:10px">en fait non</button>
-    <button type="submit" name="boutton" value="envoi partager" class="w3-button w3-text-white" style="margin:10px; background-color:{{theme_color}}">{% if user['gain_a_partager'] < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
+    <button type="submit" name="boutton" value="envoi partager" class="w3-button w3-text-white" style="margin:10px; background-color:{{engine.current_game.config["theme_color"][0]}}">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
 </form>
   </div>
 
 <script>
-  var total = {{user['gain_a_partager'] }};
+  var total = {{player.last_profit}};
   document.getElementById('total').innerHTML = total + document.getElementById('total').innerHTML
-  document.getElementById('0').value = Math.floor(total/5)
-  document.getElementById('1').value = Math.floor(total/5)
-  document.getElementById('2').value = Math.floor(total/5)
-  document.getElementById('3').value = Math.floor(total/5)
+  document.getElementById('sent0').value = Math.floor(total/5)
+  document.getElementById('sent1').value = Math.floor(total/5)
+  document.getElementById('sent2').value = Math.floor(total/5)
+  document.getElementById('sent3').value = Math.floor(total/5)
   update_rest()
   function update_rest() {
     document.getElementById('rest').innerHTML = total -
-                                                    document.getElementById('0').value -
-                                                    document.getElementById('1').value -
-                                                    document.getElementById('2').value -
-                                                    document.getElementById('3').value + ' <img src="{{url_for("static", filename="images/coin.png")}}" style="width:20px" alt="Coin">'
+                                                    document.getElementById('sent0').value -
+                                                    document.getElementById('sent1').value -
+                                                    document.getElementById('sent2').value -
+                                                    document.getElementById('sent3').value + '&nbsp; <img src="{{url_for("static", filename="images/coin.png")}}" class="coin-small" alt="Coin">'
   }
 </script>
 

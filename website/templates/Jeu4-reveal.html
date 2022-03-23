@@ -5,20 +5,20 @@
   
 	{% for i in range(2) %}
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{i}}" {% if gameState['reveal'][i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{players[i]['color']}};">
-          <h4><b>{{players[i]["name"]}}</b></h4>
+      <div id="card{{i}}" {% if engine.current_game.current_reveal_state[i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+        <div class="flip-card-front" style="background-color:{{engine.players[i].color}};">
+          <h4><b>{{engine.players[i].name}}</b></h4>
         </div>
-        <div class="flip-card-back" style="background-color:{{players[i]['color']}};">
-          <h4><b>{{players[i]["name"]}}</b></h4>
-			{% if page['prize'][gameState["game4_bonus"]][players[i]["choix"]] == "star" %}
-			  {% if players[i]["choix"] == 3 %}
-				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{players[i]['secColor']}}"><i class="fa fa-star"></i></div>
+        <div class="flip-card-back" style="background-color:{{engine.players[i].color}};">
+          <h4><b>{{engine.players[i].name}}</b></h4>
+			{% if engine.current_game.current_prizes[engine.players[i].choice] == "star" %}
+			  {% if engine.players[i].choice == 3 %}
+				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{engine.players[i].sec_color}}"><i class="fa fa-star"></i></div>
 			  {% else %}
-				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{players[i]['secColor']}}"><i class="fa fa-star"></i></div>
+				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{engine.players[i].sec_color}}"><i class="fa fa-star"></i></div>
 			  {% endif %}
 			{% else %}
-			<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{players[i]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[i]["choix"]]}} <img src="/static/images/coin.png" style="width:22px" alt="Coin"></div>
+			<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{engine.players[i].sec_color}}">{{engine.current_game.current_prizes[engine.players[i].choice]}} <img src="/static/images/coin.png" style="width:22px" alt="Coin"></div>
 			{% endif %}
         </div>
       </div>
@@ -30,20 +30,20 @@
   
     {% for i in range(2) %}
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{i+2}}" {% if gameState['reveal'][i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{players[i+2]['color']}};">
-          <h4><b>{{players[i+2]["name"]}}</b></h4>
+      <div id="card{{i+2}}" {% if engine.current_game.current_reveal_state[i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+        <div class="flip-card-front" style="background-color:{{engine.players[i+2].color}};">
+          <h4><b>{{engine.players[i+2].name}}</b></h4>
         </div>
-        <div class="flip-card-back" style="background-color:{{players[i+2]['color']}};">
-          <h4><b>{{players[i+2]["name"]}}</b></h4>
-			{% if page['prize'][gameState["game4_bonus"]][players[i+2]["choix"]] == "star" %}
-			  {% if players[i+2]["choix"] == 3 %}
-				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{players[i+2]['secColor']}}"><i class="fa fa-star"></i></div>
+        <div class="flip-card-back" style="background-color:{{engine.players[i+2].color}};">
+          <h4><b>{{engine.players[i+2].name}}</b></h4>
+			{% if engine.current_game.current_prizes[engine.players[i+2].choice] == "star" %}
+			  {% if engine.players[i+2].choice == 3 %}
+				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{engine.players[i+2].sec_color}}"><i class="fa fa-star"></i></div>
 			  {% else %}
-				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{players[i+2]['secColor']}}"><i class="fa fa-star"></i></div>
+				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{engine.players[i+2].sec_color}}"><i class="fa fa-star"></i></div>
 			  {% endif %}
 			{% else %}
-			<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{players[i+2]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[i+2]["choix"]]}} <img src="/static/images/coin.png" style="width:22px" alt="Coin"></div>
+			<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{engine.players[i+2].sec_color}}">{{engine.current_game.current_prizes[engine.players[i+2].choice]}} <img src="/static/images/coin.png" style="width:22px" alt="Coin"></div>
 			{% endif %}
         </div>
       </div>
@@ -53,20 +53,20 @@
   </div>
   <div style="display:flex; justify-content:space-around;">
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{4}}" {% if gameState['reveal'][4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{players[4]['color']}};">
-          <h4><b>{{players[i]["name"]}}</b></h4>
+      <div id="card{{4}}" {% if engine.current_game.current_reveal_state[4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+        <div class="flip-card-front" style="background-color:{{engine.players[4].color}};">
+          <h4><b>{{engine.players[i].name}}</b></h4>
         </div>
-        <div class="flip-card-back" style="background-color:{{players[4]['color']}};">
-          <h4><b>{{players[4]["name"]}}</b></h4>
-			{% if page['prize'][gameState["game4_bonus"]][players[4]["choix"]] == "star" %}
-			  {% if players[4]["choix"] == 3 %}
-				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{players[4]['secColor']}}"><i class="fa fa-star"></i></div>
+        <div class="flip-card-back" style="background-color:{{engine.players[4].color}};">
+          <h4><b>{{engine.players[4].name}}</b></h4>
+			{% if engine.current_game.current_prizes[engine.players[4].choice] == "star" %}
+			  {% if engine.players[4].choice == 3 %}
+				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{engine.players[4].sec_color}}"><i class="fa fa-star"></i></div>
 			  {% else %}
-				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{players[4]['secColor']}}"><i class="fa fa-star"></i></div>
+				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{engine.players[4].sec_color}}"><i class="fa fa-star"></i></div>
 			  {% endif %}
 			{% else %}
-			<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{players[4]['secColor']}}">{{page['prize'][gameState["game4_bonus"]][players[4]["choix"]]}} <img src="/static/images/coin.png" style="width:22px" alt="Coin"></div>
+			<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{engine.players[4].sec_color}}">{{engine.current_game.current_prizes[engine.players[4].choice]}} <img src="/static/images/coin.png" style="width:22px" alt="Coin"></div>
 			{% endif %}
         </div>
       </div>

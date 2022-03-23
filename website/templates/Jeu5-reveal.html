@@ -1,16 +1,16 @@
 {% extends "base.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside %}
 
 <div class="w3-display-middle w3-center w3-text-white animate__animated animate__fadeIn" style="width:500px;">
-  <header class="w3-container" style="background-color:{{theme_color}}">
-      <h4>{{user['message']}}</h4>
+  <header class="w3-container" style="background-color:{{engine.current_game.config["theme_color"][0]}}">
+      <h4>{{player['message']}}</h4>
   </header>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
     {% for i in range(2) %}
-    <div class="w3-card w3-xlarge w3-margin w3-padding w3-half w3-teal" style="width:150px; height:150px; background-color:{{players[i]['color']}};">
-      <p><b>{{otherPlayers[i]["name"]}}</b></p>
-      <div class="w3-padding w3-text-white w3-margin" style="background-color:{{players[i]['secColor']}};">{{otherPlayers[i]['proposition']}}</div>
+    <div class="w3-card w3-xlarge w3-margin w3-padding w3-half w3-teal" style="width:150px; height:150px; background-color:{{engine.players[i].color}};">
+      <p><b>{{engine.current_game.other_players[i].name}}</b></p>
+      <div class="w3-padding w3-text-white w3-margin" style="background-color:{{engine.players[i].sec_color}};">{{engine.current_game.other_players[i]['proposition']}}</div>
       <div class="w3-padding w3-white w3-margin">
-        {% if otherPlayers[i]['choix'] == 0 %}
+        {% if engine.current_game.other_players[i].choice == 0 %}
         <p class="w3-text-red">Refusé</p>
         {% else %}
         <p class="w3-text-green">Accepté</p>
@@ -21,11 +21,11 @@
   </div>
   <div class="w3-margin-right w3-margin-left" style="display:flex; justify-content:space-around;">
     {% for i in range(2) %}
-    <div class="w3-card w3-xlarge w3-margin w3-padding w3-half w3-teal" style="width:150px; height:150px; background-color:{{players[i+2]['color']}};">
-      <p><b>{{otherPlayers[i+2]["name"]}}</b></p>
-      <div class="w3-padding w3-text-white w3-margin" style="background-color:{{players[i+2]['secColor']}};">{{otherPlayers[i+2]['proposition']}}</div>
+    <div class="w3-card w3-xlarge w3-margin w3-padding w3-half w3-teal" style="width:150px; height:150px; background-color:{{engine.players[i+2].color}};">
+      <p><b>{{engine.current_game.other_players[i+2].name}}</b></p>
+      <div class="w3-padding w3-text-white w3-margin" style="background-color:{{engine.players[i+2].sec_color}};">{{engine.current_game.other_players[i+2]['proposition']}}</div>
       <div class="w3-padding w3-white w3-margin">
-        {% if otherPlayers[i+2]['choix'] == 0 %}
+        {% if engine.current_game.other_players[i+2].choice == 0 %}
         <p class="w3-text-red">Refusé</p>
         {% else %}
         <p class="w3-text-green">Accepté</p>
@@ -36,7 +36,7 @@
   </div>
   <div class="w3-container w3-center">
       <form method="POST">
-        <button type="submit" class="w3-btn w3-xlarge w3-padding" name="boutton" value="nouvelle proposition" style="background-color:{{theme_color}}">Faire une nouvelle proposition</button>
+        <button type="submit" class="w3-btn w3-xlarge w3-padding" name="boutton" value="nouvelle proposition" style="background-color:{{engine.current_game.config["theme_color"][0]}}">Faire une nouvelle proposition</button>
       </form>
   </div>
 </div>

@@ -48,11 +48,6 @@ class gameEngine(object):
     return engine.games[engine.current_stage[0]]
 
 
-  @property
-  def current_presentation_frame(engine):
-    assert (engine.current_stage in [(1, 0)])
-    return engine.current_game.current_frame_id
-
   def next_page(engine):
     engine.iterator += 1
     stage = engine.current_stage
@@ -65,10 +60,14 @@ class gameEngine(object):
       engine.games[current_game_nb - 1].end()
 
     if engine.current_page["url"] == "results.html":
-      engine.games[current_game_nb].logic
+      engine.games[current_game_nb].logic()
 
     engine.force_refresh()
 
+  def refresh_monitoring(engine):
+    if engine.admin_sid:
+      engine.socketio.emit('refresh', None, room=engine.admin_sid)
+  
   def force_refresh(engine):
     engine.socketio.emit('refresh', None, broadcast=True)
 

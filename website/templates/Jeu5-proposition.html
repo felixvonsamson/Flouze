@@ -1,31 +1,31 @@
 {% extends "base.html" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
 
 <form method="POST" class="w3-card-4 w3-display-middle w3-center w3-white animate__animated animate__fadeIn" style="width:400px;">
-<header class="w3-container w3-text-white" style="background-color:{{theme_color}}">
+<header class="w3-container w3-text-white" style="background-color:{{engine.current_game.config["theme_color"][0]}}">
     <h4>Veuillez faire une offre aux autres joueurs</h4>
 </header>
 <div class="w3-margin-right w3-margin-left" style="display:flex;">
-  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{otherPlayers[0]['color']}}">
-    <p><b>{{otherPlayers[0]["name"]}}</b></p>
-    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{otherPlayers[0]['name']}} type="number" style="width:100px; display:inline-block;"></p>
+  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{engine.current_game.other_players[0].color}}">
+    <p><b>{{engine.current_game.other_players[0].name}}</b></p>
+    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{engine.current_game.other_players[0].name}} type="number" style="width:100px; display:inline-block;"></p>
   </div>
-  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{otherPlayers[1]['color']}}">
-    <p><b>{{otherPlayers[1]["name"]}}</b></p>
-    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{otherPlayers[1]['name']}} type="number" style="width:100px; display:inline-block;"></p>
+  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{engine.current_game.other_players[1].color}}">
+    <p><b>{{engine.current_game.other_players[1].name}}</b></p>
+    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{engine.current_game.other_players[1].name}} type="number" style="width:100px; display:inline-block;"></p>
   </div>
 </div>
 <div class="w3-margin-right w3-margin-left" style="display:flex;">
-  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{otherPlayers[2]['color']}}">
-    <p><b>{{otherPlayers[2]["name"]}}</b></p>
-    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{otherPlayers[2]['name']}} type="number" style="width:100px; display:inline-block;"></p>
+  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{engine.current_game.other_players[2].color}}">
+    <p><b>{{engine.current_game.other_players[2].name}}</b></p>
+    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{engine.current_game.other_players[2].name}} type="number" style="width:100px; display:inline-block;"></p>
   </div>
-  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{otherPlayers[3]['color']}}">
-    <p><b>{{otherPlayers[3]["name"]}}</b></p>
-    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{otherPlayers[3]['name']}} type="number" style="width:100px; display:inline-block;"></p>
+  <div class="w3-card w3-margin w3-padding w3-half" style="background-color:{{engine.current_game.other_players[3].color}}">
+    <p><b>{{engine.current_game.other_players[3].name}}</b></p>
+    <p><input class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{engine.current_game.other_players[3].name}} type="number" style="width:100px; display:inline-block;"></p>
   </div>
 </div>
 <p>
-<button type="submit" name="boutton" value="proposition" class="w3-button w3-text-white" style="background-color:{{theme_color}}">Faire une proposition</button>
+<button type="submit" name="boutton" value="proposition" class="w3-button w3-text-white" style="background-color:{{engine.current_game.config["theme_color"][0]}}">Faire une proposition</button>
 <p>
 </form>
 

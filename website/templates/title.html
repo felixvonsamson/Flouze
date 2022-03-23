@@ -1,8 +1,8 @@
 {% extends "base+don.html" %} {% block title %}Flouze - Jeu 1{% endblock %} {% block content%}
 
 
-<div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{secondary_theme_color}}">
-  <div class="w3-container w3-text-white" style="background-color:{{theme_color}}; margin:10px">
+<div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{engine.current_game.config["theme_color"][1]}}">
+  <div class="w3-container w3-text-white" style="background-color:{{engine.current_game.config["theme_color"][0]}}; margin:10px">
     {% if background == "10.jpg" %}
       <h2>Premier jeu</h2>
     {% elif background == "9.jpg" %}
@@ -16,7 +16,7 @@
     {% endif %}
   </div>
 </div>
-<iframe src="{{url_for('static', filename='animations/Jeu1.sozi.html')}}" style="width: 100%;" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{gameState['frameId']}} % player.presentation.frames.length);">
+<iframe src="{{url_for('static', filename='animations/Jeu1.sozi.html')}}" style="width: 100%;" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{engine.current_game.frame_id}} % player.presentation.frames.length);">
   My Sozi presentation should play here.
 </iframe>
 

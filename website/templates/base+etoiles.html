@@ -1,11 +1,9 @@
 {% extends "base.html" %}{% block inside%}
 
 <div class="w3-display-topleft" style="width:115px">
-  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[0]['color']}}">{{players[0]["name"]}}<i id="player0_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[0]["stars"]}}</i></div>
-  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[1]['color']}}">{{players[1]["name"]}}<i id="player1_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[1]["stars"]}}</i></div>
-  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[2]['color']}}">{{players[2]["name"]}}<i id="player2_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[2]["stars"]}}</i></div>
-  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[3]['color']}}">{{players[3]["name"]}}<i id="player3_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[3]["stars"]}}</i></div>
-  <div class="w3-border-0 w3-padding-small" style="background-color:{{players[4]['color']}}">{{players[4]["name"]}}<i id="player4_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{players[4]["stars"]}}</i></div>
+  {% for player in engine.players %}
+  <div class="w3-border-0 w3-padding-small" style="background-color:{{player.color}}">{{player.name}}<i id="player0_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{player.stars}}</i></div>
+  {% endfor %}
 </div>
 
 {% block inside2 %} {% endblock %}

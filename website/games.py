@@ -31,11 +31,11 @@ games_config = {
     "background": "6.jpg",
     "theme_colors": ["#024b66","#60a7c1"],
     "prizes": [[[150, 100, 50, 0, "star"]],
-           [[250, 150, 0, -150, "star"],
-          [400, 250, 0, -250, "star"]],
-           [[400, 200, -250, "star", "star"],
-          [600, 250, -300, "star", "star"],
-          [1000, 300, -400, "star", "star"]]],
+               [[250, 150, 0, -150, "star"],
+                [400, 250, 0, -250, "star"]],
+               [[400, 200, -250, "star", "star"],
+                [600, 250, -300, "star", "star"],
+                [1000, 300, -400, "star", "star"]]],
   },
   "game5": {
     "background": "7.jpg",
@@ -67,7 +67,7 @@ quiz = [
 
 class Game(ABC):
   @abstractmethod
-  def __init__(game, engine, game_id):
+  def __init__(game, engine):
     game.engine = engine
     game.choices = [[None]*5 for _ in range(3)]
     game.is_done = [[False]*5 for _ in range(3)]
@@ -96,6 +96,7 @@ class Game(ABC):
 
   @property
   def current_reveal_state(game):
+    assert "reveal_state" in game.__dict__
     return game.reveal_state[game.current_round_id]
 
   @property
@@ -106,8 +107,8 @@ class Game(ABC):
   def is_everyone_done(game):
     return all(game.current_done)
 
-  def is_allowed_to_play(game, player, game_id):
-    return game_id == game.game_id and not player.is_done
+  def is_allowed_to_play(game, player, game_nb):
+    return game_nb == game.game_nb and not player.is_done
 
   def reveal_card(game, card_id):
     assert "reveal_states" in game.__dict__
@@ -135,10 +136,10 @@ class Game(ABC):
   def update_waiting_count(game):
     is_done = game.current_done
     waiting_players = [player
-      for player, is_done in zip(game.players, is_done)
+      for player, is_done in zip(game.engine.players, is_done)
       if is_done
     ]
-    total = 5 if game.game_id < 5 else 4
+    total = 5 if game.game_nb < 5 else 4
     updates = [("count", f"{len(waiting_players)} / {total}")]
     game.engine.update_fields(updates, waiting_players)
 
@@ -147,12 +148,12 @@ class Game1(Game):
   def __init__(game, engine):
     super().__init__(engine)
     game.engine = engine
-    game.game_id = 1
+    game.game_nb = 1
     game.config = games_config["game1"]
     game.frame_id = 0
 
   def logic(game):
-    assert game.is_everyone_done()
+    assert game.is_everyone_done
     choices = game.current_choices
     lottery = []
     for player, nb_tickets in zip(game.engine.players, choices):
@@ -168,7 +169,7 @@ class Game1(Game):
       winner.last_profit = prize
 
       game.engine.log(
-        f"Le gagnant de la lotterie est {winner['name']} "\
+        f"Le gagnant de la lotterie est {winner.name} "\
         f"qui a reçu {prize} Pièces.")
 
       winner.message = Markup(
@@ -202,7 +203,7 @@ class Game2(Game):
   def __init__(game, engine):
     super().__init__(engine)
     game.engine = engine
-    game.game_id = 2
+    game.game_nb = 2
     game.config = games_config["game2"]
     game.reveal_state = [[False]*5 for _ in range(3)]
 
@@ -252,7 +253,7 @@ class Game3(Game):
   def __init__(game, engine):
     super().__init__(engine)
     game.engine = engine
-    game.game_id = 3
+    game.game_nb = 3
     game.config = games_config["game3"]
 
     game.done_stars = [False] * 5
@@ -326,7 +327,7 @@ class Game4(Game):
   def __init__(game, engine):
     super().__init__(engine)
     game.engine = engine
-    game.game_id = 4
+    game.game_nb = 4
     game.config = games_config["game4"]
     # combien de fois les joueurs ont tous choisis des objets differents
     game.bonuses = [False] * 3
@@ -346,6 +347,10 @@ class Game4(Game):
     round_id = game.current_round_id
     game.bonuses[round_id] = bonus
 
+  @property
+  def current_prizes(game):
+    return game.config['prize'][game.bonuses]
+  
   def logic(game):
     assert game.is_everyone_done()
     # compte le nombre de choix uniques
@@ -353,7 +358,7 @@ class Game4(Game):
     unique_choices = set(np.unique(choices))
     for player, choice in zip(game.engine.players, choices):
       if choice in unique_choices:
-        prize = game.config['prize'][game.bonuses][choice]
+        prize = game.current_prizes[choice]
         if prize == "star":
           player.stars += 1
           game.engine.log(f"{player.name} a gagné une étoile.")
@@ -390,7 +395,7 @@ class Game4(Game):
       f"respectivement : {stars}")
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
-      master = engine.players[master_id]
+      master = game.engine.players[master_id]
       prize = games_config["game5"]["prize"] + \
           (game.current_bonuses == 3) * games_config["game5"]["bonus"]
       master.flouze += prize
@@ -413,15 +418,15 @@ class Game4(Game):
         "le gros lot et le cinquième jeu est annulé")
       for player in game.engine.players:
         player.message = "Dû à une égalité en terme d'étoiles, "\
-          "personne ne remporte le gros lot"\
-          "et le cinquième jeu est annulé"
+                         "personne ne remporte le gros lot"\
+                         "et le cinquième jeu est annulé"
 
 
 class Game5(Game):
   def __init__(game, engine, master, with_bonus):
     super().__init__(engine)
     game.engine = engine
-    game.game_id = 5
+    game.game_nb = 5
     game.config = games_config["game5"]
     # joueur ayant le plus d'étoiles à la fin du jeu 4
     game.master = master
