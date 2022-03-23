@@ -225,6 +225,10 @@ def home():
                 if request.form['diapo'] == 'précedent':
                     previous_frame()
             elif request.form['boutton'] == 'page suivante' and gameState['iterator'] < len(pages)-1:
+                if pages[gameState['iterator']]['url'] == "Jeu2-reveal.html":
+                    game2_logic()
+                if pages[gameState['iterator']]['url'] == "Jeu4-reveal.html":
+                    game4_logic()
                 if pages[gameState['iterator']]['url'] == "results.html":
                     for p in players: #reinitialiser le statut et les choix des joueurs
                         p["choix"] = None
@@ -357,7 +361,6 @@ def home():
                 if gameState['done'] < 5:
                     update_waiting_count(gameState["done"], 5)
                 else:
-                    game2_logic()
                     end_waiting()
                 save_data()
             else:
@@ -409,7 +412,6 @@ def home():
                 if gameState['done'] < 5:
                     update_waiting_count(gameState["done"], 5)
                 else:
-                    game4_logic()
                     end_waiting()
                 save_data()
             else:
