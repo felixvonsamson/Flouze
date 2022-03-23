@@ -5,28 +5,6 @@ from flask_socketio import SocketIO
 
 
 
-
-
-quiz = [
-    ["_______ _______ _ a-t-il __ __ drapeau ______ ?", 
-    "_______ d’étoiles _ ____ sur __ ______ valaisan ?", 
-    "Combien _______ y ____ __ le _______ ______ ?"], 
-    ["Quel ____ __ enclavé ____ le _______ ?", 
-    "___ pays ___ ______ dans __ _______ ?", 
-    "___ ____ est ______ ____ __ Sénégal ?"], 
-    ["Combien _ ___ de _____ __ tram _ ________ ?", 
-    "_______ y ___ __ lignes __ ____ à ________ ?", 
-    "_______ _ a-t-il __ ____ de ____ _ Bordeaux ?"], 
-    ["Quel ____ ___ pseudo ___ ____ of ____ ?", 
-    "____ était ___ ______ sur ____ __ clans ?", 
-    "____ ____ mon _____ ___ clash __ ____ ?"], 
-    ["Comment _______ __ parc ______ _ l’université __ _______ ?", 
-    "________ s’appelle __ ___ adjacent _ ________ de _______ ?", 
-    "________ _______ le ____ ______ à _________ __ Montréal ?"]
-]
-
-
-
 def init_game():
     players = []
     with open("players.txt", "r") as file:
