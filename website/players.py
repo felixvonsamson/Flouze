@@ -17,13 +17,18 @@ class Player(object):
         player.saved_flouze = 0
         player.stars = 0
 
-        player.choix = None
-        # Indique si le joueur est en attente
-        player.is_done = False
-        # Quantitée a partager dans 'partager.htlm'
         player.last_profit = 0
         player.messages = []
         return player
+    
+    @property
+    def choice(player):
+        return player.engine.current_game.current_choice[player.ID]
+    
+    @property
+    def is_done(player):
+        return player.engine.current_game.current_done[player.ID]
+    
     
     def send_message(player, message):
         socketio = player.engine.socketio

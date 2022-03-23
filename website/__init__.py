@@ -13,25 +13,24 @@ def init_engine():
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'hjshjhdjah kjshkjdhjs'
+    app.config["SECRET_KEY"] = "hjshjhdjah kjshkjdhjs"
 
     engine = gameEngine.load_data() if os.path.isfile("data.pck")  \
              else init_engine()
-    players_by_name = { player.name for player in engine.players }
     
     socketio = SocketIO(app)
     engine.socketio = socketio
-    @socketio.on('give_identity')
+    @socketio.on("give_identity")
     def give_identity(name):
         if name == "admin":
             admin_sid = request.sid
         else:
-            players_by_name[name].sid = request.sid
+            engine.players_by_name[name].sid = request.sid
 
     from .views import views
     from .auth import auth
 
-    app.register_blueprint(views, url_prefix='/')
-    app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(auth, url_prefix="/")
 
-    return socketio, app
+    return engine, socketio, app

@@ -87,9 +87,16 @@ class Game(ABC):
     def current_round(game):
         return game.current_stage[1] - 1
     
+    @property
+    def current_choice(game):
+        return game.choices[game.current_round]
+    
+    @property
+    def current_done(game):
+        return game.is_done[game.current_round]
+    
     def check_action_allowed(game, player, game_id):
-        return game_id == game.game_id and \
-               game.choices[game.current_round][player.ID] is None
+        return game_id == game.game_id and not player.is_done
 
     def is_everyone_done(game):
         return all(game.is_done[game.current_round])

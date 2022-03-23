@@ -1,6 +1,5 @@
 import datetime
 import pickle
-from flask import Markup, flash
 
 from .players import Player
 from .games import Game1, Game2, Game3, Game4, Game5
@@ -20,6 +19,7 @@ class gameEngine(object):
         for i, player in enumerate(engine.players):
             player.other_players = engine.players.copy()
             player.other_players.pop(i)
+        engine.players_by_name = { p.name: p for p in engine.players }
         
         engine.games = [Game1(engine), 
                         Game2(engine), 
@@ -79,8 +79,10 @@ class gameEngine(object):
 
     def save_data(engine):
         socketio = engine.socketio
+        engine.socketio = None
         with open("data.pck", 'wb') as file:
             pickle.dump(engine, file)
+        engine.socketio = socketio
         if engine.admin_sid:
             socketio.emit('refresh', None, room=engine.admin_sid)
 
