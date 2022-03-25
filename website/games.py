@@ -353,7 +353,8 @@ class Game4(Game):
 
   @property
   def current_prizes(game):
-    return game.config['prize'][game.bonuses]
+    round_id = game.current_round_id
+    return game.config["prizes"][round_id][game.current_bonuses]
   
   def logic(game):
     assert game.is_everyone_done
