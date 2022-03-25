@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup, current_app 
 from website import engine
 
-from .jinja_icons import icons
+from .html_icons import icons
 
 views = Blueprint("views", __name__)
 

@@ -1,19 +1,21 @@
-{% extends "base+don.html" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content
+{% set game = engine.current_game %}
+{% set config = game.config %}
+{% set reveal_state = game.current_reveal_state %}
+{% extends "base+don.jinja" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content
 %}
 <div class="w3-center animate__animated animate__fadeIn" style="width:320px;">
   <div class="w3-margin-bottom" style="display:flex; justify-content:space-between;">
 
-    {% for i in range(2) %}
-
+    {% for player_it in engine.players[:2] %}
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{i}}" {% if engine.current_game.current_reveal_state[i] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{engine.players[i].color}};">
-          <h4><b>{{engine.players[i].name}}</b></h4>
+      <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+        <div class="flip-card-front" style="background-color:{{ player_it.color }};">
+          <h4><b>{{ player_it.name }}</b></h4>
         </div>
-        <div class="flip-card-back" style="background-color:{{engine.players[i].color}};">
-          <h4><b>{{engine.players[i].name}}</b></h4>
+        <div class="flip-card-back" style="background-color:{{ player_it.color }};">
+          <h4><b>{{ player_it.name }}</b></h4>
           <div class="w3-display-container" style="height:50px;">
-            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{engine.players[i].sec_color}};">{{engine.players[i].choice}}</div>
+            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{ player_it.sec_color}};">{{ player_it.choice }}</div>
           </div>
         </div>
       </div>
@@ -23,16 +25,16 @@
   </div>
   <div class="w3-margin-bottom" style="display:flex; justify-content:space-between;">
 
-    {% for i in range(2) %}
+    {% for player_it in engine.players[2:4] %}
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{i+2}}" {% if engine.current_game.current_reveal_state[i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{engine.players[i+2].color}};">
-          <h4><b>{{engine.players[i+2].name}}</b></h4>
+      <div id="card{{ loop.index0 + 2 }}" {% if reveal_state[loop.index0+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+        <div class="flip-card-front" style="background-color:{{ player_it.color }};">
+          <h4><b>{{ player_it.name }}</b></h4>
         </div>
-        <div class="flip-card-back" style="background-color:{{engine.players[i+2].color}};">
-          <h4><b>{{engine.players[i+2].name}}</b></h4>
+        <div class="flip-card-back" style="background-color:{{ player_it.color }};">
+          <h4><b>{{ player_it.name }}</b></h4>
           <div class="w3-display-container" style="height:50px;">
-            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{engine.players[i+2].sec_color}};">{{engine.players[i+2].choice}}</div>
+            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{ player_it.sec_color }};">{{ player_it.choice }}</div>
           </div>
         </div>
       </div>
@@ -42,14 +44,14 @@
   </div>
   <div style="display:flex; justify-content:space-around;">
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card4" {% if engine.current_game.current_reveal_state[4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{engine.players[4].color}};">
-          <h4><b>{{engine.players[4].name}}</b></h4>
+      <div id="card4" {% if reveal_state[4] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+        <div class="flip-card-front" style="background-color:{{ engine.players[4].color }};">
+          <h4><b>{{engine.players[4].name }}</b></h4>
         </div>
-        <div class="flip-card-back" style="background-color:{{engine.players[4].color}};">
-          <h4><b>{{engine.players[4].name}}</b></h4>
+        <div class="flip-card-back" style="background-color:{{ engine.players[4].color }};">
+          <h4><b>{{ engine.players[4].name }}</b></h4>
           <div class="w3-display-container" style="height:50px;">
-            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{engine.players[4].sec_color}};">{{engine.players[4].choice}}</div>
+            <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{ engine.players[4].sec_color }};">{{ engine.players[4].choice }}</div>
           </div>
         </div>
       </div>

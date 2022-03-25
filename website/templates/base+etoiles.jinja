@@ -1,8 +1,8 @@
-{% extends "base.html" %}{% block inside%}
+{% extends "base.jinja" %}{% block inside%}
 
 <div class="w3-display-topleft" style="width:115px">
-  {% for player in engine.players %}
-  <div class="w3-border-0 w3-padding-small" style="background-color:{{player.color}}">{{player.name}}<i id="player0_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{player.stars}}</i></div>
+  {% for player_it in engine.players %}
+    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player.color }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
   {% endfor %}
 </div>
 

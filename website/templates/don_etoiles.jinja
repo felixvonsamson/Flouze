@@ -1,20 +1,21 @@
-{% extends "base+don.html" %} {% block title %}Donner des étoiles{% endblock %} {% block content%}
+{% set game = engine.current_game %}
+{% set config = game.config %}
+{% extends "base+don.jinja" %} {% block title %}Donner des étoiles{% endblock %} {% block content%}
 
   <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:250px;">
-  <header class="w3-container" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">
+  <header class="w3-container" style="background-color:{{ config["theme_colors"][0] }}">
       <h4>À qui shouaitez-vous léguer des étoiles ?</h4>
   </header>
   <form class="w3-container" method="POST">
   <select name="destinataire" class="w3-select w3-border w3-margin w3-round-large w3-center" style="width:120px;">
     <option value="" disabled="" selected="">Destinataire</option>
-    <option value=0>{{player.other_players[0].name}}</option>
-    <option value=1>{{player.other_players[1].name}}</option>
-    <option value=2>{{player.other_players[2].name}}</option>
-    <option value=3>{{player.other_players[3].name}}</option>
+    {% for other_player in player.other_players %}
+      <option value={{ loop.index0 }}>{{ other_player.name }}</option>
+    {% endfor %}}
   </select>
   <br><input name="quantité" class="w3-input w3-border w3-round-large w3-center" placeholder="Quantitée" type="number" style="width:120px; display:inline-block;">
   <p>
-    <button type="submit" name="boutton" value="envoyer etoile" class="w3-margin-right w3-button" style="background-color:{{engine.current_game.config["theme_colors"][0]}}">Envoyer</button>
+    <button type="submit" name="boutton" value="envoyer etoile" class="w3-margin-right w3-button" style="background-color:{{ config["theme_colors"][0] }}">Envoyer</button>
     <button type="submit" name="boutton" value="terminer" class="w3-margin-left w3-button w3-red">Terminer</button>
   </p>
   <p>

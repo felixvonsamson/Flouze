@@ -1,3 +1,6 @@
+{% set game = engine.current_game %}
+{% set page = engine.current_page %}
+{% set stage = engine.current_stage %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,45 +8,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
-    <link rel="stylesheet" href="{{url_for('static', filename="flouze.css")}}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for("static", filename="flouze.css") }}" type="text/css">
     <style>
       body, h1, h2, h3, h4, h5, h6  {
         font-family: 'Baloo 2', cursive;
       }
     </style>
-    <link rel = "icon" href ="{{url_for('static', filename="images/coin.png")}}" type = "image/x-icon">
+    <link rel = "icon" href ="{{ url_for("static", filename="images/coin.png") }}" type = "image/x-icon">
     <title>Flouze-Admin</title>
   </head>
 <body>
   <div style="display:flex; justify-content:space-evenly;">
-    {% for p in engine.players %}
-    <div class="w3-center w3-margin w3-xlarge" style="width:360px; background-color:{{p.color}}">
-      <p><b>{{p.name}}</b></p>
+    {% for player in engine.players %}
+    <div class="w3-center w3-margin w3-xlarge" style="width:360px; background-color:{{ player.color }}">
+      <p><b>{{ player.name }}</b></p>
       <div class="w3-row large">
         <div class="w3-half">
-          {{p.stars}} <i class="fa fa-star"></i><br>
+          {{ player.stars }} <i class="fa fa-star"></i><br>
         </div>
         <div class="w3-half">
-          {{p.flouze}} <img src="{{url_for('static', filename="images/coin.png")}}" class="coin-medium" alt="Coin"><br>
+          {{ player.flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin"><br>
           {% if engine == 3 %}
-            ({{p.saved_flouze}} <img src="{{url_for('static', filename="images/coin.png")}}" class="coin-medium" alt="Coin">)<br>
+            ({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)<br>
           {% endif %}
         </div>
       </div>
       <div class="w3-large w3-margin-left" style="text-align:left;">
         message :
       </div>
-      <div class="w3-text-white w3-large" style="margin:0 16px 16px; background-color:{{p.sec_color}}">
-        {{p.message}}
+      <div class="w3-text-white w3-large" style="margin:0 16px 16px; background-color:{{ player.sec_color }}">
+        {{ player.message }}
       </div>
-      {% if engine.current_stage[1] in [1, 2, 3] %}
-      choix : {{p.choice}}<br>
-      done : {{p.is_done}}<br>
+      {% if stage[1] in [1, 2, 3] %}
+      choix : {{ player.choice }}<br>
+      done : {{ player.is_done }}<br>
       {% endif %}
-      {% if engine.current_game_nb in [2, 4] and "reveal" in engine.current_page["url"] %}
-      <form class="w3-center w3-margin w3-large" method="POST">
-        <button type="submit" class="w3-button" style="background-color:{{p.sec_color}}" name="reveal" value="{{p["ID"]}}" {% if engine.current_game.current_reveal_state[p['ID']] %}disabled{% endif %}>Révéler</button>
-      </form>
+      {% if stage[0] in [2, 4] and "reveal" in page["url"] %}
+        {% set reveal_state = game.current_reveal_state %}
+        <form class="w3-center w3-margin w3-large" method="POST">
+          <button type="submit" class="w3-button" style="background-color:{{ player.sec_color }}" name="reveal" value="{{ player.ID }}" {% if reveal_state[player.ID] %}disabled{% endif %}>Révéler</button>
+        </form>
       {% endif %}
     </div>
     {% endfor %}
@@ -53,13 +57,13 @@
   <div class="w3-row w3-margin">
     <div class="w3-right w3-large w3-light-gray w3-padding" style="max-width:50%">
       {% for i in range(imax) %}
-      {{engine.logs[-i-1]}}<br>
+      {{ engine.logs[-i-1] }}<br>
       {% endfor %}
     </div>
     <div class="w3-rest">
       <form class="w3-center w3-xlarge" method="POST">
-        <p>Page actuelle : {{engine.current_page['url']}}</p>
-        <p>Jeu {{engine.current_stage[0]}}, manche {{engine.current_stage[1]}}</p>
+        <p>Page actuelle : {{ engine.current_page['url'] }}</p>
+        <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
         <p><button type="submit" class="w3-button w3-red w3-margin" name="boutton" value="page précedente">Page précedante</button>
           <button type="submit" class="w3-button w3-teal w3-margin" name="boutton" value="page suivante">Page suivante</button></p>
         {% if engine.current_stage[1] == 0 %}

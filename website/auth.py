@@ -21,7 +21,7 @@ def login():
                 return redirect(url_for("views.home"))
             else:
                 flash("Mot de passe incorrect, réessayez.", category = "error")
-                return render_template("login.html")
+                return render_template("login.jinja")
         else:
             flash("Vous n'êtes pas un participant", category = "error")
-    return render_template("login.html")
+    return render_template("login.jinja")
