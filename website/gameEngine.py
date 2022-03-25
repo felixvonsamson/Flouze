@@ -64,7 +64,7 @@ class gameEngine(object):
     if current_game_nb > 1 and current_round_nb == 0:
       engine.games[current_game_nb - 1].end()
 
-    if engine.current_page["url"] == "results.html":
+    if engine.current_page["url"] == "results.jinja":
       engine.games[current_game_nb].logic()
 
     engine.force_refresh()

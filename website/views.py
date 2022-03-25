@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup, current_app 
 from website import engine
 
-from .html_icons import icons
+from .jinja_icons import icons
 
 views = Blueprint("views", __name__)
 
@@ -25,7 +25,7 @@ def home():
         if request.form["diapo"] == "précedent":
           game.previous_frame()
       elif request.form["boutton"] == "page suivante" and engine.iterator < len(engine.pages)-1:
-        if engine.current_page["url"] == "results.html":
+        if engine.current_page["url"] == "results.jinja":
           for player in engine.players:
             player.last_profit = None
 
@@ -35,7 +35,7 @@ def home():
 
       elif request.form["boutton"] == "page précedente" and engine.iterator:
         game.next_frame()
-        return render_template("monitoring.html", engine=engine, imax=min(len(engine.logs),20))
+        return render_template("monitoring.jinja", engine=engine, imax=min(len(engine.logs),20))
 
         for p in players:
           p["choix"] = False
@@ -46,7 +46,7 @@ def home():
         save_data()
         force_refresh()
 
-    return render_template("monitoring.html", engine=engine, imax=min(len(engine.logs),20))
+    return render_template("monitoring.jinja", engine=engine, imax=min(len(engine.logs),20))
   
   assert session["ID"] in range(5)
   player = engine.players[session["ID"]]
@@ -54,13 +54,13 @@ def home():
     pass
   if request.method == "POST":
     if request.form["boutton"] == "partager":
-      return render_template("partager.html", engine=engine, player=player)
+      return render_template("partager.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "don":
-      return render_template("faire_un_don.html", engine=engine, player=player)
+      return render_template("faire_un_don.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "léguer etoiles":
-      return render_template("don_etoiles.html", engine=engine, player=player)
+      return render_template("don_etoiles.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "en fait non":
         return render_template(engine.current_page["url"], engine=engine, player=player)
@@ -69,20 +69,20 @@ def home():
       receiver_level = request.form.get("destinataire")
       if receiver_level == None:
         flash("Veuillez choisir un destinataire !", category="error")
-        return render_template("faire_un_don.html", engine=engine, player=player)
+        return render_template("faire_un_don.jinja", engine=engine, player=player)
       amount = request.form.get("montant")
       if amount == "":
         flash("Veuiller indiquer un montant !", category="error")
-        return render_template("faire_un_don.html", engine=engine, player=player)
+        return render_template("faire_un_don.jinja", engine=engine, player=player)
       receiver_level = int(receiver_level)
       receiver = player.other_players[receiver_level]
       amount = int(amount)
       if amount <= 0:
         flash("Le montant à envoyer ne peut pas être negatif ou nul !", category="error")
-        return render_template("faire_un_don.html", engine=engine, player=player)
+        return render_template("faire_un_don.jinja", engine=engine, player=player)
       if amount > player.flouze:
         flash("Le montant indiqué dépasse votre solde !", category="error")
-        return render_template("faire_un_don.html", engine=engine, player=player)
+        return render_template("faire_un_don.jinja", engine=engine, player=player)
       player.send_money(receiver, amount)
       return render_template(engine.current_page["url"], engine=engine, player=player)
 
@@ -93,14 +93,14 @@ def home():
         amount = 0 if amount == "" else int(amount)
         if amount < 0:
           flash("Vous ne pouvez pas envoiyer des montants négatifs !", category="error")
-          return render_template("partager.html", engine=engine, player=player)
+          return render_template("partager.jinja", engine=engine, player=player)
         amounts.append(amount)
       if sum(amounts) > player.last_profit:
         flash("Vous ne pouvez pas donner plus que ce que vous avez reçu !", category="error")
-        return render_template("partager.html", engine=engine, player=player)
+        return render_template("partager.jinja", engine=engine, player=player)
       if sum(amounts) > player.last_profit:
         flash("Vous ne pouvez pas donner plus que ce que vous avez avez !", category="error")
-        return render_template("partager.html", engine=engine, player=player)
+        return render_template("partager.jinja", engine=engine, player=player)
       player.share_profit(amounts)
       return render_template(engine.current_page["url"], engine=engine, player=player)
 
@@ -109,21 +109,21 @@ def home():
       amount = request.form.get("quantité")
       if receiver_level == None:
         flash("Veuiller choisir un destinataire !", category="error")
-        return render_template("don_etoiles.html", engine=engine, player=player)
+        return render_template("don_etoiles.jinja", engine=engine, player=player)
       if amount == "":
         flash("Veuiller indiquer un nombre d'étoiles !", category="error")
-        return render_template("don_etoiles.html", engine=engine, player=player)
+        return render_template("don_etoiles.jinja", engine=engine, player=player)
       receiver_level = int(receiver_level)
       amount = int(amount)
       if amount <= 0:
         flash("Le nombre d'étoiles à envoyer ne peut pas être negatif ou nul", category="error")
-        return render_template("don_etoiles.html", engine=engine, player=player)
+        return render_template("don_etoiles.jinja", engine=engine, player=player)
       if amount > player.stars:
         flash("Vous n'avez pas assez d'étoiles", category="error")
-        return render_template("don_etoiles.html", engine=engine, player=player)
+        return render_template("don_etoiles.jinja", engine=engine, player=player)
       receiver = player.other_players[receiver_level]
       player.send_stars(receiver, amount)
-      return render_template("don_etoiles.html", engine=engine, player=player)
+      return render_template("don_etoiles.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "jeu1-choix":
       #action = check_action_allowed(player, 1)
@@ -138,7 +138,7 @@ def home():
       flash(f"Vous avez choisis {tickets} tickets.", category="success")
       engine.save_data()
 
-    if engine.current_page["url"] == "Jeu2-choix.html":
+    if engine.current_page["url"] == "Jeu2-choix.jinja":
       #action = check_action_allowed(player, 2)
       #if action: return action
       if request.form["boutton"] == "validate num":
@@ -174,7 +174,7 @@ def home():
       flash(Markup(f"Vous avez versé {amount} {icons['coin']} dans le pot commun"), category="success")
       engine.save_data()
 
-    if engine.current_page["url"] == "Jeu4-choix.html":
+    if engine.current_page["url"] == "Jeu4-choix.jinja":
       #action = check_action_allowed(player, 4)
       #if action: return action
       if request.form["boutton"] == "Jeu4-choix":
@@ -216,12 +216,12 @@ def home():
           amount = request.form.get(player.name)
           if amount == "":
             flash("Veuiller indiquer un montant pour tous les joueurs !", category="error")
-            return render_template("Jeu5-proposition.html", player=player)
+            return render_template("Jeu5-proposition.jinja", player=player)
           amount = int(amount)
           total += amount
         if total > player.flouze:
           flash("Les propositions que vous avez faites dépasse vos moyens !", category="error")
-          return render_template("Jeu5-proposition.html", player=player)
+          return render_template("Jeu5-proposition.jinja", player=player)
         for i, player in enumerate(game.other_players):
           amount = int(request.form.get(player.name))
           amount = int(amount)
@@ -241,30 +241,30 @@ def home():
 
   if engine.current_page['url'] == "Jeu 5":
     if player.is_done:
-      return render_template("en_attente_jeu5.html", player=player)
+      return render_template("en_attente_jeu5.jinja", player=player)
 
     if engine.current_page["phase"] == "proposition":
       if player == game.master:
-        return render_template("Jeu5-proposition.html", player=player)
+        return render_template("Jeu5-proposition.jinja", player=player)
       elif game.current_round_id == 0 and game.question_id < 4:
         if player == game.current_guesser:
-          return render_template("quiz.html", player=player, input=True)
+          return render_template("quiz.jinja", player=player, input=True)
         else:
-          return render_template("quiz.html", player=player, input=False)
+          return render_template("quiz.jinja", player=player, input=False)
       else:
-        return render_template("results.html", player=player)
+        return render_template("results.jinja", player=player)
     elif engine.current_page["phase"] == "validation":
       if player == game.master:
-        return render_template("en_attente_jeu5.html", player=player)
+        return render_template("en_attente_jeu5.jinja", player=player)
       else:
-        return render_template("Jeu5-Valider.html", player=player)
+        return render_template("Jeu5-Valider.jinja", player=player)
     elif engine.current_page["phase"] == "reveal":
       if player == game.master:
-        return render_template("Jeu5-reveal.html", player=player)
+        return render_template("Jeu5-reveal.jinja", player=player)
       else:
-        return render_template("results.html", player=player)
+        return render_template("results.jinja", player=player)
 
   if "choix" in engine.current_page["url"] and player.is_done:
-    return render_template("en_attente.html", engine=engine, player=player)
+    return render_template("en_attente.jinja", engine=engine, player=player)
 
   return render_template(engine.current_page['url'], player=player, engine=engine)
