@@ -34,17 +34,10 @@ def home():
         engine.force_refresh()
 
       elif request.form["boutton"] == "page précedente" and engine.iterator:
-        game.next_frame()
-        return render_template("monitoring.jinja", engine=engine, imax=min(len(engine.logs),20))
-
-        for p in players:
-          p["choix"] = False
-          p["done"] = False
-        gameState["done"] = 0
         engine.iterator -= 1
         engine.log(f"Retour à la page précedente : {engine.current_page['url']} (jeu {engine.current_stage[0]}, manche {engine.current_stage[1]})")
-        save_data()
-        force_refresh()
+        engine.save_data()
+        engine.force_refresh()
 
     return render_template("monitoring.jinja", engine=engine, imax=min(len(engine.logs),20))
   
@@ -182,9 +175,9 @@ def home():
           flash("Veuiller choisir un nombre !", category="error")
           return render_template(engine.current_page["url"], engine=engine, player=player)
         player.is_done = True
-        prizes = game.config["prize"][game.bonuses]
+        prizes = game.game.current_prizes
         prize = prizes[player.choice]
-        if prize[player.choice] == "star":
+        if prize == "star":
           engine.log(f"{player.name} a choisis l'etoile.")
           flash(Markup(f"Vous avez choisis le prix : {icons['star']}"), category="success")
         else:
@@ -199,8 +192,8 @@ def home():
 
 
     if request.form["boutton"] == "terminer":
-      game.is_done_stars[player.ID] = True
-      if all(game.is_done_stars[player.ID]):
+      player.is_done = True
+      if all(game.current_done):
         engine.next_page()
       engine.save_data()
 
@@ -264,7 +257,7 @@ def home():
       else:
         return render_template("results.jinja", player=player)
 
-  if "choix" in engine.current_page["url"] and player.is_done:
+  if ("choix" in engine.current_page["url"]  or engine.current_page["url"] == "donner_des_etoiles.html") and player.is_done:
     return render_template("en_attente.jinja", engine=engine, player=player)
 
   return render_template(engine.current_page['url'], player=player, engine=engine)

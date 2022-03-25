@@ -93,7 +93,11 @@ class Game(ABC):
 
   @property
   def current_done(game):
-    return game.is_done[game.current_round_id]
+    if game.current_stage[1] in [1, 2, 3]:
+      return game.is_done[game.current_round_id]
+    if game.engine.current_page["url"] == "donner_des_etoiles.html":
+      return game.is_done_stars
+    return None
 
   @property
   def current_reveal_state(game):
@@ -213,9 +217,9 @@ class Game2(Game):
   def logic(game):
     assert game.is_everyone_done
     choices = game.current_choices
-    unique_choices, counts = np.unique(choices, return_counts=True)
+    values, counts = np.unique(choices, return_counts=True)
     if 1 in counts:
-      winning_value = unique_choices[counts.index(1)]
+      winning_value = values[counts.index(1)]
       for player, choice in zip(game.engine.players, choices):
         round_id = game.current_round_id
         if choice == winning_value:
@@ -239,7 +243,7 @@ class Game2(Game):
             f"{prize} {icons['coin']}")
       else:
         for player in game.engine.players:
-          won_stars = game.config["stars"]
+          won_stars = game.config["3rd_round_stars"]
           player.message = Markup(
             f"{player.name} a gagné et a remporté {icons['coin']}."\
             f"<br>En plus iel recoit {won_stars} {icons['star']} "\
@@ -336,31 +340,29 @@ class Game4(Game):
     # combien de fois les joueurs ont tous choisis des objets differents
     game.bonuses = [False] * 3
     game.reveal_states = [[False]*5 for _ in range(3)]
+    game.is_done_stars = [False]*5
 
   @property
   def current_bonuses(game):
-    round_id = game.current_round_id
-    return sum(game.bonuses[:round_id])
+    return sum(game.bonuses[:game.current_round_id])
 
   @property
   def current_bonus(game):
-    round_id = game.current_round_id
-    return game.bonuses[round_id]
+    return game.bonuses[game.current_round_id]
   @current_bonus.setter
   def current_bonus(game, bonus):
-    round_id = game.current_round_id
-    game.bonuses[round_id] = bonus
+    game.bonuses[game.current_round_id] = bonus
 
   @property
   def current_prizes(game):
-    round_id = game.current_round_id
-    return game.config["prizes"][round_id][game.current_bonuses]
+    return game.config["prizes"][game.current_round_id][game.current_bonuses]
   
   def logic(game):
     assert game.is_everyone_done
     # compte le nombre de choix uniques
     choices = game.current_choices
-    unique_choices = set(np.unique(choices))
+    values, count = np.unique(choices, return_counts=True)
+    unique_choices = set(values[np.where(count == 1)])
     for player, choice in zip(game.engine.players, choices):
       if choice in unique_choices:
         prize = game.current_prizes[choice]

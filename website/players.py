@@ -30,8 +30,7 @@ class Player(object):
 
   @property
   def is_done(player):
-    return player.engine.current_stage[1] in [1, 2, 3] \
-           and player.engine.current_game.current_done[player.ID]
+    return player.engine.current_game.current_done[player.ID]
   @is_done.setter
   def is_done(player, is_done):
     player.engine.current_game.current_done[player.ID] = is_done
