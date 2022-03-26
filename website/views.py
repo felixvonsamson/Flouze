@@ -128,8 +128,8 @@ def home():
         return render_template(engine.current_page["url"], engine=engine, player=player)
       player.choice = int(tickets)
       engine.log(f"{player.name} a choisis {tickets} tickets.")
-      player.is_done = True
       player.flash_message(f"Vous avez choisis {tickets} tickets.")
+      player.is_done = True
       engine.save_data()
     
     if engine.current_page["url"] == "Jeu2-choix.jinja":
@@ -141,8 +141,8 @@ def home():
           return render_template(engine.current_page["url"], engine=engine, player=player)
         player.choice = int(request.form["choice"])
         engine.log(f"{player.name} a choisis le nombre {player.choice}.")
-        player.is_done = True
         player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
+        player.is_done = True
         engine.save_data()
 
     if request.form["boutton"] == "Jeu3-choix":
@@ -161,9 +161,9 @@ def home():
         return render_template(engine.current_page["url"], engine=engine, player=player)
       player.flouze -= amount
       player.choice = amount
-      player.is_done = True
       engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
       player.flash_message(f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
+      player.is_done = True
       engine.save_data()
 
     if engine.current_page["url"] == "Jeu4-choix.jinja":
@@ -174,7 +174,6 @@ def home():
           flash("Veuiller choisir un prix !", category="error")
           return render_template(engine.current_page["url"], engine=engine, player=player)
         player.choice = int(request.form["choice"])
-        player.is_done = True
         prizes = game.current_prizes
         prize = prizes[player.choice]
         if prize == "star":
@@ -183,6 +182,7 @@ def home():
         else:
           engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
           player.flash_message(f"Vous avez choisis le prix : {prize} {icons['coin']}")
+        player.is_done = True
         engine.save_data()
 
 
@@ -219,6 +219,7 @@ def home():
           other_player.message = Markup(f"{player.name} vous fait une proposition de {amount} {icons['coin']}")
         player.is_done = True
         engine.next_page()
+        engine.save_data()
 
 
       elif request.form["boutton"] in ["0", "1"]:
@@ -226,9 +227,11 @@ def home():
           return redirect(url_for("views.home"))
         player.choice = int(request.form["boutton"])
         player.is_done = True
+        engine.save_data()
+      
       elif request.form["boutton"] == 'nouvelle proposition':
         engine.next_page()
-      engine.save_data()
+        engine.save_data()
 
   if engine.current_page['url'] == "Jeu 5":
     if engine.current_page["phase"] == "proposition":
