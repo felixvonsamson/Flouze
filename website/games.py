@@ -446,6 +446,8 @@ class Game5(Game):
     # reste des joueurs
     game.other_players = engine.players.copy()
     game.other_players.pop(master.ID)
+    for i in range(3):
+      game.choices[i][master.ID] = 0
     game.propositions = [[0]*5 for _ in range(3)]
     game.question_id = -1
     game.start_round()
@@ -510,9 +512,8 @@ class Game5(Game):
           player.message = Markup(
             "La proposition à été refusée par au moins 2 joueurs."\
             "<br>En attente d'une nouvelle proposition...")
-        game.engine.next_page()
 
   def end(game):
     game.engine.iterator = len(pages) - 1
-    game.engine.refresh_all_pages()
+    game.engine.force_refresh()
 

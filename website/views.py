@@ -245,17 +245,14 @@ def home():
       else:
         return render_template("results.jinja", engine=engine, player=player)
     elif engine.current_page["phase"] == "validation":
-      if player == game.master:
+      if player.is_done:
         return render_template("en_attente_jeu5.jinja", engine=engine, player=player)
-      else:
-        return render_template("Jeu5-Valider.jinja", engine=engine, player=player)
+      return render_template("Jeu5-Valider.jinja", engine=engine, player=player)
     elif engine.current_page["phase"] == "reveal":
       if player == game.master:
         return render_template("Jeu5-reveal.jinja", engine=engine, player=player)
       else:
         return render_template("results.jinja", engine=engine, player=player)
-    if player.is_done:
-      return render_template("en_attente_jeu5.jinja", engine=engine, player=player)
 
   if ("choix" in engine.current_page["url"]  or engine.current_page["url"] == "donner_des_etoiles.jinja") and player.is_done:
     return render_template("en_attente.jinja", engine=engine, player=player)

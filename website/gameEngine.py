@@ -56,15 +56,17 @@ class gameEngine(object):
   def next_page(engine):
     engine.iterator += 1
     stage = engine.current_stage
+    page = engine.current_page
     engine.log(
-      f"Passage à la page suivante : {engine.current_page['url']} "\
+      f"Passage à la page suivante : {page['url']} "\
       f"(jeu {stage[0]}, manche {stage[1]})")
 
     current_game_nb, current_round_nb = engine.current_stage
     if current_game_nb > 1 and current_round_nb == 0:
       engine.games[current_game_nb - 1].end()
 
-    if engine.current_page["url"] == "results.jinja"  and current_round_nb:
+    if page["url"] == "results.jinja"  and current_round_nb \
+       or page["url"] == "Jeu 5" and page["phase"] == "reveal":
       engine.games[current_game_nb].logic()
 
     engine.force_refresh()
