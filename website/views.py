@@ -56,8 +56,7 @@ def home():
       return render_template("don_etoiles.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "en fait non":
-      player.is_done = True
-      engine.save_data()
+      return redirect(url_for("views.home"))
     
     if request.form["boutton"] == "envoyer don":
       receiver_level = request.form.get("destinataire")
@@ -186,11 +185,12 @@ def home():
         engine.save_data()
 
 
-
-
-
     if request.form["boutton"] == "retour don etoiles":
       return render_template(engine.current_page['url'], player=player, engine=engine)
+    
+    if request.form["boutton"] == "terminer":
+      player.is_done = True
+      engine.save_data()
 
     if engine.current_page['url'] == "Jeu 5":
       if request.form["boutton"] == 'quiz':

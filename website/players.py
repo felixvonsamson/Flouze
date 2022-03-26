@@ -52,7 +52,7 @@ class Player(object):
     now = datetime.datetime.now()
     timeout = datetime.timedelta(seconds=timeout)
     player.messages.append((now, now + timeout, message))
-    if emit:
+    if emit and player.sid:
       socketio.emit("message", message, room=player.sid)
   
   @property
