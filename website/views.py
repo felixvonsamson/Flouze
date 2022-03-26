@@ -56,7 +56,8 @@ def home():
       return render_template("don_etoiles.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "en fait non":
-        return render_template(engine.current_page["url"], engine=engine, player=player)
+      player.is_done = True
+      engine.save_data()
     
     if request.form["boutton"] == "envoyer don":
       receiver_level = request.form.get("destinataire")
@@ -128,7 +129,7 @@ def home():
       player.choice = int(tickets)
       engine.log(f"{player.name} a choisis {tickets} tickets.")
       player.is_done = True
-      player.send_message(f"Vous avez choisis {tickets} tickets.")
+      player.flash_message(f"Vous avez choisis {tickets} tickets.")
       engine.save_data()
 
     if engine.current_page["url"] == "Jeu2-choix.jinja":
@@ -140,7 +141,7 @@ def home():
           return render_template(engine.current_page["url"], engine=engine, player=player)
         engine.log(f"{player.name} a choisis le nombre {player.choice}.")
         player.is_done = True
-        player.send_message(f"Vous avez choisis le nombre {player.choice}.")
+        player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
         engine.save_data()
       else:
         player.choice = int(request.form["boutton"])
@@ -164,7 +165,7 @@ def home():
       player.choice = amount
       player.is_done = True
       engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
-      player.send_message(f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
+      player.flash_message(f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
       engine.save_data()
 
     if engine.current_page["url"] == "Jeu4-choix.jinja":
@@ -179,10 +180,10 @@ def home():
         prize = prizes[player.choice]
         if prize == "star":
           engine.log(f"{player.name} a choisis l'etoile.")
-          player.send_message(f"Vous avez choisis le prix : {icons['star']}")
+          player.flash_message(f"Vous avez choisis le prix : {icons['star']}")
         else:
           engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
-          player.send_message(f"Vous avez choisis le prix : {prize} {icons['coin']}")
+          player.flash_message(f"Vous avez choisis le prix : {prize} {icons['coin']}")
         engine.save_data()
       else:
         player.choice = int(request.form["boutton"])
@@ -194,8 +195,6 @@ def home():
 
     if request.form["boutton"] == "terminer":
       player.is_done = True
-      if all(game.current_done):
-        engine.next_page()
       engine.save_data()
 
     if engine.current_page['url'] == "Jeu 5":

@@ -45,6 +45,6 @@ pages = [      # Liste des pages a afficher dans l'ordre / stage est de la forme
   { "url": "Jeu 5",                    "stage": (5, 3), "phase": "proposition" }, 
   { "url": "Jeu 5",                    "stage": (5, 3), "phase": "validation" }, 
   { "url": "Jeu 5",                    "stage": (5, 3), "phase": "reveal" }, 
-  { "url": "final-results.jinja",      "stage": (None, None) }
+  { "url": "final-results.jinja",      "stage": (5, None) }
 ]
 

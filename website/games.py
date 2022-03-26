@@ -216,7 +216,7 @@ class Game2(Game):
       winner_id = choices.index(winning_value)
       winner = game.engine.players[winner_id]
       round_id = game.current_round_id
-      prize = game.config["prizes"][round_id] * winning_value
+      prize = game.config["prizes"][round_id] * int(winning_value)
       winner.flouze += prize
       winner.last_profit = prize
       game.engine.log(
@@ -253,7 +253,6 @@ class Game3(Game):
 
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
-    game.start()
 
   def start(game):
     total_saved = 0
@@ -311,7 +310,7 @@ class Game3(Game):
   def end(game):
     for player in game.engine.players:
       player.flouze += player.saved_flouze
-      player.saved_flouze = None
+      player.saved_flouze = 0
     game.engine.log("L'argent mis de coté à été remis en jeu")
 
 
@@ -323,7 +322,6 @@ class Game4(Game):
     # combien de fois les joueurs ont tous choisis des objets differents
     game.bonuses = [False] * 3
     game.reveal_states = [[False]*5 for _ in range(3)]
-    game.is_done_stars = [False]*5
 
   @property
   def current_bonuses(game):
@@ -384,19 +382,17 @@ class Game4(Game):
 
 
 class Game5(Game):
-  def __init__(game, engine, master):
+  def __init__(game, engine):
     super().__init__(engine)
     game.game_nb = 5
     game.config = games_config["game5"]
-    game.jackpot = game.config["prize"] \
-                   + (game.total_bonuses == 3) * game.config["bonus"]
-
     game.propositions = [[0]*5 for _ in range(3)]
     game.question_id = -1
-    game.start()
-    game.start_round()
-
+    game.is_done_stars = [False]*5
+      
   def set_master(game):
+    game.jackpot = game.config["prize"] \
+                   + (game.engine.games[4].total_bonuses == 3) * game.config["bonus"]
     stars = [player.stars for player in game.engine.players]
     game.engine.log(
        "Le nombre d'etoiles pour chaque joueur est "\
@@ -404,7 +400,7 @@ class Game5(Game):
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
       game.master = game.engine.players[master_id]
-      game.other_players = game.master.other_players()
+      game.other_players = game.master.other_players
       for i in range(3):
         game.choices[i][master_id] = 0
       game.master.flouze += game.jackpot
@@ -414,8 +410,8 @@ class Game5(Game):
       for player in game.other_players:
         player.message = Markup(
           f"{game.master.name} a le plus d'étoiles et est ainsi "\
-          f"en possesion de la somme de {game.jackpot} {icons['coin']}."\
-            "pour le 5ème jeu")
+          f"en possesion de la somme de {game.jackpot} {icons['coin']} "\
+           "pour le 5ème jeu")
       game.master.message = Markup(
           "Vous avez le plus d'étoiles et êtes ainsi en possesion de "\
         f"la somme de {game.jackpot} {icons['coin']} pour le 5ème jeu.")

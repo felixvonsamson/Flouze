@@ -19,7 +19,7 @@
   <div class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
     <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
   </div>
-  {% if player.saved_flouze != 0 %}
+  {% if player.saved_flouze %}
   <div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)</div>
   <div style="height:28px">*</div>
   {% endif %}

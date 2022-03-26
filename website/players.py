@@ -1,5 +1,5 @@
 import datetime
-from flask import Markup
+from flask import Markup, flash
 
 from .html_icons import icons
 
@@ -13,6 +13,7 @@ class Player(object):
     player.color = main_color
     player.sec_color = sec_color
     player.flouze = 0
+    player.saved_flouze = None
     # Dans le jeu 3 l'argent est mis de coté
     player.saved_flouze = 0
     player.stars = 0
@@ -41,10 +42,15 @@ class Player(object):
       player.engine.next_page()
     player.engine.refresh_monitoring()
 
-  def send_message(player, message, timeout=30, emit=False):
+  def flash_message(player, message):
+    flash(Markup(message))
+    player.send_message(message, timeout=-1, emit=False)
+    
+  def send_message(player, message, timeout=30, emit=True):
     message = Markup(message)
     socketio = player.engine.socketio
     now = datetime.datetime.now()
+    timeout = datetime.timedelta(seconds=timeout)
     player.messages.append((now, now + timeout, message))
     if emit:
       socketio.emit("message", message, room=player.sid)
@@ -55,12 +61,12 @@ class Player(object):
   @message.setter
   def message(player, message):
     player.__message = Markup(message)
-    player.send_message(message, timeout=-1)
+    player.send_message(message, timeout=-1, emit=False)
   
   @property
   def messages_to_show(player):
     now = datetime.datetime.now()
-    return [message for _, limit, message in player.messages if limit <= now]
+    return [message for _, limit, message in player.messages if now <= limit]
 
 
   def send_money(player, receiver, amount):
@@ -75,12 +81,12 @@ class Player(object):
     updates = [("flouze", receiver.flouze)]
     player.engine.update_fields(updates, [receiver])
 
-    player.send_message(
+    player.flash_message(
       f"Vous avez envoyé {amount} {icons['coin']} &nbsp; à {receiver.name}.")
     
     receiver.send_message(
       f"Vous avez reçu {amount} {icons['coin']} &nbsp; "\
-      f"de la part de {player.name}.", emit=True)
+      f"de la part de {player.name}.")
 
     player.engine.save_data()
 
@@ -99,12 +105,12 @@ class Player(object):
            (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)
 
-    player.send_message(
+    player.flash_message(
       f"Vous avez envoyé {sent_stars} {icons['star']} à {receiver.name}.")
 
     receiver.send_message(
       f"Vous avez reçu {sent_stars} {icons['star']}"\
-      f"de la part de {player.name}.", emit=True)
+      f"de la part de {player.name}.")
 
     player.engine.save_data()
 
