@@ -120,8 +120,8 @@ def home():
       return render_template("don_etoiles.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "jeu1-choix":
-      #action = check_action_allowed(player, 1)
-      #if action: return action
+      if not game.is_allowed_to_play(player, 1):
+        return redirect(url_for("views.home"))
       tickets = request.form.get("tickets")
       if tickets == None:
         flash("Veuiller faire un choix !", category="error")
@@ -131,9 +131,10 @@ def home():
       player.is_done = True
       player.flash_message(f"Vous avez choisis {tickets} tickets.")
       engine.save_data()
+    
     if engine.current_page["url"] == "Jeu2-choix.jinja":
-      #action = check_action_allowed(player, 2)
-      #if action: return action
+      if not game.is_allowed_to_play(player, 2):
+        return redirect(url_for("views.home"))
       if request.form["boutton"] == "validate num":
         if "choice" not in request.form:
           flash("Veuiller choisir un nombre !", category="error")
@@ -145,8 +146,8 @@ def home():
         engine.save_data()
 
     if request.form["boutton"] == "Jeu3-choix":
-      #action = check_action_allowed(player, 3)
-      #if action: return action
+      if not game.is_allowed_to_play(player, 3):
+        return redirect(url_for("views.home"))
       amount = request.form.get("montant")
       if amount == "":
         flash(Markup("Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir) !"), category="error")
@@ -166,8 +167,8 @@ def home():
       engine.save_data()
 
     if engine.current_page["url"] == "Jeu4-choix.jinja":
-      #action = check_action_allowed(player, 4)
-      #if action: return action
+      if not game.is_allowed_to_play(player, 4):
+        return redirect(url_for("views.home"))
       if request.form["boutton"] == "Jeu4-choix":
         if "choice" not in request.form:
           flash("Veuiller choisir un prix !", category="error")
@@ -198,6 +199,8 @@ def home():
 
 
       if request.form["boutton"] == 'proposition':
+        if not game.is_allowed_to_play(player, 5):
+          return redirect(url_for("views.home"))
         total = 0
         for other_player in game.other_players:
           amount = request.form.get(other_player.name)
@@ -219,7 +222,8 @@ def home():
 
 
       elif request.form["boutton"] in ["0", "1"]:
-        if player.is_done: pass
+        if not game.is_allowed_to_play(player, 5):
+          return redirect(url_for("views.home"))
         player.choice = int(request.form["boutton"])
         player.is_done = True
       elif request.form["boutton"] == 'nouvelle proposition':

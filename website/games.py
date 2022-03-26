@@ -113,7 +113,9 @@ class Game(ABC):
     return all(game.current_done)
 
   def is_allowed_to_play(game, player, game_nb):
-    return game_nb == game.game_nb and not player.is_done
+    return game_nb == game.game_nb \
+           and game.current_round_id in [0, 1, 2] \
+           and not player.is_done
 
   def reveal_card(game, card_id):
     assert "reveal_states" in game.__dict__
