@@ -175,7 +175,7 @@ def home():
           flash("Veuiller choisir un nombre !", category="error")
           return render_template(engine.current_page["url"], engine=engine, player=player)
         player.is_done = True
-        prizes = game.game.current_prizes
+        prizes = game.current_prizes
         prize = prizes[player.choice]
         if prize == "star":
           engine.log(f"{player.name} a choisis l'etoile.")
@@ -186,6 +186,7 @@ def home():
         engine.save_data()
       else:
         player.choice = int(request.form["boutton"])
+        engine.refresh_monitoring()
 
 
 
@@ -205,22 +206,22 @@ def home():
 
       if request.form["boutton"] == 'proposition':
         total = 0
-        for player in game.other_players:
-          amount = request.form.get(player.name)
+        for other_player in game.other_players:
+          amount = request.form.get(other_player.name)
           if amount == "":
             flash("Veuiller indiquer un montant pour tous les joueurs !", category="error")
-            return render_template("Jeu5-proposition.jinja", player=player)
+            return render_template("Jeu5-proposition.jinja", engine=engine, player=player)
           amount = int(amount)
           total += amount
         if total > player.flouze:
           flash("Les propositions que vous avez faites dépasse vos moyens !", category="error")
-          return render_template("Jeu5-proposition.jinja", player=player)
-        for i, player in enumerate(game.other_players):
-          amount = int(request.form.get(player.name))
+          return render_template("Jeu5-proposition.jinja", engine=engine, player=player)
+        for i, other_player in enumerate(game.other_players):
+          amount = int(request.form.get(other_player.name))
           amount = int(amount)
           game.current_proposition[i] = amount
-          player.message = Markup(f"{player.name} vous fait une proposition de {amount} {icons['coin']}")
-
+          other_player.message = Markup(f"{player.name} vous fait une proposition de {amount} {icons['coin']}")
+        player.is_done = True
         engine.next_page()
 
 
@@ -233,31 +234,30 @@ def home():
       engine.save_data()
 
   if engine.current_page['url'] == "Jeu 5":
-    if player.is_done:
-      return render_template("en_attente_jeu5.jinja", player=player)
-
     if engine.current_page["phase"] == "proposition":
       if player == game.master:
-        return render_template("Jeu5-proposition.jinja", player=player)
+        return render_template("Jeu5-proposition.jinja", engine=engine, player=player)
       elif game.current_round_id == 0 and game.question_id < 4:
         if player == game.current_guesser:
-          return render_template("quiz.jinja", player=player, input=True)
+          return render_template("quiz.jinja", engine=engine, player=player, input=True)
         else:
-          return render_template("quiz.jinja", player=player, input=False)
+          return render_template("quiz.jinja", engine=engine, player=player, input=False)
       else:
-        return render_template("results.jinja", player=player)
+        return render_template("results.jinja", engine=engine, player=player)
     elif engine.current_page["phase"] == "validation":
       if player == game.master:
-        return render_template("en_attente_jeu5.jinja", player=player)
+        return render_template("en_attente_jeu5.jinja", engine=engine, player=player)
       else:
-        return render_template("Jeu5-Valider.jinja", player=player)
+        return render_template("Jeu5-Valider.jinja", engine=engine, player=player)
     elif engine.current_page["phase"] == "reveal":
       if player == game.master:
-        return render_template("Jeu5-reveal.jinja", player=player)
+        return render_template("Jeu5-reveal.jinja", engine=engine, player=player)
       else:
-        return render_template("results.jinja", player=player)
+        return render_template("results.jinja", engine=engine, player=player)
+    if player.is_done:
+      return render_template("en_attente_jeu5.jinja", engine=engine, player=player)
 
-  if ("choix" in engine.current_page["url"]  or engine.current_page["url"] == "donner_des_etoiles.html") and player.is_done:
+  if ("choix" in engine.current_page["url"]  or engine.current_page["url"] == "donner_des_etoiles.jinja") and player.is_done:
     return render_template("en_attente.jinja", engine=engine, player=player)
 
   return render_template(engine.current_page['url'], player=player, engine=engine)

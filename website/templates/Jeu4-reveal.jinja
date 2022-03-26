@@ -16,7 +16,7 @@
         <div class="flip-card-back" style="background-color:{{ player_it.color }};">
           <h4><b>{{ player_it.name }}</b></h4>
 			{% if prizes[player_it.choice] == "star" %}
-			  {% if engine.player_it.choice == 3 %}
+			  {% if player_it.choice == 3 %}
 				<div class="w3-xlarge w3-padding w3-margin w3-text-teal" style="background-color:{{ player_it.sec_color }}"><i class="fa fa-star"></i></div>
 			  {% else %}
 				<div class="w3-xlarge w3-padding w3-margin w3-text-white" style="background-color:{{ player_it.sec_color }}"><i class="fa fa-star"></i></div>
@@ -34,7 +34,7 @@
   
     {% for player_it in engine.players[2:4] %}
     <div class="flip-card" style="width:150px; height:120px;">
-      <div id="card{{ loop.index0 + 2 }}" {% if reveal_state[i+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+      <div id="card{{ loop.index0 + 2 }}" {% if reveal_state[loop.index0+2] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
         <div class="flip-card-front" style="background-color:{{ player_it.color }};">
           <h4><b>{{ player_it.name }}</b></h4>
         </div>

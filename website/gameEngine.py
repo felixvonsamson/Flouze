@@ -61,10 +61,10 @@ class gameEngine(object):
       f"(jeu {stage[0]}, manche {stage[1]})")
 
     current_game_nb, current_round_nb = engine.current_stage
-    if current_game_nb > 1 and current_round_nbs:
+    if current_game_nb > 1 and current_round_nb == 0:
       engine.games[current_game_nb - 1].end()
 
-    if engine.current_page["url"] == "results.jinja":
+    if engine.current_page["url"] == "results.jinja"  and current_round_nb:
       engine.games[current_game_nb].logic()
 
     engine.force_refresh()

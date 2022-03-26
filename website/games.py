@@ -95,7 +95,7 @@ class Game(ABC):
   def current_done(game):
     if game.current_stage[1] in [1, 2, 3]:
       return game.is_done[game.current_round_id]
-    if game.engine.current_page["url"] == "donner_des_etoiles.html":
+    if game.engine.current_page["url"] == "donner_des_etoiles.jinja":
       return game.is_done_stars
     return None
 
@@ -145,8 +145,10 @@ class Game(ABC):
       for player, is_done in zip(game.engine.players, is_done)
       if is_done
     ]
-    total = 5 if game.game_nb < 5 else 4
-    updates = [("count", f"{len(waiting_players)} / {total}")]
+    if game.game_nb < 5: 
+      updates = [("count", f"{len(waiting_players)} / 5")]
+    else:
+      updates = [("count", f"{len(waiting_players) - 1} / 4")]
     game.engine.update_fields(updates, waiting_players)
 
 
@@ -219,7 +221,7 @@ class Game2(Game):
     choices = game.current_choices
     values, counts = np.unique(choices, return_counts=True)
     if 1 in counts:
-      winning_value = values[counts.index(1)]
+      winning_value = values[list(counts).index(1)]
       for player, choice in zip(game.engine.players, choices):
         round_id = game.current_round_id
         if choice == winning_value:
@@ -245,7 +247,7 @@ class Game2(Game):
         for player in game.engine.players:
           won_stars = game.config["3rd_round_stars"]
           player.message = Markup(
-            f"{player.name} a gagné et a remporté {icons['coin']}."\
+            f"{winner.name} a gagné et a remporté {icons['coin']}."\
             f"<br>En plus iel recoit {won_stars} {icons['star']} "\
              "car iel a remporté la dernière manche.")
     else:
@@ -344,7 +346,11 @@ class Game4(Game):
 
   @property
   def current_bonuses(game):
+    assert game == game.engine.current_game
     return sum(game.bonuses[:game.current_round_id])
+  @property
+  def total_bonuses(game):
+    return sum(game.bonuses)
 
   @property
   def current_bonus(game):
@@ -404,7 +410,7 @@ class Game4(Game):
       master_id = np.argmax(stars)
       master = game.engine.players[master_id]
       prize = games_config["game5"]["prize"] + \
-          (game.current_bonuses == 3) * games_config["game5"]["bonus"]
+          (game.total_bonuses == 3) * games_config["game5"]["bonus"]
       master.flouze += prize
       game.engine.log(
         f"{master.name} a le plus d'étoiles et remporte ainsi "\
@@ -430,7 +436,7 @@ class Game4(Game):
 
 
 class Game5(Game):
-  def __init__(game, engine, master, with_bonus):
+  def __init__(game, engine, master):
     super().__init__(engine)
     game.engine = engine
     game.game_nb = 5
@@ -442,15 +448,12 @@ class Game5(Game):
     game.other_players.pop(master.ID)
     game.propositions = [[0]*5 for _ in range(3)]
     game.question_id = -1
+    game.start_round()
 
   @property
   def current_proposition(game):
     round_id = game.current_round_id
     return game.propositions[round_id]
-  @property
-  def current_proposition(game, proposition):
-    round_id = game.current_round_id
-    game.propositions[round_id] = proposition
 
   @property
   def current_guesser(game):
@@ -459,7 +462,7 @@ class Game5(Game):
   def start_round(game):
     for players in game.other_players:
       players.message = f"Veuillez attendre la nouvelle proposition "\
-                f"de {game.master.name} ..."
+                        f"de {game.master.name} ..."
     game.next_question()
 
   def next_question(game):
@@ -481,10 +484,10 @@ class Game5(Game):
         game.master.flouze -= offer
         player.flouze += offer
         player.message = Markup(
-            f"La proposition à été acceptée par la majorité des joueurs.<br>"\
-            f"Vous avez recu {offer} {icons['coin']} de {game.master.name}."\
-            f"<br>Vous repartez donc avec {player.flouze} {icons['coin']} "\
-            f"ce qui correspond à {player.flouze / 10} €.")
+          f"La proposition à été acceptée par la majorité des joueurs.<br>"\
+          f"Vous avez recu {offer} {icons['coin']} de {game.master.name}."\
+          f"<br>Vous repartez donc avec {player.flouze} {icons['coin']} "\
+          f"ce qui correspond à {player.flouze / 10} €.")
       game.end()
     else:
       if game.current_round_id == 2:

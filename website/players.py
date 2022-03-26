@@ -33,8 +33,8 @@ class Player(object):
     return player.engine.current_game.current_done[player.ID]
   @is_done.setter
   def is_done(player, is_done):
-    player.engine.current_game.current_done[player.ID] = is_done
     current_game = player.engine.current_game
+    current_game.current_done[player.ID] = is_done
     if not current_game.is_everyone_done:
       current_game.update_waiting_count()
     else:
@@ -69,7 +69,7 @@ class Player(object):
     player.engine.save_data()
 
 
-  def send_star(player, receiver, sent_stars):
+  def send_stars(player, receiver, sent_stars):
     assert (player.stars >= sent_stars)
 
     player.stars -= sent_stars

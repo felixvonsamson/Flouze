@@ -2,7 +2,7 @@
 
 <div class="w3-display-topleft" style="width:115px">
   {% for player_it in engine.players %}
-    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player.color }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
+    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player_it.color }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
   {% endfor %}
 </div>
 
