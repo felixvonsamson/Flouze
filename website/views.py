@@ -193,9 +193,8 @@ def home():
 
 
 
-    if request.form["boutton"] == "terminer":
-      player.is_done = True
-      engine.save_data()
+    if request.form["boutton"] == "retour don etoiles":
+      return render_template(engine.current_page['url'], player=player, engine=engine)
 
     if engine.current_page['url'] == "Jeu 5":
       if request.form["boutton"] == 'quiz':

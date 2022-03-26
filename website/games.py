@@ -145,7 +145,7 @@ class Game(ABC):
       for player, is_done in zip(game.engine.players, is_done)
       if is_done
     ]
-    if game.game_nb < 5: 
+    if game.engine.current_page["url"] != "Jeu 5": 
       updates = [("count", f"{len(waiting_players)} / 5")]
     else:
       updates = [("count", f"{len(waiting_players) - 1} / 4")]
