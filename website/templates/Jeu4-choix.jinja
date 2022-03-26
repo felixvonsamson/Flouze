@@ -10,29 +10,16 @@
 </header>
 <form method="POST">
   <div class="w3-margin" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px">
-    {% for prize in prizes %}
-      {% if player.choice == loop.index0 %}
-        {% if prize == "star" %}
-          {% if loop.index0 == 3 %}
-            <div class="w3-card w3-xlarge w3-padding-small w3-light-gray w3-text-teal" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
-          {% else %}
-            <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;"><i class="fa fa-star"></i></div>
-          {% endif %}
-        {% else %}
-        <div class="w3-card w3-xlarge w3-padding-small w3-light-gray" style="white-space:nowrap;">{{ prize }} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></div>
-        {% endif %}
-      {% else %}
-        {% if prize == "star" %}
-          {% if loop.index0 == 3 %}
-            <button type="submit" name="boutton" value={{ loop.index0 }} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white w3-text-teal" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
-          {% else %}
-            <button type="submit" name="boutton" value={{ loop.index0 }} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;"><i class="fa fa-star"></i></button>
-          {% endif %}
-        {% else %}
-        <button type="submit" name="boutton" value={{ loop.index0 }} class="w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-white" style="white-space:nowrap;">{{ prize }} <img src="/static/images/coin.png" style="width:25px" alt="Coin"></button>
-        {% endif %}
-      {% endif %}
-    {% endfor %}
+  {% for prize in prizes %}
+    <label value={{ loop.index0 }} class="prize-radio w3-border-0 w3-card w3-xlarge w3-padding-small w3-hover-opacity w3-text-black {% if prize == "star" and loop.index0 == 3 %} w3-text-teal {% endif %}" style="white-space:nowrap;">
+    <input type="radio" name="choice" value={{ loop.index0 }} onchange="update_choice(this)"/>
+    {% if prize == "star" %}
+      <i class="fa fa-star" style="position:relative; top:2px;"></i>
+    {% else %}
+      {{ prize }} <img src="/static/images/coin.png" class="coin-medium" alt="Coin">
+    {% endif %}
+    </label>
+  {% endfor %}
   </div>
   <p><button type="submit" name="boutton" value="Jeu4-choix" class="w3-button w3-large" style="background-color:{{ config["theme_colors"][0] }}">Valider</button></p>
 </form>

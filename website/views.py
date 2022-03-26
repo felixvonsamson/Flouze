@@ -131,21 +131,18 @@ def home():
       player.is_done = True
       player.flash_message(f"Vous avez choisis {tickets} tickets.")
       engine.save_data()
-
     if engine.current_page["url"] == "Jeu2-choix.jinja":
       #action = check_action_allowed(player, 2)
       #if action: return action
       if request.form["boutton"] == "validate num":
-        if player.choice == None:
+        if "choice" not in request.form:
           flash("Veuiller choisir un nombre !", category="error")
           return render_template(engine.current_page["url"], engine=engine, player=player)
+        player.choice = int(request.form["choice"])
         engine.log(f"{player.name} a choisis le nombre {player.choice}.")
         player.is_done = True
         player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
         engine.save_data()
-      else:
-        player.choice = int(request.form["boutton"])
-        engine.refresh_monitoring()
 
     if request.form["boutton"] == "Jeu3-choix":
       #action = check_action_allowed(player, 3)
@@ -172,9 +169,10 @@ def home():
       #action = check_action_allowed(player, 4)
       #if action: return action
       if request.form["boutton"] == "Jeu4-choix":
-        if player.choice == None:
-          flash("Veuiller choisir un nombre !", category="error")
+        if "choice" not in request.form:
+          flash("Veuiller choisir un prix !", category="error")
           return render_template(engine.current_page["url"], engine=engine, player=player)
+        player.choice = int(request.form["choice"])
         player.is_done = True
         prizes = game.current_prizes
         prize = prizes[player.choice]
@@ -185,9 +183,6 @@ def home():
           engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
           player.flash_message(f"Vous avez choisis le prix : {prize} {icons['coin']}")
         engine.save_data()
-      else:
-        player.choice = int(request.form["boutton"])
-        engine.refresh_monitoring()
 
 
 

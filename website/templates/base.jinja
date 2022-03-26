@@ -92,7 +92,12 @@
     socket.on('refresh', function() {
         window.location = window.location;
     });
-
+    function update_choice(obj) {
+      if (typeof prev != 'undefined') 
+        prev.parentNode.classList.remove('checked');
+      obj.parentNode.classList.add('checked');
+      prev = obj;
+    }
     function disableBack() { window.history.forward(); }
     setTimeout("disableBack()", 0);
     window.onunload = function () { null };
