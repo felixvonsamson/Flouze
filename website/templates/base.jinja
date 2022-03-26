@@ -27,9 +27,7 @@
 {% block inside %} {% endblock %}
 
   <div id="messages" class="toast">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %} 
-  {% for category, message in messages %}
+  {% for category, message in get_flashed_messages(with_categories=true) %}
     {% if category == "error" %}
     <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
       <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
@@ -37,12 +35,20 @@
       <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
     </div>
     {% else %}
+  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+    <div class="w3-center">{{ message }}</div>
+    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+  </div>
+    {% endif %}
+  {% endfor %}
+  {% for message in player.messages_to_show %}
    <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
      <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
      <div class="w3-center">{{ message }}</div>
      <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
    </div>
-  {% endif %} {% endfor %} {% endif %} {% endwith %}
+  {% endfor %}
   </div>
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>

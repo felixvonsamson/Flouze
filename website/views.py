@@ -128,7 +128,7 @@ def home():
       player.choice = int(tickets)
       engine.log(f"{player.name} a choisis {tickets} tickets.")
       player.is_done = True
-      flash(f"Vous avez choisis {tickets} tickets.", category="success")
+      player.send_message(f"Vous avez choisis {tickets} tickets.")
       engine.save_data()
 
     if engine.current_page["url"] == "Jeu2-choix.jinja":
@@ -140,7 +140,7 @@ def home():
           return render_template(engine.current_page["url"], engine=engine, player=player)
         engine.log(f"{player.name} a choisis le nombre {player.choice}.")
         player.is_done = True
-        flash(f"Vous avez choisis le nombre {player.choice}.", category="success")
+        player.send_message(f"Vous avez choisis le nombre {player.choice}.")
         engine.save_data()
       else:
         player.choice = int(request.form["boutton"])
@@ -164,7 +164,7 @@ def home():
       player.choice = amount
       player.is_done = True
       engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
-      flash(Markup(f"Vous avez versé {amount} {icons['coin']} dans le pot commun"), category="success")
+      player.send_message(f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
       engine.save_data()
 
     if engine.current_page["url"] == "Jeu4-choix.jinja":
@@ -179,10 +179,10 @@ def home():
         prize = prizes[player.choice]
         if prize == "star":
           engine.log(f"{player.name} a choisis l'etoile.")
-          flash(Markup(f"Vous avez choisis le prix : {icons['star']}"), category="success")
+          player.send_message(f"Vous avez choisis le prix : {icons['star']}")
         else:
           engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
-          flash(Markup(f"Vous avez choisis le prix : {prize} {icons['coin']}"), category="success")
+          player.send_message(f"Vous avez choisis le prix : {prize} {icons['coin']}")
         engine.save_data()
       else:
         player.choice = int(request.form["boutton"])
@@ -237,7 +237,7 @@ def home():
     if engine.current_page["phase"] == "proposition":
       if player == game.master:
         return render_template("Jeu5-proposition.jinja", engine=engine, player=player)
-      elif game.current_round_id == 0 and game.question_id < 4:
+      elif game.current_round_id == 0 and game.question_id < 3:
         if player == game.current_guesser:
           return render_template("quiz.jinja", engine=engine, player=player, input=True)
         else:

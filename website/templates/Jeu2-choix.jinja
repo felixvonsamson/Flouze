@@ -10,7 +10,7 @@
 <form method="POST">
   <div class="w3-margin w3-lobster">
     {% for choice in range(1, 6) %}
-      {% if player.choice == prize %}
+      {% if player.choice == choice %}
       <button type="submit" name="boutton" value={{ choice }} class="circle w3-grayscale" style="background-color: #bff5ea;" disabled>{{ choice }}</button>
       {% else %}
       <button type="submit" name="boutton" value={{ choice }} class="circle w3-hover-opacity" style="background-color: #bff5ea;">{{ choice }}</button>

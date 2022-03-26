@@ -28,7 +28,7 @@
         </div>
         <div class="w3-half">
           {{ player.flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin"><br>
-          {% if engine == 3 %}
+          {% if stage[0] == 3 %}
             ({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)<br>
           {% endif %}
         </div>

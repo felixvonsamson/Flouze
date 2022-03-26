@@ -1,9 +1,13 @@
 import datetime
 import pickle
 
+from markupsafe import Markup
+
 from .players import Player
+
 from .games import Game1, Game2, Game3, Game4, Game5
 from .pages_ordering import pages
+from .html_icons import icons
 
 class gameEngine(object):
   pages = pages
@@ -23,10 +27,10 @@ class gameEngine(object):
 
     engine.games = {
       1: Game1(engine),
-      2: None,
-      3: None,
-      4: None,
-      5: None
+      2: Game2(engine),
+      3: Game3(engine),
+      4: Game4(engine),
+      5: Game5(engine)
     }
 
     # pointeur pour indiquer sur quelle page on est (l'array 'pages')
@@ -62,9 +66,12 @@ class gameEngine(object):
       f"(jeu {stage[0]}, manche {stage[1]})")
 
     current_game_nb, current_round_nb = engine.current_stage
-    if current_game_nb > 1 and current_round_nb == 0:
-      engine.games[current_game_nb - 1].end()
-
+    if engine.current_stage == (3, 0):
+      engine.games[3].start()
+    if engine.current_stage == (4, 0):
+      engine.games[3].end()
+    if current_game_nb == 5 and page["url"] == "results.jinja":
+      engine.games[5].set_master()
     if page["url"] == "results.jinja"  and current_round_nb \
        or page["url"] == "Jeu 5" and page["phase"] == "reveal":
       engine.games[current_game_nb].logic()

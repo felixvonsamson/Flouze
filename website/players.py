@@ -1,6 +1,5 @@
 import datetime
-from platform import platform
-from flask import Markup, flash
+from flask import Markup
 
 from .html_icons import icons
 
@@ -19,6 +18,7 @@ class Player(object):
     player.stars = 0
 
     player.last_profit = None
+    player.__message = None
     player.messages = []
 
   @property
@@ -41,10 +41,27 @@ class Player(object):
       player.engine.next_page()
     player.engine.refresh_monitoring()
 
-  def send_message(player, message):
+  def send_message(player, message, timeout=30, emit=False):
+    message = Markup(message)
     socketio = player.engine.socketio
-    player.messages.append((datetime.datetime.now(), message))
-    socketio.emit('message', message, room=player.sid)
+    now = datetime.datetime.now()
+    player.messages.append((now, now + timeout, message))
+    if emit:
+      socketio.emit("message", message, room=player.sid)
+  
+  @property
+  def message(player):
+    return player.__message
+  @message.setter
+  def message(player, message):
+    player.__message = Markup(message)
+    player.send_message(message, timeout=-1)
+  
+  @property
+  def messages_to_show(player):
+    now = datetime.datetime.now()
+    return [message for _, limit, message in player.messages if limit <= now]
+
 
   def send_money(player, receiver, amount):
     assert (player.flouze >= amount)
@@ -52,19 +69,18 @@ class Player(object):
     player.flouze -= amount
     receiver.flouze += amount
 
-    player.engine.log(f"{player.name} a fait un don de {amount} Pièces à "\
-                      f"{receiver.name}.")
+    player.engine.log(
+      f"{player.name} a fait un don de {amount} Pièces à {receiver.name}.")
 
     updates = [("flouze", receiver.flouze)]
     player.engine.update_fields(updates, [receiver])
 
-    flash(Markup(
-      f"Vous avez envoyé {amount} {icons['coin']}"\
-      f" &nbsp; à {receiver.name}."), category="success")
+    player.send_message(
+      f"Vous avez envoyé {amount} {icons['coin']} &nbsp; à {receiver.name}.")
     
     receiver.send_message(
       f"Vous avez reçu {amount} {icons['coin']} &nbsp; "\
-      f"de la part de {player.name}.")
+      f"de la part de {player.name}.", emit=True)
 
     player.engine.save_data()
 
@@ -83,13 +99,12 @@ class Player(object):
            (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)
 
-    flash(Markup(
-      f"Vous avez envoyé {sent_stars} {icons['star']} "\
-      f"à {receiver.name}."), category="success")
+    player.send_message(
+      f"Vous avez envoyé {sent_stars} {icons['star']} à {receiver.name}.")
 
     receiver.send_message(
       f"Vous avez reçu {sent_stars} {icons['star']}"\
-      f"de la part de {player.name}.")
+      f"de la part de {player.name}.", emit=True)
 
     player.engine.save_data()
 
