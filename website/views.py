@@ -5,58 +5,128 @@ from .html_icons import icons
 
 views = Blueprint("views", __name__)
 
+@views.route("/faire_un_don", methods=["GET"])
+def don_get():
+  return render_template("faire_un_don.jinja", engine=engine, player=player)
+
+@views.route("/faire_un_don", methods=["POST"])
+def don_post():
+  receiver_level = request.form.get("destinataire")
+  if receiver_level == None:
+    flash("Veuillez choisir un destinataire !", category="error")
+    return render_template("faire_un_don.jinja", engine=engine, player=player)
+  amount = request.form.get("montant")
+  if amount == "":
+    flash("Veuiller indiquer un montant !", category="error")
+    return render_template("faire_un_don.jinja", engine=engine, player=player)
+  receiver_level = int(receiver_level)
+  receiver = player.other_players[receiver_level]
+  amount = int(amount)
+  if amount <= 0:
+    flash("Le montant à envoyer ne peut pas être negatif ou nul !", category="error")
+    return render_template("faire_un_don.jinja", engine=engine, player=player)
+  if amount > player.flouze:
+    flash("Le montant indiqué dépasse votre solde !", category="error")
+    return render_template("faire_un_don.jinja", engine=engine, player=player)
+  player.send_money(receiver, amount)
+  return render_template(engine.current_page["url"], engine=engine, player=player)
+
+
+
+  
+  
 
 @views.route("/", methods=["GET", "POST"])
 def home():
   if "ID" not in session :
     return redirect(url_for("auth.login"))
 
-  game = engine.current_game
   if session["ID"] == "admin":
-    if request.method == "POST":
-      assert "boutton" in request.form and request.form["boutton"] in ["page suivante", "page précedente"] or\
-           "reveal" in request.form and request.form["reveal"] in map(str, range(5)) or\
-           "diapo" in request.form and request.form["diapo"] in ["suivant", "précedent"]
-      if "reveal" in request.form:
-        game.reveal_card(int(request.form["reveal"]))
-      elif "diapo" in request.form:
-        if request.form["diapo"] == "suivant":
-          game.next_frame()
-        if request.form["diapo"] == "précedent":
-          game.previous_frame()
-      elif request.form["boutton"] == "page suivante" and engine.iterator < len(engine.pages)-1:
-        if engine.current_page["url"] == "results.jinja":
-          for player in engine.players:
-            player.last_profit = None
+    return redirect(url_for("monitoring.monitoring_get"))
 
-        engine.next_page()
-        engine.save_data()
-        engine.force_refresh()
-
-      elif request.form["boutton"] == "page précedente" and engine.iterator:
-        engine.iterator -= 1
-        engine.log(f"Retour à la page précedente : {engine.current_page['url']} (jeu {engine.current_stage[0]}, manche {engine.current_stage[1]})")
-        engine.save_data()
-        engine.force_refresh()
-
-    return render_template("monitoring.jinja", engine=engine, imax=min(len(engine.logs),20))
-  
   assert session["ID"] in range(5)
   player = engine.players[session["ID"]]
-  if request.method == "GET":
+  game = engine.current_game
+
+  if "jeu1" in request.form:
+    if not game.is_allowed_to_play(player, 1):
+        return redirect(url_for("views.home"))
+      tickets = request.form.get("tickets")
+      if tickets == None:
+        flash("Veuiller faire un choix !", category="error")
+        return render_template(engine.current_page["url"], engine=engine, player=player)
+      player.choice = tickets
+      engine.log(f"{player.name} a choisis {tickets} tickets.")
+      player.flash_message(f"Vous avez choisis {tickets} tickets.")
+      player.is_done = True
+      engine.save_data()
+
+  if "jeu2" in request.form:
+    if not game.is_allowed_to_play(player, 2):
+        return redirect(url_for("views.home"))
+      if request.form["boutton"] == "validate num":
+        if "choice" not in request.form:
+          flash("Veuiller choisir un nombre !", category="error")
+          return render_template(engine.current_page["url"], engine=engine, player=player)
+        player.choice = int(request.form["choice"])
+        engine.log(f"{player.name} a choisis le nombre {player.choice}.")
+        player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
+        player.is_done = True
+        engine.save_data()
+
+  if "jeu3" in request.form:
+    if not game.is_allowed_to_play(player, 3):
+        return redirect(url_for("views.home"))
+      amount = request.form.get("montant")
+      if amount == "":
+        flash(Markup("Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir) !"), category="error")
+        return render_template(engine.current_page["url"], engine=engine, player=player)
+      amount = int(amount)
+      if amount < 0:
+        flash("Le montant à investir ne peut pas être negatif !", category="error")
+        return render_template(engine.current_page["url"], engine=engine, player=player)
+      if amount > player.flouze:
+        flash("Le montant indiqué dépasse votre solde !", category="error")
+        return render_template(engine.current_page["url"], engine=engine, player=player)
+      player.flouze -= amount
+      player.choice = amount
+      engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
+      player.flash_message(f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
+      player.is_done = True
+      engine.save_data()
+      
+  if "jeu4" in request.form:
     pass
-  if request.method == "POST":
-    if request.form["boutton"] == "partager":
+  if "jeu5" in request.form:
+    assert request.form["jeu5"] in ["proposition", "nouvelle_proposition", "refuser", "accepter", "quiz_reponse"]
+  
+  if "retour" in request.form:
+      return redirect(url_for("views.home"))
+
+  if "faire_un_don" in request.form:
+    assert request.form["faire_un_don"] in ["envoi", "redirect"]
+    if request.form["faire_un_don"] == "redirect":
+      return render_template("faire_un_don.jinja", engine=engine, player=player)
+    if request.form["faire_un_don"] == "envoi":
+      pass
+      
+   
+  if "don_etoiles" in request.form:
+    assert request.form["don_etoiles"] in ["envoi", "oui", "non"]
+    if request.form["don_etoiles"] == "oui":
+      return render_template("don_etoiles.jinja", engine=engine, player=player)
+  
+  if "partager" in request.form:
+    assert request.form["partager"] in ["envoi", "redirect"]
+    if request.form["partager"] == "redirect":
       return render_template("partager.jinja", engine=engine, player=player)
 
-    if request.form["boutton"] == "don":
-      return render_template("faire_un_don.jinja", engine=engine, player=player)
 
-    if request.form["boutton"] == "léguer etoiles":
-      return render_template("don_etoiles.jinja", engine=engine, player=player)
 
-    if request.form["boutton"] == "en fait non":
-      return redirect(url_for("views.home"))
+
+
+  
+  
     
     if request.form["boutton"] == "envoyer don":
       receiver_level = request.form.get("destinataire")
@@ -119,51 +189,13 @@ def home():
       return render_template("don_etoiles.jinja", engine=engine, player=player)
 
     if request.form["boutton"] == "jeu1-choix":
-      if not game.is_allowed_to_play(player, 1):
-        return redirect(url_for("views.home"))
-      tickets = request.form.get("tickets")
-      if tickets == None:
-        flash("Veuiller faire un choix !", category="error")
-        return render_template(engine.current_page["url"], engine=engine, player=player)
-      player.choice = int(tickets)
-      engine.log(f"{player.name} a choisis {tickets} tickets.")
-      player.flash_message(f"Vous avez choisis {tickets} tickets.")
-      player.is_done = True
-      engine.save_data()
+      
     
     if engine.current_page["url"] == "Jeu2-choix.jinja":
-      if not game.is_allowed_to_play(player, 2):
-        return redirect(url_for("views.home"))
-      if request.form["boutton"] == "validate num":
-        if "choice" not in request.form:
-          flash("Veuiller choisir un nombre !", category="error")
-          return render_template(engine.current_page["url"], engine=engine, player=player)
-        player.choice = int(request.form["choice"])
-        engine.log(f"{player.name} a choisis le nombre {player.choice}.")
-        player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
-        player.is_done = True
-        engine.save_data()
+      
 
     if request.form["boutton"] == "Jeu3-choix":
-      if not game.is_allowed_to_play(player, 3):
-        return redirect(url_for("views.home"))
-      amount = request.form.get("montant")
-      if amount == "":
-        flash(Markup("Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir) !"), category="error")
-        return render_template(engine.current_page["url"], engine=engine, player=player)
-      amount = int(amount)
-      if amount < 0:
-        flash("Le montant à investir ne peut pas être negatif !", category="error")
-        return render_template(engine.current_page["url"], engine=engine, player=player)
-      if amount > player.flouze:
-        flash("Le montant indiqué dépasse votre solde !", category="error")
-        return render_template(engine.current_page["url"], engine=engine, player=player)
-      player.flouze -= amount
-      player.choice = amount
-      engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
-      player.flash_message(f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
-      player.is_done = True
-      engine.save_data()
+      
 
     if engine.current_page["url"] == "Jeu4-choix.jinja":
       if not game.is_allowed_to_play(player, 4):
@@ -196,6 +228,7 @@ def home():
       if request.form["boutton"] == 'quiz':
         answer = request.form.get("réponse")
         engine.log(f'{player.name} a donner la réponse {answer} au quiz')
+        game.current_answer = answer
 
 
       if request.form["boutton"] == 'proposition':

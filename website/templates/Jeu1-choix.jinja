@@ -12,27 +12,11 @@
 <option value="" disabled="" selected="">Nombre de tickets</option>
 <option value="0">Aucun ticket</option>
 <option value="1">1 ticket</option>
-<option value="2">2 tickets</option>
-<option value="3">3 tickets</option>
-<option value="4">4 tickets</option>
-<option value="5">5 tickets</option>
-<option value="6">6 tickets</option>
-<option value="7">7 tickets</option>
-<option value="8">8 tickets</option>
-<option value="9">9 tickets</option>
-<option value="10">10 tickets</option>
-<option value="11">11 tickets</option>
-<option value="12">12 tickets</option>
-<option value="13">13 tickets</option>
-<option value="14">14 tickets</option>
-<option value="15">15 tickets</option>
-<option value="16">16 tickets</option>
-<option value="17">17 tickets</option>
-<option value="18">18 tickets</option>
-<option value="19">19 tickets</option>
-<option value="20">20 tickets</option>
+{% for i in range(2, 21)%}
+<option value={{i}}>{{i}} tickets</option>
+{% endfor %}
 </select>
-<button type="submit" class="w3-button w3-large w3-text-white" style="background-color:{{ config["theme_colors"][0] }}" name="boutton" value="jeu1-choix">Valider</button></form>
+<button name="jeu1" type="submit" class="w3-button w3-large w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Valider</button></form>
 </div>
 
 {% endblock %}

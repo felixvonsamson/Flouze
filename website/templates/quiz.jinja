@@ -6,7 +6,7 @@
 {% if input %}
 <form method="POST">
   <p><input name="réponse" class="w3-input w3-border w3-round-large w3-center" placeholder="Votre réponse" type="text" style="width:200px;"></p>
-  <p><button type="submit" name="boutton" value="quiz" class="w3-button w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Valider</button></p>
+  <p><button type="submit" name="jeu5" value="quiz_reponse" class="w3-button w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Valider</button></p>
 </form>
 {% else %}
   <p>{{ player.question }}</p>

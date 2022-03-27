@@ -28,10 +28,12 @@ def create_app():
         else:
             engine.players_by_name[name].sid = request.sid
 
-    from .views import views
     from .auth import auth
+    from .views import views
+    from .monitoring import monitoring
 
     app.register_blueprint(views, url_prefix="/")
+    app.register_blueprint(monitoring, url_prefix="/monitoring")
     app.register_blueprint(auth, url_prefix="/")
 
     return socketio, app

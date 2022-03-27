@@ -46,7 +46,7 @@
       {% if stage[0] in [2, 4] and "reveal" in page["url"] %}
         {% set reveal_state = game.current_reveal_state %}
         <form class="w3-center w3-margin w3-large" method="POST">
-          <button type="submit" class="w3-button" style="background-color:{{ player.sec_color }}" name="reveal" value="{{ player.ID }}" {% if reveal_state[player.ID] %}disabled{% endif %}>Révéler</button>
+          <button name="reveal" value={{ player.ID }} type="submit" class="w3-button" style="background-color:{{ player.sec_color }}" {% if reveal_state[player.ID] %}disabled{% endif %}>Révéler</button>
         </form>
       {% endif %}
     </div>
@@ -56,20 +56,27 @@
 
   <div class="w3-row w3-margin">
     <div class="w3-right w3-large w3-light-gray w3-padding" style="max-width:50%">
-      {% for i in range(imax) %}
+      {% for i in range(20) %}
       {{ engine.logs[-i-1] }}<br>
       {% endfor %}
     </div>
     <div class="w3-rest">
       <form class="w3-center w3-xlarge" method="POST">
         <p>Page actuelle : {{ engine.current_page['url'] }}</p>
-        <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
-        <p><button type="submit" class="w3-button w3-red w3-margin" name="boutton" value="page précedente">Page précedante</button>
-          <button type="submit" class="w3-button w3-teal w3-margin" name="boutton" value="page suivante">Page suivante</button></p>
         {% if engine.current_stage[1] == 0 %}
           <p>Explications</p>
-          <p><button type="submit" class="w3-button w3-green w3-margin-right" name="diapo" value="précedent">Diapo précedante</button>
-            <button type="submit" class="w3-button w3-green w3-margin-left" name="diapo" value="suivant">Diapo suivante</button></p>
+          <p><button name="diapo" type="submit" class="w3-button w3-green w3-margin-right" value="precedant">Diapo précedante</button>
+            <button name="diapo" type="submit" class="w3-button w3-green w3-margin-left" value="suivant">Diapo suivante</button></p>
+        {% endif %}
+        <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
+        <p><button name="page" type="submit" class="w3-button w3-red w3-margin" value="precedant">Page précedante</button>
+          <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant">Page suivante</button></p>
+        {% if engine.current_stage == (5, 1) and page["phase"] == proposition and game.current_anwser %}
+          {{game.current_question[1][0]}}<br>
+          {{game.current_guesser["name"]}} : {{game.current_anwser}}<br>
+          ({{game.current_question[1][1]}})
+          <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin" value="rejeter">Rejeter</button>
+          <button name="quiz" type="submit" class="w3-button w3-teal w3-margin" value="valider">Valider</button></p>
         {% endif %}
       </form>
     </div>

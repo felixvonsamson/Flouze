@@ -47,21 +47,31 @@ games_config = {
 
 
 quiz = [
-  ["_______ _______ _ a-t-il __ __ drapeau ______ ?",
+  (["_______ _______ _ a-t-il __ __ drapeau ______ ?",
   "_______ d’étoiles _ ____ sur __ ______ valaisan ?",
   "Combien _______ y ____ __ le _______ ______ ?"],
-  ["Quel ____ __ enclavé ____ le _______ ?",
+  ["Combien d'etoiles y a-t-il sur le drapeau valaisan ?",
+  "13"]),
+  (["Quel ____ __ enclavé ____ le _______ ?",
   "___ pays ___ ______ dans __ _______ ?",
   "___ ____ est ______ ____ __ Sénégal ?"],
-  ["Combien _ ___ de _____ __ tram _ ________ ?",
+  ["Quel pays est enclavé dans le Sénégal ?",
+  "La Gambie"]),
+  (["Combien _ ___ de _____ __ tram _ ________ ?",
   "_______ y ___ __ lignes __ ____ à ________ ?",
   "_______ _ a-t-il __ ____ de ____ _ Bordeaux ?"],
-  ["Quel ____ ___ pseudo ___ ____ of ____ ?",
+  ["Combien y a-t-il de lignes de tram à Bordeaux ?",
+  "4"]),
+  (["Quel ____ ___ pseudo ___ ____ of ____ ?",
   "____ était ___ ______ sur ____ __ clans ?",
   "____ ____ mon _____ ___ clash __ ____ ?"],
-  ["Comment _______ __ parc ______ _ l’université __ _______ ?",
+  ["Quel était mon pseudo sur clash of clans ?",
+  "FvS"]),
+  (["Comment _______ __ parc ______ _ l’université __ _______ ?",
   "________ s’appelle __ ___ adjacent _ ________ de _______ ?",
-  "________ _______ le ____ ______ à _________ __ Montréal ?"]
+  "________ _______ le ____ ______ à _________ __ Montréal ?"],
+  ["Comment s'appelle le parc ajacent à l'université de Montréal ?",
+  "Le parc du Mont-Royal"])
 ]
 
 
@@ -389,7 +399,9 @@ class Game5(Game):
     game.game_nb = 5
     game.config = games_config["game5"]
     game.propositions = [[0]*5 for _ in range(3)]
+    game.quiz = quiz.copy()
     game.question_id = -1
+    game.answers = [None]*4
     game.is_done_stars = [False]*5
       
   def set_master(game):
@@ -402,6 +414,7 @@ class Game5(Game):
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
       game.master = game.engine.players[master_id]
+      game.quiz.pop(master.id)
       game.other_players = game.master.other_players
       for i in range(3):
         game.choices[i][master_id] = 0
@@ -437,8 +450,20 @@ class Game5(Game):
   def current_guesser(game):
     return game.other_players[game.question_id]
 
+  @property
+  def current_question(game):
+    return game.quiz[game.question_id]
+
+  @property
+  def current_answer(game):
+    return game.answers[game.question_id]
+
+  @current_answer.setter
+  def current_answer(game, answer):
+    game.answers[game.question_id] = answer
+  
   def next_question(game):
-    if game.question_id == 2:
+    if game.question_id == 3:
       for players in game.other_players:
         players.message = \
           f"Veuillez attendre la proposition de {game.master.name} ..."
@@ -446,7 +471,7 @@ class Game5(Game):
     game.question_id += 1
     guessers = game.other_players.copy()
     guessers.pop(game.question_id)
-    for player, question in zip(guessers, quiz[game.question_id]):
+    for player, question in zip(guessers, current_question[0]):
       player.question = question
 
   def logic(game):
