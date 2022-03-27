@@ -12,6 +12,8 @@ def monitoring_post():
   if session["ID"] != "admin":
     return redirect(url_for("views.home"))
   
+  game = engine.current_game
+
   if "reveal" in request.form:
     assert request.form["reveal"] in range(4)
     game.reveal_card(request.form["reveal"])
