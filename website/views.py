@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup, current_app 
+from flask import Blueprint, render_template, request, flash, session, redirect, url_for
 from website import engine
 
 from .html_icons import icons
@@ -123,7 +123,7 @@ def home():
       return redirect(url_for("views.home"))
     amount = request.form.get("montant")
     if amount == "":
-      flash(Markup("Veuiller indiquer un montant<br>(0 si vous ne voulez rien investir) !"), category="error")
+      flash("Veuiller indiquer un montant !", category="error")
       return render_template(engine.current_page["url"], engine=engine, player=player)
     amount = int(amount)
     if amount < 0:
@@ -188,7 +188,7 @@ def home():
         amount = int(request.form.get(other_player.name))
         amount = int(amount)
         game.current_proposition[i] = amount
-        other_player.message = Markup(f"{player.name} vous fait une proposition de {amount} {icons['coin']}")
+        other_player.message = f"{player.name} vous fait une proposition de {amount} {icons['coin']}"
       player.is_done = True
       engine.next_page()
       engine.save_data()
