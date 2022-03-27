@@ -1,6 +1,8 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% extends "base+don.jinja" %} {% block title %}Donner des étoiles{% endblock %} {% block content%}
+{% extends "base+don.jinja" %}
+{% block title %}Donner des étoiles{% endblock %}
+{% block content %}
 
   <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:250px;">
   <header class="w3-container" style="background-color:{{ config["theme_colors"][0] }}">
@@ -16,10 +18,10 @@
   <br><input name="quantité" class="w3-input w3-border w3-round-large w3-center" placeholder="Quantitée" type="number" style="width:120px; display:inline-block;">
   <p>
     <button type="submit" class="w3-margin-right w3-button" style="background-color:{{ config["theme_colors"][0] }}">Envoyer</button>
-    <button type="submit" class="w3-margin-left w3-button w3-red" formaction="/">Retour</button>
+    <button type="submit" formaction="/" class="w3-margin-left w3-button w3-red">Retour</button>
   </p>
   <p>
-</form>
+  </form>
   </div>
 
 {% endblock %}

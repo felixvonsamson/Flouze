@@ -1,12 +1,12 @@
 {% set game = engine.current_game %}
 {% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% else %} {% extends "base+etoiles.jinja" %} {% endif %}
-{% block title %}Flouze - Jeu 1{% endblock %}
+{% block title %}Résultats{% endblock %}
 {% block content %}
 <div class="w3-panel w3-large w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding w3-margin animate__animated animate__fadeIn">
   {{ player.message }}
   {% if player.last_profit != None %}
-    <form method="POST">
-      <p><button name="partager" type="submit" class="w3-btn w3-green" value="redirect">Partager</button></p>
+    <form action="partager_profit" method="GET">
+      <p><button name="partager" type="submit" class="w3-btn w3-green">Partager</button></p>
     </form>
   {% endif %}
 </div>

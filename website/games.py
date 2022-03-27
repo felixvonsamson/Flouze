@@ -414,7 +414,7 @@ class Game5(Game):
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
       game.master = game.engine.players[master_id]
-      game.quiz.pop(game.master.id)
+      game.quiz.pop(master_id)
       game.other_players = game.master.other_players
       for i in range(3):
         game.choices[i][master_id] = 0

@@ -1,22 +1,19 @@
-from flask import Blueprint, render_template, request, flash, session, redirect, url_for, Markup, current_app 
+from flask import Blueprint, render_template, request, session, redirect, url_for
 from website import engine
 
 monitoring = Blueprint("monitoring", __name__)
 
-@monitoring.route("/", methods=["GET"])
-def monitoring_get():
-  return render_template("monitoring.jinja", engine=engine)
-
-@monitoring.route("/", methods=["POST"])
-def monitoring_post():
+@monitoring.route("/monitoring", methods=("GET", "POST"))
+def home():
+  print(f"/n/n{session['ID']}/n/n")
   if session["ID"] != "admin":
     return redirect(url_for("views.home"))
   
   game = engine.current_game
 
   if "reveal" in request.form:
-    assert request.form["reveal"] in range(4)
-    game.reveal_card(request.form["reveal"])
+    assert request.form["reveal"] in map(str, range(5))
+    game.reveal_card(int(request.form["reveal"]))
 
   elif "diapo" in request.form:
     assert request.form["diapo"] in ["precedant", "suivant"]
@@ -41,4 +38,4 @@ def monitoring_post():
       engine.save_data()
       engine.force_refresh()
     
-    return render_template("monitoring.jinja", engine=engine)
+  return render_template("monitoring.jinja", engine=engine)

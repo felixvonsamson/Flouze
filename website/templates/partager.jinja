@@ -20,8 +20,8 @@
     <div class="w3-col w3-padding" style="width:120px;"><b>{{ player.name }}</b></div>
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>
-    <button type="submit" name="retour" class="w3-button w3-red" style="margin:10px">en fait non</button>
-    <button type="submit" name="partager" value="envoi" class="w3-button w3-text-white" style="margin:10px; background-color:{{ config["theme_colors"][0] }}">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
+    <button type="submit" formaction="/" class="w3-button w3-red" style="margin:10px">en fait non</button>
+    <button type="submit" class="w3-button w3-text-white" style="margin:10px; background-color:{{ config["theme_colors"][0] }}">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
 </form>
   </div>
 
