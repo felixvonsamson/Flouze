@@ -414,7 +414,7 @@ class Game5(Game):
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
       game.master = game.engine.players[master_id]
-      game.quiz.pop(master.id)
+      game.quiz.pop(game.master.id)
       game.other_players = game.master.other_players
       for i in range(3):
         game.choices[i][master_id] = 0
@@ -471,7 +471,7 @@ class Game5(Game):
     game.question_id += 1
     guessers = game.other_players.copy()
     guessers.pop(game.question_id)
-    for player, question in zip(guessers, current_question[0]):
+    for player, question in zip(guessers, game.current_question[0]):
       player.question = question
 
   def logic(game):
