@@ -11,7 +11,7 @@ def login():
         password = request.form.get("password")
         if first_name == "felix" and password == "felix":
             session["ID"] = "admin"
-            return redirect(url_for("monitoring.monitoring"))
+            return redirect(url_for("monitoring.home"))
         if first_name in engine.players_by_name.keys():
             player = engine.players_by_name[first_name]
             if player.password == password:
