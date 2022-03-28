@@ -249,7 +249,11 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .circle input{display:none}
 @media (max-width:400px){.circle {border-radius: 50%;width: 50px;height: 50px;font-size:24px!important; margin:2px; border:4px solid #009688;}}
 .circle-big {border-radius: 50%;width: 55px;height: 55px;font-size:36px!important;}
+
 @media (max-width:500px){.contrainte {width: 280px}}
+
+@media (max-width:500px){.contrainte_reveal {width: 320px}}
+@media (max-width:1000px){.contrainte_reveal {width: 500px}}
 
 .prize-radio {display:inline-block;}
 .prize-radio.checked {background-color:lightgray;}
