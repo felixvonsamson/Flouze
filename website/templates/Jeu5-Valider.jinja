@@ -1,8 +1,8 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% extends "base.jinja" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block inside%}
+{% extends "base.jinja" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block content_without_stars %}
 
-  <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:350px;">
+  <div class="w3-card-4 w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:350px;">
   <header class="w3-container" style="background-color:{{ config["theme_colors"][0] }}">
       <h4>{{ player.message }}</h4>
   </header>
