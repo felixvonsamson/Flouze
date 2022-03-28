@@ -1,7 +1,9 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% set reveal_state = game.current_reveal_state %}
-{% extends "base+don.jinja" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content %}
+{% extends "base+don.jinja" %}
+{% block title %}Flouze - Jeu 2{% endblock %}
+{% block content %}
 
 <div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px">
   {% for player_it in engine.players %}

@@ -1,6 +1,8 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% extends "base+don.jinja" %} {% block title %}Partager{% endblock %} {% block content %}
+{% extends "base+don.jinja" %}
+{% block title %}Partager{% endblock %}
+{% block content %}
 
   <div class="w3-large w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:260px;">
   <header id="total" class="w3-container w3-text-white w3-xlarge w3-padding" style="background-color:{{ engine.current_game.config["theme_colors"][0] }}">

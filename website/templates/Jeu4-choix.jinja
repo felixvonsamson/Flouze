@@ -1,7 +1,9 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% set prizes = engine.current_game.current_prizes %}
-{% extends "base+don.jinja" %} {% block title %}Flouze - Jeu 4{% endblock %} {% block content %}
+{% extends "base+don.jinja" %}
+{% block title %}Flouze - Jeu 4{% endblock %}
+{% block content %}
 
 <div id="card2" class="w3-card-4 w3-center w3-white w3-text-white animate__animated animate__fadeIn contrainte">
 <header class="medium w3-padding" style="background-color:{{ config["theme_colors"][0] }}">

@@ -1,5 +1,5 @@
 {% extends "base.jinja" %}
-{% block content_with_stars %}
+{% block etoiles_header %}
 
 <div class="w3-display-topleft" style="width:115px">
   {% for player_it in engine.players %}
@@ -7,6 +7,8 @@
   {% endfor %}
 </div>
 
-{% block content_with_donations %} {% endblock %}
+{% block don_header %} {% endblock %}
 
 {% endblock %}
+
+

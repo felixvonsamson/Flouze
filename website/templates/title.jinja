@@ -1,8 +1,8 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% block content %} 
-{% else %} {% extends "base+etoiles.jinja" %} {% block content_without_stars %} 
-{% endif %}
+{% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% else %} {% extends "base+etoiles.jinja" %} {% endif %}
+{% block title %}Flouze - Jeu {{game.game_nb}}{% endblock %}
+{% block content %}
 
 <div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{ config["theme_colors"][1] }}">
   <div class="w3-container w3-text-white" style="background-color:{{ config["theme_colors"][0] }}; margin:10px">
@@ -24,5 +24,3 @@
 </iframe>
 
 {% endblock %}
-
-{% block title %}Flouze - Jeu {{game.game_nb}}{% endblock %}

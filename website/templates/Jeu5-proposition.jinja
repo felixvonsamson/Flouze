@@ -1,7 +1,9 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% set other_players = engine.current_game.other_players %}
-{% extends "base.jinja" %} {% block title %}Flouze - Jeu 5{% endblock %} {% block content_without_stars %}
+{% extends "base.jinja" %}
+{% block title %}Flouze - Jeu 5{% endblock %}
+{% block content %}
 
 <form method="POST" class="w3-card-4 w3-center w3-white animate__animated animate__fadeIn" style="width:400px;">
 <header class="w3-container w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">

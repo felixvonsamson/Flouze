@@ -1,14 +1,10 @@
 {% extends "base+etoiles.jinja" %}
-{% block content_with_donations %}
+{% block don_header %}
 
 <div class="w3-center" style="margin-left:115px">
 <form method="GET" action="faire_un_don">
 <button type="submit" class="w3-btn w3-round-large w3-margin w3-red w3-border" style="font-size:22px">Faire un don</button>
 </form>
-</div>
-
-<div style="width: 100%; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; flex-grow: 1">
-{% block content %} {% endblock %}
 </div>
 
 {% endblock %}
