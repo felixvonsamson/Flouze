@@ -26,7 +26,7 @@ def home():
     if request.form["page"] == "suivant" and engine.iterator < len(engine.pages)-1:
       if engine.current_page["url"] == "results.jinja":
         for player in engine.players:
-          player.last_profit = None
+          player.last_profit = 0
       engine.next_page()
       engine.save_data()
       engine.force_refresh()

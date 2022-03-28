@@ -285,11 +285,12 @@ class Game3(Game):
     inputs = game.current_choices
     common_pot = sum(inputs)
     if game.sabotage:
-      common_pot = 1.2 * np.max(common_pot)
+      common_pot = 1.2 * np.max(inputs)
       game.engine.log(
         f"Cette manche a été sabotée car les participans on été trop "\
          "coopératifs. Le contenu du pot commun avant l'ajout de la "\
         f"banque à été fixé à {common_pot}")
+      game.sabotage = False
 
     interest = game.config["interests"][game.current_round_id]
     prize = int(common_pot * interest  // 5)

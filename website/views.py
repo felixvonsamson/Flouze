@@ -157,7 +157,10 @@ def home():
       prizes = game.current_prizes
       prize = prizes[player.choice]
       if prize == "star":
-        engine.log(f"{player.name} a choisis l'etoile.")
+        if player.choice == 3 :
+          engine.log(f"{player.name} a choisis la deuxième étoile.")
+        else :
+          engine.log(f"{player.name} a choisis l'etoile.")
         player.flash_message(f"Vous avez choisis le prix : {icons['star']}")
       else:
         engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
@@ -180,6 +183,8 @@ def home():
         answer = request.form.get("réponse")
         engine.log(f'{player.name} a donner la réponse {answer} au quiz')
         game.current_answer = answer
+        print("\n",game.current_answer, engine.current_page["phase"] == "proposition", game.current_stage,"\n")
+        engine.save_data()
       
       elif request.form["jeu5"] == "proposition":
         if not game.is_allowed_to_play(player, 5):
@@ -223,10 +228,7 @@ def home():
       if player == game.master:
         return render_template_ctx("Jeu5-proposition.jinja")
       elif game.current_round_id == 0 and game.question_id < 3:
-        if player == game.current_guesser:
-          return render_template_ctx("quiz.jinja")
-        else:
-          return render_template_ctx("quiz.jinja")
+        return render_template_ctx("quiz.jinja")
       else:
         return render_template_ctx("results.jinja")
     

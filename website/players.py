@@ -18,7 +18,7 @@ class Player(object):
     player.saved_flouze = 0
     player.stars = 0
 
-    player.last_profit = None
+    player.last_profit = 0
     player.__message = None
     player.messages = []
 
@@ -82,10 +82,10 @@ class Player(object):
     player.engine.update_fields(updates, [receiver])
 
     player.flash_message(
-      f"Vous avez envoyé {amount} {icons['coin']} &nbsp; à {receiver.name}.")
+      f"Vous avez envoyé {amount} {icons['coin']}&nbsp; à {receiver.name}.")
     
     receiver.send_message(
-      f"Vous avez reçu {amount} {icons['coin']} &nbsp; "\
+      f"Vous avez reçu {amount} {icons['coin']}&nbsp; "\
       f"de la part de {player.name}.")
 
     player.engine.save_data()
@@ -116,10 +116,10 @@ class Player(object):
 
 
   def share_profit(player, amounts):
-    assert player.last_profit
+    assert player.last_profit != 0
     assert (sum(amounts) <= player.last_profit)
     assert (sum(amounts) <= player.flouze)
     for receiver, amount in zip(player.other_players, amounts):
       if amount:
         player.send_money(receiver, amount)
-    player.last_profit = None
+    player.last_profit = 0
