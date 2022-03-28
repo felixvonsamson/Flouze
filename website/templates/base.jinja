@@ -16,7 +16,7 @@
     <title>{% block title %}Home{% endblock %}</title>
   </head>
 
-<body style="background-image: url({{ url_for("static", filename="images/" + config["background"]) }}); min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-start;">
+<body style="background-image: url({{ url_for("static", filename="images/" + config["background"]) }}); min-height: 100vh; display:flex; flex-direction:column; justify-content:flex-start;">
   <div class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
     <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
   </div>
@@ -24,8 +24,9 @@
   <div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)</div>
   <div style="height:28px">*</div>
   {% endif %}
-<div style="width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: space-evenly; align-items: center; flex-grow: 1">
-{% block inside %} {% endblock %}
+  {% block content_with_stars %} {% endblock %}
+<div style="width: 100%; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; flex-grow: 1">
+{% block content_without_stars %} {% endblock %}
 </div>
   <div id="messages" class="toast">
   {% for category, message in get_flashed_messages(with_categories=true) %}
