@@ -1,7 +1,8 @@
 {% set game = engine.current_game %}
-{% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% else %} {% extends "base+etoiles.jinja" %} {% endif %}
-{% block title %}Résultats{% endblock %}
-{% block content %}
+{% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% block content %} 
+{% else %} {% extends "base+etoiles.jinja" %} {% block content_without_stars %} 
+{% endif %}
+
 <div class="w3-panel w3-large w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding w3-margin animate__animated animate__fadeIn">
   {{ player.message }}
   {% if player.last_profit != None %}
@@ -12,3 +13,5 @@
 </div>
 
 {% endblock %}
+
+{% block title %}Résultats{% endblock %}
