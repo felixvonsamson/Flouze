@@ -5,7 +5,6 @@ monitoring = Blueprint("monitoring", __name__)
 
 @monitoring.route("/monitoring", methods=("GET", "POST"))
 def home():
-  print(f"/n/n{session['ID']}/n/n")
   if session["ID"] != "admin":
     return redirect(url_for("views.home"))
   
