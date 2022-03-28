@@ -2,9 +2,9 @@
 {% set config = game.config %}
 {% set prizes = game.current_prizes %}
 {% set reveal_state = game.current_reveal_state %}
-{% extends "base+don.jinja" %} {% block title %}Flouze - Jeu 4{% endblock %} {% block content
-%}
-<div class="w3-display-middle w3-center animate__animated animate__fadeIn" style="width:320px;">
+{% extends "base+don.jinja" %} {% block title %}Flouze - Jeu 4{% endblock %} {% block content %}
+
+<div class="w3-center animate__animated animate__fadeIn" style="width:320px;">
   <div class="w3-margin-bottom" style="display:flex; justify-content:space-between;">
   
 	{% for player_it in engine.players[0:2] %}
