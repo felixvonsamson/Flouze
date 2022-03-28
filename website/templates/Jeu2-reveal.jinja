@@ -3,7 +3,7 @@
 {% set reveal_state = game.current_reveal_state %}
 {% extends "base+don.jinja" %} {% block title %}Flouze - Jeu 2{% endblock %} {% block content %}
 
-<div class="w3-center animate__animated animate__fadeIn" style="width:320px; display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px">
+<div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px">
   {% for player_it in engine.players %}
   <div class="flip-card" style="width:150px; height:120px;">
     <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
