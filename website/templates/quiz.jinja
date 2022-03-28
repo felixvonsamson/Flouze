@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="w3-card-4 w3-center w3-padding w3-large animate__animated animate__jackInTheBox" style="border-style:solid; border-width: 5px; border-color:{{ config["theme_colors"][0] }}; background-color:{{ config["theme_colors"][1] }}">
-{% if input %}
+{% if player == game.current_guesser %}
 <form method="POST">
   <p><input name="réponse" class="w3-input w3-border w3-round-large w3-center" placeholder="Votre réponse" type="text" style="width:200px;"></p>
   <p><button type="submit" name="jeu5" value="quiz_reponse" class="w3-button w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Valider</button></p>
