@@ -1,8 +1,8 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% extends "base+etoiles.jinja" %} {% block title %}Faire un don{% endblock %} {% block inside2%}
+{% extends "base+etoiles.jinja" %} {% block title %}Faire un don{% endblock %} {% block content_without_stars %}
 
-  <div class="w3-card-4 w3-display-middle w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:240px;">
+  <div class="w3-card-4 w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:240px;">
   <header class="w3-container w3-padding" style="background-color:{{ config["theme_colors"][0] }}; font-size:22px">
       Faire un don
   </header>
