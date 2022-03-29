@@ -11,8 +11,6 @@ flash_error = partial(flash,  category="error")
 
 @views.before_request
 def check_user():
-  if "ID" not in session :
-    return redirect(url_for("auth.login"))
   if session["ID"] == "admin":
     return redirect(url_for("monitoring.home"))
   assert session["ID"] in range(5)
