@@ -183,7 +183,6 @@ def home():
         answer = request.form.get("réponse")
         engine.log(f"{player.name} a donner la réponse {answer} au quiz")
         game.current_answer = answer
-        game.next_question()
         engine.save_data()
       
       elif request.form["jeu5"] == "proposition":

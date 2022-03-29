@@ -462,6 +462,7 @@ class Game5(Game):
   @current_answer.setter
   def current_answer(game, answer):
     game.answers[game.question_id] = answer
+    game.next_question()
   
   def next_question(game):
     if game.question_id == 3:
@@ -474,6 +475,8 @@ class Game5(Game):
     guessers.pop(game.question_id)
     for player, question in zip(guessers, game.current_question[0]):
       player.question = question
+      socketio = game.engine.socketio
+      socketio.emit("refresh", None, room=player.sid)
 
   def logic(game):
     if sum(game.current_choices) >= 3:

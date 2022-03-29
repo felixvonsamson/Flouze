@@ -12,7 +12,7 @@
   <div class="w3-modal-content w3-padding scroll">
     <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright">&times;</span>
     {% for time, _, msg in player.messages %}
-    {{time.strftime('%H:%M : ') + msg}}
+    <p>{{time.strftime('%H:%M : ') + msg}}</p>
     {% endfor %}
   </div>
 </div>
