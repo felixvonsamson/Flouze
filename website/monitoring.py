@@ -51,5 +51,7 @@ def home():
         player.flouze += quiz_prize
         player.send_message(
           f"Félicitation ! Vous remportez {quiz_prize} {icons['coin']} !")
+    engine.force_refresh()
+    engine.save_data()
       
   return render_template("monitoring.jinja", engine=engine)
