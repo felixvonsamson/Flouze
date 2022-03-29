@@ -95,36 +95,36 @@ class gameEngine(object):
 
   def refresh_monitoring(engine):
     if engine.admin_sid:
-      engine.socketio.emit('refresh', None, room=engine.admin_sid)
+      engine.socketio.emit("refresh", None, room=engine.admin_sid)
   
   def force_refresh(engine):
-    engine.socketio.emit('refresh', None, broadcast=True)
+    engine.socketio.emit("refresh", None, broadcast=True)
 
   def update_fields(engine, updates, players=None):
     socketio = engine.socketio
     if players:
       for player in players:
         if player.sid:
-          socketio.emit('update_data', updates, room=player.sid)
+          player.emit("update_data", updates)
     else:
-      socketio.emit('update_data', updates, broadcast=True)
+      socketio.emit("update_data", updates, broadcast=True)
 
   def log(engine, message):
-    log_message = datetime.datetime.now().strftime('%H:%M:%S : ') + message
+    log_message = datetime.datetime.now().strftime("%H:%M:%S : ") + message
     engine.logs.append(log_message)
 
 
   def save_data(engine):
     socketio = engine.socketio
     engine.socketio = None
-    with open("data.pck", 'wb') as file:
+    with open("data.pck", "wb") as file:
       pickle.dump(engine, file)
     engine.socketio = socketio
     engine.refresh_monitoring()
 
   @staticmethod
   def load_data():
-    with open("data.pck", 'rb') as file:
+    with open("data.pck", "rb") as file:
       engine = pickle.load(file)
     engine.admin_sid = None
     for player in engine.players:

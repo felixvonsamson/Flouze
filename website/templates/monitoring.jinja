@@ -68,7 +68,7 @@
     </div>
     <div class="w3-rest">
       <form class="w3-center w3-xlarge" method="POST">
-        <p>Page actuelle : {{ page['url'] }}</p>
+        <p>Page actuelle : {{ page["url"] }}</p>
         {% if engine.current_stage[1] == 0 %}
           <p>Explications</p>
           <p><button name="diapo" type="submit" class="w3-button w3-green w3-margin-right" value="precedant">Diapo précedante</button>
@@ -77,12 +77,16 @@
         <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
         <p><button name="page" type="submit" class="w3-button w3-red w3-margin" value="precedant">Page précedante</button>
           <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant">Page suivante</button></p>
-        {% if engine.current_stage == (5, 1) and engine.current_page["phase"] == "proposition" and game.last_question_id != None %}
-          {{game.quiz[game.last_question_id][1][0]}}<br>
-          {{game.other_players[game.last_question_id]["name"]}} : {{game.answers[game.last_question_id]}}<br>
-          ({{game.quiz[game.last_question_id][1][1]}})
-          <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin-right" value="rejeter">Rejeter</button>
-          <button name="quiz" type="submit" class="w3-button w3-teal w3-margin-left" value="valider">Valider</button></p>
+        {% if engine.current_stage == (5, 1) and engine.current_page["phase"] == "proposition" %}
+          {% for (_, (question, correct_answer)), player, answer, decision in zip(game.quiz, game.other_players, game.answers, game.is_answer_correct) %}
+            {% if answer and decision == None %}
+          {{question}}<br>
+          {{player.name}} : {{answer}}<br>
+          ({{correct_answer}})
+          <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin-right" value="rejeter{{ loop.index0 }}">Rejeter</button>
+          <button name="quiz" type="submit" class="w3-button w3-teal w3-margin-left" value="valider{{ loop.index0 }}">Valider</button></p>
+            {% endif %}
+          {% endfor %}
         {% endif %}
       </form>
     </div>

@@ -42,6 +42,11 @@ class Player(object):
       player.engine.next_page()
     player.engine.refresh_monitoring()
 
+  def emit(player, *args):
+    if player.sid:
+      socketio = player.engine.socketio
+      socketio.emit(*args, room=player.sid)
+  
   def flash_message(player, message):
     flash(Markup(message))
     player.send_message(message, timeout=-1, emit=False)
@@ -52,8 +57,8 @@ class Player(object):
     now = datetime.datetime.now()
     timeout = datetime.timedelta(seconds=timeout)
     player.messages.append((now, now + timeout, message))
-    if emit and player.sid:
-      socketio.emit("message", message, room=player.sid)
+    if emit:
+      player.emit("message", message)
   
   @property
   def message(player):

@@ -13,7 +13,7 @@ def home():
     return redirect(url_for("views.home"))
   
   game = engine.current_game
-
+  
   if "reveal" in request.form:
     assert request.form["reveal"] in map(str, range(5))
     game.reveal_card(int(request.form["reveal"]))
@@ -40,20 +40,28 @@ def home():
       engine.save_data()
       
   elif "quiz" in request.form:
-    assert request.form["quiz"] in ["rejeter", "valider"]
-    if request.form["quiz"] == "rejeter":
+    decision = request.form["quiz"][:-1]
+    question_id = request.form["quiz"][-1:]
+    assert decision in ["rejeter", "valider"]
+    assert question_id in map(str, range(4))
+    question_id = int(question_id)
+    question, correct_answer = game.quiz[question_id][1]
+    if decision == "rejeter":
+      game.is_answer_correct[question_id] = False
       for player in game.other_players:
         player.send_message(
-          f"Perdu ! La bonne réponse était : {game.current_question[1][1]}")
-    elif request.form["quiz"] == "valider":
+          f'Perdu ! La bonne réponse à la question "{question}" était : '\
+          f'{correct_answer}')
+    elif decision == "valider":
+      game.is_answer_correct[question_id] = True
       for player in game.other_players:
-        quiz_prize = game.config['quiz_prize']
+        quiz_prize = game.config["quiz_prize"]
         player.flouze += quiz_prize
-        player.send_message(
-          f"Félicitation ! Vous remportez {quiz_prize} {icons['coin']} !")
         updates = [("flouze", player.flouze)]
         player.engine.update_fields(updates, [player])
-    game.last_question_id = None
+        player.send_message(
+          f'Félicitation ! Vous remportez {quiz_prize} {icons["coin"]} pour '\
+          f'la question {question} !')
     engine.save_data()
-      
-  return render_template("monitoring.jinja", engine=engine)
+  
+  return render_template("monitoring.jinja", engine=engine, zip=zip)

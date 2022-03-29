@@ -272,7 +272,7 @@ class Game3(Game):
     for player in game.engine.players:
       player.saved_flouze = max(0, player.flouze - initial_flouze)
       total_saved += player.saved_flouze
-      player.flouze = game.config['initial_flouze']
+      player.flouze = game.config["initial_flouze"]
     if total_saved > 1500:
       game.sabotage = True
     game.engine.log(
@@ -385,9 +385,9 @@ class Game4(Game):
           "donc un bonus s'applique pour la manche suivante")
         game.current_bonus = True
       else:
-        master_prize = games_config['game5']['prize']
-        master_prize_with_bonus = games_config['game5']['prize'] \
-                      + games_config['game5']['bonus']
+        master_prize = games_config["game5"]["prize"]
+        master_prize_with_bonus = games_config["game5"]["prize"] \
+                      + games_config["game5"]["bonus"]
         game.engine.log(
           f"Tous les joueurs ont choisis un prix différent "\
           f"donc le gros lot passe de {master_prize} "\
@@ -402,9 +402,9 @@ class Game5(Game):
     game.propositions = [[0]*5 for _ in range(3)]
     game.quiz = quiz.copy()
     game.question_id = -1
-    game.answers = [None]*4
-    game.last_question_id = None
     game.is_done_stars = [False]*5
+    game.answers = [None]*4
+    game.is_answer_correct = [None]*4
       
   def set_master(game):
     all_bonuses = game.engine.games[4].total_bonuses == 3
@@ -464,20 +464,23 @@ class Game5(Game):
   def current_answer(game, answer):
     game.answers[game.question_id] = answer
     game.next_question()
+    game.engine.refresh_monitoring()
   
   def next_question(game):
-    print("\n\n"+str(game.question_id)+"\n\n")
     if game.question_id == 3:
       for players in game.other_players:
         players.message = \
           f"Veuillez attendre la proposition de {game.master.name} ..."
-        break
+      return
     game.question_id += 1
-    game.engine.refresh_monitoring()
-    for player, question in zip(game.other_players, game.current_question[0]):
+    guessers = game.other_players.copy()
+    guessers.pop(game.question_id)
+    for player, question in zip(guessers, game.current_question[0]):
       player.question = question
-      socketio = game.engine.socketio
-      socketio.emit("refresh", None, room=player.sid)
+    if game.question_id:
+      for player in guessers:
+        player.emit("refresh", None)
+      game.other_players[game.question_id].emit("refresh", None)
 
   def logic(game):
     if sum(game.current_choices) >= 3:
