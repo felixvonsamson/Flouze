@@ -1,18 +1,18 @@
 {% extends "base+etoiles.jinja" %}
 {% block don_header %}
 
-<div class="w3-center" style="margin-left:115px">
-<form method="GET" action="faire_un_don">
-<button type="submit" class="w3-btn w3-round-large w3-margin w3-red w3-border medium">Faire un don</button>
+<div class="w3-center" style="margin: 16px 0 0 115px; display:flex; justify-content:space-evenly;">
+<form method="GET" action="faire_un_don" style="width:150px">
+<button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">Faire un don</button>
 </form>
-<button onclick="document.getElementById('history').style.display='block'" class="w3-button w3-circle medium w3-text-white" style="background-color:{{ config["theme_colors"][0] }}"><i class="fa fa-history"></i></button>
+<button onclick="document.getElementById('history').style.display='block'" class="w3-button w3-circle medium w3-text-white" style="border:2px solid #fff; background-color:{{ config["theme_colors"][0] }}"><i class="fa fa-history" style="position:relative; top:1px;"></i></button>
 </div>
 
 <div id="history" class="w3-modal">
-  <div class="w3-modal-content w3-padding scroll">
-    <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+  <div class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
+    <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright w3-xlarge" style="padding:1px 16px;">&times;</span>
     {% for time, _, msg in player.messages %}
-    <p>{{time.strftime('%H:%M : ') + msg}}</p>
+    {{time.strftime('%H:%M : ') + msg}}<br>
     {% endfor %}
   </div>
 </div>

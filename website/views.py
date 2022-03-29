@@ -191,12 +191,12 @@ def home():
         total = 0
         for other_player in game.other_players:
           amount = request.form.get(other_player.name)
+          if amount == "":
+            flash_error("Veuiller indiquer un montant pour tous les joueurs !")
+            return render_template_ctx("Jeu5-proposition.jinja")
           if amount + other_player.flouze < 0:
             flash_error(f"{other_player.name} ne peut pas accepter votre "\
                          "proposition car il n'a pas assez d'argent !")
-            return render_template_ctx("Jeu5-proposition.jinja")
-          if amount == "":
-            flash_error("Veuiller indiquer un montant pour tous les joueurs !")
             return render_template_ctx("Jeu5-proposition.jinja")
           amount = int(amount)
           total += amount

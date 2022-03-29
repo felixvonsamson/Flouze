@@ -263,7 +263,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
  font-family: "Lobster", serif;
 }
 
-.scroll {width: 90%; overflow-x: hidden; overflow-y: auto;}
+.scroll {width: 90%; max-height:90%; overflow-x: hidden; overflow-y: auto;}
 
 .flip-card {
   perspective: 1000px;
