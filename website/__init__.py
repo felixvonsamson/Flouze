@@ -9,7 +9,7 @@ from website.gameEngine import gameEngine
 def init_engine():
   with open("players.txt", "r") as file:
     players_raw = [(player_id, *file.readline().split()) 
-             for player_id in range(5)]
+                   for player_id in range(5)]
   return gameEngine(players_raw)
 
 
@@ -39,8 +39,8 @@ def create_app():
   app.register_blueprint(auth, url_prefix="/")
 
   @app.before_request
-  def load_user():
-    if "ID" not in session :
+  def check_connected():
+    if "ID" not in session and request.endpoint != 'login':
       return redirect(url_for("auth.login"))
 
   return socketio, app
