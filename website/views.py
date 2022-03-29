@@ -1,6 +1,8 @@
 from flask import request, session
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for
 from flask import Blueprint
+from functools import partial
+from website import engine
 
 from .html_icons import icons
 
