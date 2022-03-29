@@ -1,4 +1,5 @@
-pages = [      # Liste des pages a afficher dans l'ordre / stage est de la forme [jeu, manche]
+# Liste des pages a afficher dans l'ordre, stage est de la forme (jeu, manche)
+pages = [
   { "url": "title.jinja",          "stage": (1, 0) }, 
   { "url": "Jeu1-choix.jinja",     "stage": (1, 1) }, 
   { "url": "results.jinja",        "stage": (1, 1) }, 
