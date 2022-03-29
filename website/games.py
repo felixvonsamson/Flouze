@@ -467,20 +467,20 @@ class Game5(Game):
     game.engine.refresh_monitoring()
   
   def next_question(game):
-    if game.question_id == 3:
-      for players in game.other_players:
-        players.message = \
-          f"Veuillez attendre la proposition de {game.master.name} ..."
-      return
     game.question_id += 1
+    if game.question_id == 4:
+      for player in game.other_players:
+        player.message = \
+          f"Veuillez attendre la proposition de {game.master.name} ..."
+        player.emit("refresh", None)
+      return
     guessers = game.other_players.copy()
     guessers.pop(game.question_id)
     for player, question in zip(guessers, game.current_question[0]):
       player.question = question
     if game.question_id:
-      for player in guessers:
+      for player in game.other_players:
         player.emit("refresh", None)
-      game.other_players[game.question_id].emit("refresh", None)
 
   def logic(game):
     if sum(game.current_choices) >= 3:

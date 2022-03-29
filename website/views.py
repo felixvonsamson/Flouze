@@ -230,7 +230,7 @@ def home():
     if engine.current_page["phase"] == "proposition":
       if player == game.master:
         return render_template_ctx("Jeu5-proposition.jinja")
-      elif game.current_round_id == 0 and game.question_id < 3:
+      elif game.current_round_id == 0 and game.question_id < 4:
         return render_template_ctx("quiz.jinja")
       else:
         return render_template_ctx("results.jinja")
