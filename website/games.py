@@ -135,7 +135,6 @@ class Game(ABC):
     reveal_state[card_id] = True
     socketio = game.engine.socketio
     socketio.emit("reveal_card", card_id, broadcast=True)
-    print(f"\n{card_id}\n")
     game.engine.save_data()
 
   def next_frame(game):
