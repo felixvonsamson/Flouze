@@ -182,6 +182,7 @@ def home():
       if request.form["jeu5"] == "quiz_reponse":
         answer = request.form.get("réponse")
         engine.log(f"{player.name} a donner la réponse {answer} au quiz")
+        game.last_question_id = game.question_id
         game.current_answer = answer
         engine.save_data()
       

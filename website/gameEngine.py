@@ -120,8 +120,7 @@ class gameEngine(object):
     with open("data.pck", 'wb') as file:
       pickle.dump(engine, file)
     engine.socketio = socketio
-    if engine.admin_sid:
-      socketio.emit('refresh', None, room=engine.admin_sid)
+    engine.refresh_monitoring()
 
   @staticmethod
   def load_data():

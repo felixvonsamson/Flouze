@@ -77,10 +77,10 @@
         <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
         <p><button name="page" type="submit" class="w3-button w3-red w3-margin" value="precedant">Page précedante</button>
           <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant">Page suivante</button></p>
-        {% if engine.current_stage == (5, 1) and engine.current_page["phase"] == "proposition" and game.current_answer %}
-          {{game.current_question[1][0]}}<br>
-          {{game.current_guesser["name"]}} : {{game.current_answer}}<br>
-          ({{game.current_question[1][1]}})
+        {% if engine.current_stage == (5, 1) and engine.current_page["phase"] == "proposition" and game.last_question_id != None %}
+          {{game.quiz[game.last_question_id][1][0]}}<br>
+          {{game.other_players[game.last_question_id]["name"]}} : {{game.answers[game.last_question_id]}}<br>
+          ({{game.quiz[game.last_question_id][1][1]}})
           <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin-right" value="rejeter">Rejeter</button>
           <button name="quiz" type="submit" class="w3-button w3-teal w3-margin-left" value="valider">Valider</button></p>
         {% endif %}

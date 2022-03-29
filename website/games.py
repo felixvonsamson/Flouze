@@ -403,6 +403,7 @@ class Game5(Game):
     game.quiz = quiz.copy()
     game.question_id = -1
     game.answers = [None]*4
+    game.last_question_id = None
     game.is_done_stars = [False]*5
       
   def set_master(game):
@@ -465,15 +466,15 @@ class Game5(Game):
     game.next_question()
   
   def next_question(game):
+    print("\n\n"+str(game.question_id)+"\n\n")
     if game.question_id == 3:
       for players in game.other_players:
         players.message = \
           f"Veuillez attendre la proposition de {game.master.name} ..."
         break
     game.question_id += 1
-    guessers = game.other_players.copy()
-    guessers.pop(game.question_id)
-    for player, question in zip(guessers, game.current_question[0]):
+    game.engine.refresh_monitoring()
+    for player, question in zip(game.other_players, game.current_question[0]):
       player.question = question
       socketio = game.engine.socketio
       socketio.emit("refresh", None, room=player.sid)
