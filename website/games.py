@@ -106,7 +106,7 @@ class Game(ABC):
   def current_done(game):
     if game.current_stage[1] in [1, 2, 3]:
       return game.is_done[game.current_round_id]
-    if game.engine.current_page["url"] == "donner_des_etoiles.jinja":
+    if game.engine.current_page["url"] == "choix_etoiles.jinja":
       return game.is_done_stars
     return None
 
