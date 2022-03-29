@@ -34,16 +34,10 @@ def home():
           player.last_profit = 0
       engine.next_page()
       engine.save_data()
-      engine.force_refresh()
 
     elif request.form["page"] == "precedant" and engine.iterator:
-      engine.iterator -= 1
-      engine.log(
-         "Retour à la page précedente : "\
-        f"{engine.current_page['url']} (jeu {engine.current_stage[0]}, "\
-        f"manche {engine.current_stage[1]})")
+      engine.passive_previous_page()
       engine.save_data()
-      engine.force_refresh()
       
   elif "quiz" in request.form:
     assert request.form["quiz"] in ["rejeter", "valider"]
