@@ -181,7 +181,7 @@ def home():
       
       if request.form["jeu5"] == "quiz_reponse":
         answer = request.form.get("réponse")
-        engine.log(f'{player.name} a donner la réponse {answer} au quiz')
+        engine.log(f"{player.name} a donner la réponse {answer} au quiz")
         game.current_answer = answer
         game.next_question()
         engine.save_data()
@@ -247,9 +247,7 @@ def home():
       else:
         return render_template_ctx("results.jinja")
 
-  if ("choix" in engine.current_page["url"]  \
-      or engine.current_page["url"] == "donner_des_etoiles.jinja") \
-     and player.is_done:
+  if "choix" in engine.current_page["url"] and player.is_done:
     return render_template_ctx("en_attente.jinja")
 
   return render_template_ctx(engine.current_page['url'])

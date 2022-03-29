@@ -1,7 +1,7 @@
 import datetime
 import pickle
 
-from markupsafe import Markup
+from flask import Markup
 
 from .players import Player
 

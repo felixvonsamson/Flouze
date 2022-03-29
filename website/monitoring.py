@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask import request, session
+from flask import render_template, redirect, url_for
+from flask import Blueprint
 from website import engine
 
 from .html_icons import icons
@@ -25,7 +27,8 @@ def home():
 
   elif "page" in request.form:
     assert request.form["page"] in ["precedant", "suivant"]
-    if request.form["page"] == "suivant" and engine.iterator < len(engine.pages)-1:
+    if request.form["page"] == "suivant" \
+       and engine.iterator < len(engine.pages) - 1:
       if engine.current_page["url"] == "results.jinja":
         for player in engine.players:
           player.last_profit = 0
@@ -35,20 +38,24 @@ def home():
 
     elif request.form["page"] == "precedant" and engine.iterator:
       engine.iterator -= 1
-      engine.log(f"Retour à la page précedente : {engine.current_page['url']} (jeu {engine.current_stage[0]}, manche {engine.current_stage[1]})")
+      engine.log(
+         "Retour à la page précedente : "\
+        f"{engine.current_page['url']} (jeu {engine.current_stage[0]}, "\
+        f"manche {engine.current_stage[1]})")
       engine.save_data()
       engine.force_refresh()
       
   elif "quiz" in request.form:
-    
-  return render_template("monitoring.jinja", engine=engine)
     assert request.form["quiz"] in ["rejeter", "valider"]
     if request.form["quiz"] == "rejeter":
       for player in game.other_players:
-        player.send_message(f"Perdu ! La bonne réponse était : {game.current_question[1][1]}")
+        player.send_message(
+          f"Perdu ! La bonne réponse était : {game.current_question[1][1]}")
     elif request.form["quiz"] == "valider":
       for player in game.other_players:
-        player.flouze += game.config["quiz_prize"]
-        player.send_message(f"Félicitation ! Vous remportez {game.config["quiz_prize"]} {icons['coin']} !")
-        
+        quiz_prize = game.config['quiz_prize']
+        player.flouze += quiz_prize
+        player.send_message(
+          f"Félicitation ! Vous remportez {quiz_prize} {icons['coin']} !")
       
+  return render_template("monitoring.jinja", engine=engine)

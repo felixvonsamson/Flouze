@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import request, session
+from flask import render_template, redirect, url_for, flash
+from flask import Blueprint
 
 from . import engine
 

@@ -407,8 +407,8 @@ class Game5(Game):
     game.is_done_stars = [False]*5
       
   def set_master(game):
-    game.jackpot = game.config["prize"] \
-                   + (game.engine.games[4].total_bonuses == 3) * game.config["bonus"]
+    all_bonuses = game.engine.games[4].total_bonuses == 3
+    game.jackpot = game.config["prize"] + all_bonuses * game.config["bonus"]
     stars = [player.stars for player in game.engine.players]
     game.engine.log(
        "Le nombre d'etoiles pour chaque joueur est "\
@@ -515,5 +515,3 @@ class Game5(Game):
         f"<br>Vous repartez donc avec {player.flouze} {icons['coin']}, "\
         f"ce qui correspond à {player.flouze / 10} €.")
     game.engine.iterator = len(pages) - 1
-
-
