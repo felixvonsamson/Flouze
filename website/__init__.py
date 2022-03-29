@@ -40,7 +40,7 @@ def create_app():
 
   @app.before_request
   def check_connected():
-    if "ID" not in session and request.endpoint != 'login':
+    if "ID" not in session and request.endpoint not in ["auth.login", "static"]:
       return redirect(url_for("auth.login"))
 
   return socketio, app
