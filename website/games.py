@@ -41,7 +41,8 @@ games_config = {
     "background": "7.jpg",
     "theme_colors": ["#6b017f","#c470d4"],
     "prize": 2500,
-    "bonus": 500
+    "bonus": 500,
+    "quiz_prize": 30
   }
 }
 
