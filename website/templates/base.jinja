@@ -44,11 +44,11 @@
   </div>
     {% endif %}
   {% endfor %}
-  {% for message in player.messages_to_show %}
+  {% for message_id, message in player.messages_to_show %}
    <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
      <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
      <div class="w3-center">{{ message }}</div>
-     <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+     <span onclick="this.parentElement.style.display='none'; hide_message({{message_id}});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
    </div>
   {% endfor %}
   </div>
@@ -62,12 +62,12 @@
     socket.on('connect', function() {
         socket.emit('give_identity', '{{ player.name }}');
     });
-    socket.on('message', function(msg) {
+    socket.on('message', function(message_id, message) {
         document.getElementById('messages').innerHTML += `
   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
-    <div class="w3-center">` + msg + `</div>
-    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+    <div class="w3-center">` + message + `</div>
+    <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
 `;
     });
@@ -102,6 +102,9 @@
         prev.parentNode.classList.remove('checked');
       obj.parentNode.classList.add('checked');
       prev = obj;
+    }
+    function hide_message(message_id) {
+      socket.emit('hide_message', {{player.ID}}, message_id);
     }
     function disableBack() { window.history.forward(); }
     setTimeout("disableBack()", 0);

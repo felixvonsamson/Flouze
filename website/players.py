@@ -56,9 +56,9 @@ class Player(object):
     socketio = player.engine.socketio
     now = datetime.datetime.now()
     timeout = datetime.timedelta(seconds=timeout)
-    player.messages.append((now, now + timeout, message))
+    player.messages.append([now, now + timeout, message])
     if emit:
-      player.emit("message", message)
+      player.emit("message", (len(player.messages) - 1, message))
   
   @property
   def message(player):
@@ -71,7 +71,9 @@ class Player(object):
   @property
   def messages_to_show(player):
     now = datetime.datetime.now()
-    return [message for _, limit, message in player.messages if now <= limit]
+    return [(message_id, message) 
+      for message_id, (_, limit, message) in enumerate(player.messages) 
+      if now <= limit]
 
 
   def send_money(player, receiver, amount):

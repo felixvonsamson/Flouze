@@ -1,4 +1,5 @@
 import os.path
+import datetime
 from flask import Flask
 from flask import redirect, url_for
 from flask import request, session
@@ -29,6 +30,10 @@ def create_app():
       engine.admin_sid = request.sid
     else:
       engine.players_by_name[name].sid = request.sid
+  
+  @socketio.on("hide_message")
+  def hide_message(player_id, message_id):
+    engine.players[player_id].messages[message_id][1] = datetime.datetime.now()
 
   from .auth import auth
   from .views import views
