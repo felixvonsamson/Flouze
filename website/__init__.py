@@ -34,13 +34,14 @@ def create_app():
   from .views import views
   from .monitoring import monitoring
 
+  app.register_blueprint(auth, url_prefix="/")
   app.register_blueprint(views, url_prefix="/")
   app.register_blueprint(monitoring, url_prefix="/")
-  app.register_blueprint(auth, url_prefix="/")
-
+  
   @app.before_request
   def check_connected():
-    if "ID" not in session and request.endpoint not in ["auth.login", "static"]:
+    if "ID" not in session \
+       and request.endpoint not in ["auth.login", "static"]:
       return redirect(url_for("auth.login"))
 
   return socketio, app

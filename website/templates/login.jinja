@@ -3,7 +3,6 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="prefetch" href="{{ url_for("static", filename="images/coin.png") }}" as ="image">
     <link rel="prefetch" href="{{ url_for("static", filename="images/6.jpg") }}" as ="image">
     <link rel="prefetch" href="{{ url_for("static", filename="images/7.jpg") }}" as ="image">
     <link rel="prefetch" href="{{ url_for("static", filename="images/8.jpg") }}" as ="image">
@@ -16,6 +15,7 @@
     <link rel="prefetch" href="{{ url_for("static", filename="animations/Jeu5.sozi.html") }}" as ="document">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
     <link rel="stylesheet" href="{{ url_for("static", filename="flouze.css") }}" type="text/css">
+    <link rel = "icon" href ="{{ url_for('static', filename="images/coin.png") }}" type="image/x-icon">
     <style>
     body {
       background-image: url({{ url_for("static", filename="images/2.jpg") }});
