@@ -518,6 +518,6 @@ class Game5(Game):
   def end(game):
     for player in game.engine.players:
       player.message += Markup(
-        f"<br>Vous repartez donc avec {player.flouze} {icons['coin']}, "\
-        f"ce qui correspond à {player.flouze / 10} €.")
+        f"<br>Vous repartez donc avec {player.flouze} {icons['coin']}, ce qui "\
+        f"correspond à {str(player.flouze / 10).rstrip('0').rstrip('.')} €.")
     game.engine.iterator = len(pages) - 1
