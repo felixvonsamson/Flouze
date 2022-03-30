@@ -77,7 +77,7 @@
         <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
         <p><button name="page" type="submit" class="w3-button w3-red w3-margin" value="precedant">Page précedante</button>
           <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant">Page suivante</button></p>
-        {% if engine.current_stage == (5, 1) and engine.current_page["phase"] == "proposition" %}
+        {% if engine.current_stage[0] == 5 and engine.current_stage[1] %}
           {% for (_, (question, correct_answer)), player, answer, decision in zip(game.quiz, game.other_players, game.answers, game.is_answer_correct) %}
             {% if answer and decision == None %}
           {{question}}<br>

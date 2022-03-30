@@ -60,8 +60,7 @@ def home():
         updates = [("flouze", player.flouze)]
         player.engine.update_fields(updates, [player])
         player.send_message(
-          f'Félicitation ! Vous remportez {quiz_prize} {icons["coin"]} pour '\
-          f'la question {question} !')
+          f"Félicitation ! Vous remportez {quiz_prize} {icons['coin']} !")
     engine.save_data()
   
   return render_template("monitoring.jinja", engine=engine, zip=zip)

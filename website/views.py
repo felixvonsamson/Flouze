@@ -194,11 +194,11 @@ def home():
           if amount == "":
             flash_error("Veuiller indiquer un montant pour tous les joueurs !")
             return render_template_ctx("Jeu5-proposition.jinja")
+          amount = int(amount)
           if amount + other_player.flouze < 0:
             flash_error(f"{other_player.name} ne peut pas accepter votre "\
                          "proposition car il n'a pas assez d'argent !")
             return render_template_ctx("Jeu5-proposition.jinja")
-          amount = int(amount)
           total += amount
         if total > player.flouze:
           flash_error(
@@ -223,7 +223,7 @@ def home():
         engine.save_data()
       
       elif request.form["jeu5"] == "nouvelle_proposition":
-        engine.next_page()
+        engine.next_page(refresh=False)
         engine.save_data()
 
   if engine.current_page["url"] == "Jeu 5":

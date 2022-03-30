@@ -72,7 +72,7 @@ class gameEngine(object):
       f"(jeu {stage[0]}, manche {stage[1]})")
     engine.force_refresh()
   
-  def next_page(engine):
+  def next_page(engine, refresh=True):
     engine.iterator += 1
     stage = engine.current_stage
     page = engine.current_page
@@ -91,7 +91,8 @@ class gameEngine(object):
        or page["url"] == "Jeu 5" and page["phase"] == "reveal":
       engine.games[current_game_nb].logic()
 
-    engine.force_refresh()
+    if refresh:
+      engine.force_refresh()
 
   def refresh_monitoring(engine):
     if engine.admin_sid:
