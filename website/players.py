@@ -13,7 +13,6 @@ class Player(object):
     player.color = main_color
     player.sec_color = sec_color
     player.flouze = 0
-    player.saved_flouze = None
     # Dans le jeu 3 l'argent est mis de coté
     player.saved_flouze = 0
     player.stars = 0

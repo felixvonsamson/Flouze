@@ -459,7 +459,6 @@ class Game5(Game):
   @property
   def current_answer(game):
     return game.answers[game.question_id]
-
   @current_answer.setter
   def current_answer(game, answer):
     game.answers[game.question_id] = answer

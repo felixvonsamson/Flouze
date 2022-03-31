@@ -70,6 +70,7 @@
     <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
 `;
+        document.getElementById('history_list').innerHTML += message + '<br>';
     });
     socket.on('waiting_count', function(count) {
         document.getElementById('count').innerHTML = count;
