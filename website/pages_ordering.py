@@ -1,5 +1,6 @@
 # Liste des pages a afficher dans l'ordre, stage est de la forme (jeu, manche)
 pages = [
+  { "url": "choix_couleurs.jinja", "stage": (0, 0), "heading":None}, 
   { "url": "title.jinja",          "stage": (1, 0), "heading":"dons"}, 
   { "url": "Jeu1-choix.jinja",     "stage": (1, 1), "heading":"dons" }, 
   { "url": "results.jinja",        "stage": (1, 1), "heading":"dons" }, 

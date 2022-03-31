@@ -4,14 +4,14 @@ from flask import Markup, flash
 from .html_icons import icons
 
 class Player(object):
-  def __init__(player, ID, name, password, main_color, sec_color, engine):
+  def __init__(player, ID, name, password, engine):
     player.engine = engine
     player.ID = ID
     player.sid = None
     player.name = name
     player.password = password
-    player.color = main_color
-    player.sec_color = sec_color
+    player.color = "#ffffff"
+    player.sec_color = "#ffffff"
     player.flouze = 0
     # Dans le jeu 3 l'argent est mis de coté
     player.saved_flouze = 0

@@ -6,6 +6,13 @@ from flask import Markup
 from .html_icons import icons
 from .pages_ordering import pages
 
+colors = [
+  {"id":"bleu",  "primary":"#6d9eeb", "secondary":"#3c78d8"},
+  {"id":"rouge", "primary":"#e06666", "secondary":"#cc0000"},
+  {"id":"jaune", "primary":"#ffd966", "secondary":"#bf9000"},
+  {"id":"vert",  "primary":"#93c47d", "secondary":"#6aa84f"},
+  {"id":"violet","primary":"#8e7cc3", "secondary":"#674ea7"}
+]
 
 games_config = {
   "game1": {

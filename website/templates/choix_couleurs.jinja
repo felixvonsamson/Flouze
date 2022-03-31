@@ -1,0 +1,11 @@
+{% extends "base.jinja" %}
+{% block title %}Couleurs{% endblock %}
+{% block content%}
+
+<form method="GET" class="w3-center">
+{% for color in game.colors %}
+    <button type="submit" name="couleurs" value={{color["id"]}} class="w3-padding w3-round-large" style="background-color:{{ color["primary"] }}; border:4px solid {{ color["secondary"] }}">{% if False %}{% endif %}</button>
+{% endfor %}
+</form>
+
+{% endblock %}

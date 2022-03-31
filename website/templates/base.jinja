@@ -41,7 +41,7 @@
 
 <!--Donation button-->
 {% block donation_button %}
-{% if page["heading"] == "dons" %}
+{% if page["heading"] == "dons" and player.flouze > 0 %}
 <form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
 <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">Faire un don</button>
 </form>
