@@ -7,11 +7,11 @@ from .html_icons import icons
 from .pages_ordering import pages
 
 colors = [
-  {"id":"bleu",  "primary":"#6d9eeb", "secondary":"#3c78d8"},
-  {"id":"rouge", "primary":"#e06666", "secondary":"#cc0000"},
-  {"id":"jaune", "primary":"#ffd966", "secondary":"#bf9000"},
-  {"id":"vert",  "primary":"#93c47d", "secondary":"#6aa84f"},
-  {"id":"violet","primary":"#8e7cc3", "secondary":"#674ea7"}
+  {"id":0, "name":"bleu",  "primary":"#6d9eeb", "secondary":"#3c78d8"},
+  {"id":1, "name":"rouge", "primary":"#e06666", "secondary":"#cc0000"},
+  {"id":2, "name":"jaune", "primary":"#ffd966", "secondary":"#bf9000"},
+  {"id":3, "name":"vert",  "primary":"#93c47d", "secondary":"#6aa84f"},
+  {"id":4, "name":"violet","primary":"#8e7cc3", "secondary":"#674ea7"}
 ]
 
 games_config = {
@@ -176,6 +176,7 @@ class Game1(Game):
     super().__init__(engine)
     game.game_nb = 1
     game.config = games_config["game1"]
+    game.colors = colors
     
 
   def logic(game):

@@ -99,6 +99,28 @@ def home():
   render_template_ctx = partial(render_template, engine=engine, player=player)
   game = engine.current_game
   if request.method == "POST":
+
+    if "couleurs" in request.form:
+      color_id = int(request.form.get("couleurs"))
+      if "player" in game.colors[color_id] :
+        if game.colors[color_id]["player"] == player :
+          flash_error("Vous avez déjà selectioné cette couleur.")
+        else:
+          flash_error("Cette couleur n'est plus disponible.")
+      else:
+        if player.color != "#ffffff":
+          for color in game.colors:
+            if "player" in color:
+              if color["player"] == player:
+                color.pop("player")
+        game.colors[color_id]["player"] = player
+        player.color = game.colors[color_id]["primary"]
+        player.sec_color = game.colors[color_id]["secondary"]
+        engine.log(f"{player.name} a choisis la couleur "\
+                   f"{game.colors[color_id]['name']}.")
+        player.flash_message("Vous avez choisis la couleur "\
+                            f"{game.colors[color_id]['name']}.")
+
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):
         return redirect(url_for("views.home"))

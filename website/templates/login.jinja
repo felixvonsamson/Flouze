@@ -1,44 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="prefetch" href="{{ url_for("static", filename="images/6.jpg") }}" as ="image">
-    <link rel="prefetch" href="{{ url_for("static", filename="images/7.jpg") }}" as ="image">
-    <link rel="prefetch" href="{{ url_for("static", filename="images/8.jpg") }}" as ="image">
-    <link rel="prefetch" href="{{ url_for("static", filename="images/9.jpg") }}" as ="image">
-    <link rel="prefetch" href="{{ url_for("static", filename="images/10.jpg") }}" as ="image">
-    <link rel="prefetch" href="{{ url_for("static", filename="animations/Jeu1.sozi.html") }}" as ="document">
-    <link rel="prefetch" href="{{ url_for("static", filename="animations/Jeu2.sozi.html") }}" as ="document">
-    <link rel="prefetch" href="{{ url_for("static", filename="animations/Jeu3.sozi.html") }}" as ="document">
-    <link rel="prefetch" href="{{ url_for("static", filename="animations/Jeu4.sozi.html") }}" as ="document">
-    <link rel="prefetch" href="{{ url_for("static", filename="animations/Jeu5.sozi.html") }}" as ="document">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
-    <link rel="stylesheet" href="{{ url_for("static", filename="flouze.css") }}" type="text/css">
-    <link rel = "icon" href ="{{ url_for('static', filename="images/coin.png") }}" type="image/x-icon">
-    <style>
-    body {
-      background-image: url({{ url_for("static", filename="images/2.jpg") }});
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-    }
-    </style>
-    <title>Home</title>
-  </head>
-
-<body>
-<div id="messages" style="position:absolute; bottom:5px; display:flex; flex-direction: column; align-items:center; width:100%; font-size:16px;">
-{% with messages = get_flashed_messages(with_categories=true) %} {% if
- messages %} {% for category, message in messages %}
-  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-    <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
-    <div class="w3-center">{{ message }}</div>
-    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-  </div>
- {% endfor %} {% endif %} {% endwith %}
-</div>
-
+{% extends "base_login.jinja" %}
+{% block title %}Login{% endblock %}
+{% block content %}
 
 <div class="w3-card-4 w3-display-middle w3-white" style="width:300px;">
     <div class="w3-container w3-green w3-center w3-xlarge w3-padding">
@@ -57,3 +19,5 @@
   </div>
 </body>
 </html>
+
+{% endblock %}
