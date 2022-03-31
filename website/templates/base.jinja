@@ -1,5 +1,6 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
+{% set page = engine.current_page %}
 
 <!DOCTYPE html>
 <html>
@@ -17,41 +18,75 @@
   </head>
 
 <body style="background-image: url({{ url_for("static", filename="images/" + config["background"]) }}); min-height: 100vh; display:flex; flex-direction:column; justify-content:flex-start;">
-  <div class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
-    <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
+
+<!--Top bar with money-->
+<div class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
+  <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
+</div>
+
+<!--Saved Flouze for game 3-->
+{% if player.saved_flouze %}
+<div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)</div>
+<div style="height:28px">*</div>
+{% endif %}
+
+<!--Stars Table-->
+{% if page["heading"] in ["dons", "etoiles"] %}
+<div class="w3-display-topleft" style="width:115px">
+  {% for player_it in engine.players %}
+    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player_it.color }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!--Donation button-->
+{% if page["heading"] == "dons" %}
+<form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
+<button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">Faire un don</button>
+</form>
+{% endif %}
+
+<!--History button-->
+<button onclick="document.getElementById('history').style.display='block'" class="w3-button w3-circle medium w3-text-white" style="border:2px solid #fff; background-color:{{ config["theme_colors"][0] }}"><i class="fa fa-history" style="position:relative; top:1px;"></i></button>
+<div id="history" class="w3-modal">
+  <div class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
+    <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright w3-xlarge" style="padding:1px 16px;">&times;</span>
+    {% for time, _, msg in player.messages %}
+    {{time.strftime('%H:%M : ') + msg}}<br>
+    {% endfor %}
   </div>
-  {% if player.saved_flouze %}
-  <div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)</div>
-  <div style="height:28px">*</div>
-  {% endif %}
-  {% block etoiles_header %} {% endblock %}
+</div>
+
 <div style="width: 100%; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; flex-grow: 1">
 {% block content %} {% endblock %}
 </div>
-  <div id="messages" class="toast">
-  {% for category, message in get_flashed_messages(with_categories=true) %}
-    {% if category == "error" %}
-    <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-      <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
-      <div class="w3-center">{{ message }}</div>
-      <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-    </div>
-    {% else %}
+
+
+<div id="messages" class="toast">
+{% for category, message in get_flashed_messages(with_categories=true) %}
+  {% if category == "error" %}
+  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
+    <div class="w3-center">{{ message }}</div>
+    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+  </div>
+  {% else %}
+<div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+  <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+  <div class="w3-center">{{ message }}</div>
+  <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+</div>
+  {% endif %}
+{% endfor %}
+
+{% for message_id, message in player.messages_to_show %}
   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
-    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+    <span onclick="this.parentElement.style.display='none'; hide_message({{message_id}});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
-    {% endif %}
-  {% endfor %}
-  {% for message_id, message in player.messages_to_show %}
-   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
-     <div class="w3-center">{{ message }}</div>
-     <span onclick="this.parentElement.style.display='none'; hide_message({{message_id}});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-   </div>
-  {% endfor %}
-  </div>
+{% endfor %}
+</div>
 
  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
   <script type="text/javascript" charset="utf-8">
