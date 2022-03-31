@@ -108,18 +108,7 @@ def home():
         else:
           flash_error("Cette couleur n'est plus disponible.")
       else:
-        if player.color != "#ffffff":
-          for color in game.colors:
-            if "player" in color:
-              if color["player"] == player:
-                color.pop("player")
-        game.colors[color_id]["player"] = player
-        player.color = game.colors[color_id]["primary"]
-        player.sec_color = game.colors[color_id]["secondary"]
-        engine.log(f"{player.name} a choisis la couleur "\
-                   f"{game.colors[color_id]['name']}.")
-        player.flash_message("Vous avez choisis la couleur "\
-                            f"{game.colors[color_id]['name']}.")
+        player.color = color_id
 
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):

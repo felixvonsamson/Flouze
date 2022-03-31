@@ -11,13 +11,13 @@
 </header>
 <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
   {% for player in other_players %}
-  <div class="w3-card w3-padding" style="background-color:{{ player.color }}; width:140px">
+  <div class="w3-card w3-padding" style="background-color:{{ player.color["primary"] }}; width:140px">
     <h4><b>{{ player.name }}</b></h4>
     <input id=proposition{{ loop.index0 }} onchange="update_rest()" class="w3-input w3-border w3-round-large w3-center w3-large" placeholder="Montant" name={{ player.name }} type="number" style="width:110px;">
   </div>
   {% endfor %}
 </div>
-<div class="w3-card w3-margin w3-padding-small w3-large" style="background-color:{{ game.master.color }}">
+<div class="w3-card w3-margin w3-padding-small w3-large" style="background-color:{{ game.master.color["primary"] }}">
 Il vous restera <span id="rest"></span> <img src="/static/images/coin.png" class="coin-small" alt="Coin"><br>
 </div>
 <button type="submit" name="jeu5" value="proposition" class="w3-button w3-margin-bottom w3-text-white w3-large" style="background-color:{{ config["theme_colors"][0] }}">Faire une proposition</button>

@@ -34,14 +34,14 @@
 {% if page["heading"] in ["dons", "etoiles"] %}
 <div class="w3-display-topleft" style="width:115px">
   {% for player_it in engine.players %}
-    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player_it.color }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
+    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player_it.color["primary"] }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
   {% endfor %}
 </div>
 {% endif %}
 
 <!--Donation button-->
 {% block donation_button %}
-{% if page["heading"] == "dons" and player.flouze > 0 %}
+{% if page["heading"] == "dons" %}
 <form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
 <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">Faire un don</button>
 </form>
@@ -49,7 +49,7 @@
 {% endblock %}
 
 <!--History button-->
-<button onclick="document.getElementById('history').style.display='block'" class="w3-button w3-circle medium w3-text-white" style="border:2px solid #fff; background-color:{{ config["theme_colors"][0] }}"><i class="fa fa-history" style="position:relative; top:1px;"></i></button>
+<button onclick="document.getElementById('history').style.display='block'" class="w3-button w3-circle medium w3-text-white" style="position:absolute; top:60px; right:10px; border:2px solid #fff; background-color:{{ config["theme_colors"][0] }}"><i class="fa fa-history" style="position:relative; top:1px;"></i></button>
 <div id="history" class="w3-modal">
   <div id="history_list" class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
     <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright w3-xlarge" style="padding:1px 16px;">&times;</span>

@@ -170,13 +170,21 @@ class Game(ABC):
       updates = [("count", f"{len(waiting_players) - 1} / 4")]
     game.engine.update_fields(updates, waiting_players)
 
+class Colors(Game):
+  def __init__(game, engine):
+    super().__init__(engine)
+    game.game_nb = 0
+    game.colors = colors
+  
+  def logic(game):
+    pass
+  
 
 class Game1(Game):
   def __init__(game, engine):
     super().__init__(engine)
     game.game_nb = 1
     game.config = games_config["game1"]
-    game.colors = colors
     
 
   def logic(game):

@@ -5,7 +5,7 @@ from flask import Markup
 
 from .players import Player
 
-from .games import Game1, Game2, Game3, Game4, Game5
+from .games import Colors, Game1, Game2, Game3, Game4, Game5
 from .pages_ordering import pages
 from .html_icons import icons
 
@@ -26,6 +26,7 @@ class gameEngine(object):
     engine.players_by_name = { p.name: p for p in engine.players }
 
     engine.games = {
+      0: Colors(engine),
       1: Game1(engine),
       2: Game2(engine),
       3: Game3(engine),
@@ -48,12 +49,12 @@ class gameEngine(object):
   
   @property
   def current_game_nb(engine):
-    assert (engine.current_stage[0] in [1, 2, 3, 4, 5])
+    assert (engine.current_stage[0] in [0, 1, 2, 3, 4, 5])
     return engine.current_stage[0]
   
   @property
   def current_game(engine):
-    assert (engine.current_stage[0] in [1, 2, 3, 4, 5])
+    assert (engine.current_stage[0] in [0, 1, 2, 3, 4, 5])
     return engine.games[engine.current_stage[0]]
 
   def passive_previous_page(engine):
@@ -83,9 +84,9 @@ class gameEngine(object):
     current_game_nb, current_round_nb = engine.current_stage
     if engine.current_stage == (3, 0):
       engine.games[3].start()
-    if engine.current_stage == (4, 0):
+    elif engine.current_stage == (4, 0):
       engine.games[3].end()
-    if current_game_nb == 5 and page["url"] == "results.jinja":
+    elif current_game_nb == 5 and page["url"] == "results.jinja":
       engine.games[5].set_master()
     if page["url"] == "results.jinja"  and current_round_nb \
        or page["url"] == "Jeu 5" and page["phase"] == "reveal":
@@ -99,6 +100,7 @@ class gameEngine(object):
       engine.socketio.emit("refresh", None, room=engine.admin_sid)
   
   def force_refresh(engine):
+    print("\n\nrefresh2\n\n")
     engine.socketio.emit("refresh", None, broadcast=True)
 
   def update_fields(engine, updates, players=None):

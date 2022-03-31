@@ -10,13 +10,11 @@ class Player(object):
     player.sid = None
     player.name = name
     player.password = password
-    player.color = "#ffffff"
-    player.sec_color = "#ffffff"
+    player.__color = None
     player.flouze = 0
     # Dans le jeu 3 l'argent est mis de coté
     player.saved_flouze = 0
     player.stars = 0
-
     player.last_profit = 0
     player.__message = None
     player.messages = []
@@ -40,6 +38,23 @@ class Player(object):
     else:
       player.engine.next_page()
     player.engine.refresh_monitoring()
+
+  @property
+  def color(player):
+    return player.__color
+  @color.setter
+  def color(player, color_id):
+    current_game = player.engine.current_game
+    if player.color != None:
+      current_game.colors[player.color["id"]].pop("player")
+    player.__color = current_game.colors[color_id]
+    current_game.colors[color_id]["player"] = player
+    current_game.engine.log(f"{player.name} a choisis la couleur "\
+                f"{player.__color['name']}.")
+    player.flash_message("Vous avez choisis la couleur "\
+                        f"{player.__color['name']}.")
+    player.is_done = True
+    current_game.engine.force_refresh()
 
   def emit(player, *args):
     if player.sid:

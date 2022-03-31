@@ -12,9 +12,9 @@
   </header>
   <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
     {% for other_player in other_players %}
-    <div class="w3-card medium w3-padding w3-half" style="width:150px; height:150px; background-color:{{ other_player.color }};">
+    <div class="w3-card medium w3-padding w3-half" style="width:150px; height:150px; background-color:{{ other_player.color["primary"] }};">
       <h4><b>{{ other_player.name }}</b></h4>
-      <div class="w3-padding-small w3-text-white " style="background-color:{{ other_player.sec_color }};">{{ proposition[loop.index0] }}</div>
+      <div class="w3-padding-small w3-text-white " style="background-color:{{ other_player.color["secondary"] }};">{{ proposition[loop.index0] }}</div>
       {% if other_player.choice == 0 %}
       <div class="w3-padding-small w3-white w3-text-red">Refusé</div>
       {% else %}
