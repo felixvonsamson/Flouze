@@ -16,7 +16,7 @@ def init_engine():
 
 def create_app():
   app = Flask(__name__)
-  app.config["SECRET_KEY"] = "hjshjhdjah kjshkjdhjs"
+  app.config["SECRET_KEY"] = "BxclfIEmzsq8HTqvFnyW"
 
   global engine
   engine = gameEngine.load_data() if os.path.isfile("data.pck")  \

@@ -9,7 +9,7 @@
 </div>
 
 <div id="history" class="w3-modal">
-  <div class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
+  <div id="history_list" class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
     <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright w3-xlarge" style="padding:1px 16px;">&times;</span>
     {% for time, _, msg in player.messages %}
     {{time.strftime('%H:%M : ') + msg}}<br>

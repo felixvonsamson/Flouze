@@ -1,2 +1,4 @@
 data.pck
 *.pyc
+*.pem
+.DS_Store
