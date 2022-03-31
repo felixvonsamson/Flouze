@@ -1,6 +1,6 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% else %} {% extends "base+etoiles.jinja" %} {% endif %}
+{% extends "base.jinja" %}
 {% block title %}Flouze - Jeu {{game.game_nb}}{% endblock %}
 {% block content %}
 

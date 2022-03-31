@@ -1,5 +1,5 @@
 {% set game = engine.current_game %}
-{% if game.game_nb != 5 %} {% extends "base+don.jinja" %} {% else %} {% extends "base+etoiles.jinja" %} {% endif %}
+{% extends "base.jinja" %}
 {% block title %}Résultats{% endblock %}
 {% block content %}
 
