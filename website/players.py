@@ -84,31 +84,23 @@ class Player(object):
 
   def send_money(player, receiver, amount):
     assert (player.flouze >= amount)
-
     player.flouze -= amount
     receiver.flouze += amount
-
     player.engine.log(
       f"{player.name} a fait un don de {amount} Pièces à {receiver.name}.")
-
     updates = [("flouze", receiver.flouze)]
     player.engine.update_fields(updates, [receiver])
-
     player.flash_message(
       f"Vous avez envoyé {amount} {icons['coin']}&nbsp; à {receiver.name}.")
-    
     receiver.send_message(
       f"Vous avez reçu {amount} {icons['coin']}&nbsp; "\
       f"de la part de {player.name}.")
-
     player.engine.save_data()
 
   def request_money(player, recipient, inv_amount):
     amount = -inv_amount
-
     player.engine.log(
       f"{player.name} réclame {amount} Pièces de la part de {recipient.name}.")
-    
     recipient.send_message(
       f"{player.name} vous réclame {amount} {icons['coin']}.<br> ", 
       timeout=1000, request=True)
@@ -116,25 +108,19 @@ class Player(object):
 
   def send_stars(player, receiver, sent_stars):
     assert (player.stars >= sent_stars)
-
     player.stars -= sent_stars
     receiver.stars += sent_stars
-
     player.engine.log(
       f"{player.name} a légué {sent_stars} "\
       f"étoile({'s' if sent_stars > 1 else ''}) à {receiver.name}.")
-
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
-           (f"player{receiver.ID}_star", f" {receiver.stars}")]
+               (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)
-
     player.flash_message(
       f"Vous avez envoyé {sent_stars} {icons['star']} à {receiver.name}.")
-
     receiver.send_message(
       f"Vous avez reçu {sent_stars} {icons['star']}"\
       f"de la part de {player.name}.")
-
     player.engine.save_data()
 
 

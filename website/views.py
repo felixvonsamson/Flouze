@@ -21,6 +21,8 @@ def donner_flouze():
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST":
+    if not engine.use_nonce(request.form.get("envoyer")):
+      return redirect(url_for("views.home"))
     receiver_level = request.form.get("destinataire")
     if receiver_level == None:
       flash_error("Veuillez choisir un destinataire !")
@@ -55,11 +57,12 @@ def partager_profit():
         amount = 0 if amount == "" else int(amount)
         if amount > 0:
           flash_error("Si vous vouler donner de l'argent veuillez utiliser "\
-                      "le boutton 'faire un don'.")
+                      "le boutton 'faire un don'...")
           return render_template_ctx("partager.jinja")
         amounts.append(amount)
       if sum(amounts) < player.last_profit:
-        flash_error("Vous ne pouvez pas réclamer plus que ce que vous avez perdu !")
+        flash_error(
+          "Vous ne pouvez pas réclamer plus que ce que vous avez perdu !")
         return render_template_ctx("partager.jinja")
       player.share_profit(amounts)
       return redirect(url_for("views.home"))
@@ -73,10 +76,12 @@ def partager_profit():
           return render_template_ctx("partager.jinja")
         amounts.append(amount)
       if sum(amounts) > player.last_profit:
-        flash_error("Vous ne pouvez pas donner plus que ce que vous avez reçu !")
+        flash_error(
+          "Vous ne pouvez pas donner plus que ce que vous avez reçu !")
         return render_template_ctx("partager.jinja")
-      if sum(amounts) > player.last_profit:
-        flash_error("Vous ne pouvez pas donner plus que ce que vous avez avez !")
+      if sum(amounts) > player.flouze:
+        flash_error(
+          "Vous ne pouvez pas donner plus que ce que vous avez avez !")
         return render_template_ctx("partager.jinja")
       player.share_profit(amounts)
       return redirect(url_for("views.home"))
