@@ -18,6 +18,7 @@ class Player(object):
     player.last_profit = 0
     player.__message = None
     player.messages = []
+    player.requested_flouze = None
 
   @property
   def choice(player):
@@ -57,14 +58,13 @@ class Player(object):
     flash(Markup(message))
     player.send_message(message, timeout=-1, emit=False)
     
-  def send_message(player, message, timeout=30, emit=True):
+  def send_message(player, message, timeout=30, emit=True, request=False):
     message = Markup(message)
-    socketio = player.engine.socketio
     now = datetime.datetime.now()
     timeout = datetime.timedelta(seconds=timeout)
-    player.messages.append([now, now + timeout, message])
+    player.messages.append([now, now + timeout, message, request])
     if emit:
-      player.emit("message", (len(player.messages) - 1, message))
+      player.emit("message", (len(player.messages) - 1, message, request))
   
   @property
   def message(player):
@@ -77,8 +77,8 @@ class Player(object):
   @property
   def messages_to_show(player):
     now = datetime.datetime.now()
-    return [(message_id, message) 
-      for message_id, (_, limit, message) in enumerate(player.messages) 
+    return [(message_id, message, request) 
+      for message_id, (_, limit, message, request) in enumerate(player.messages) 
       if now <= limit]
 
 
@@ -102,6 +102,16 @@ class Player(object):
       f"de la part de {player.name}.")
 
     player.engine.save_data()
+
+  def request_money(player, recipient, inv_amount):
+    amount = -inv_amount
+
+    player.engine.log(
+      f"{player.name} réclame {amount} Pièces de la part de {recipient.name}.")
+    
+    recipient.send_message(
+      f"{player.name} réclame {amount} {icons['coin']}.<br> "\
+       "Voulez-vous lui envoyer cette somme ?", timeout=1000, request=True)
 
 
   def send_stars(player, receiver, sent_stars):
@@ -130,9 +140,11 @@ class Player(object):
 
   def share_profit(player, amounts):
     assert player.last_profit != 0
-    assert (sum(amounts) <= player.last_profit)
-    assert (sum(amounts) <= player.flouze)
     for receiver, amount in zip(player.other_players, amounts):
       if amount:
-        player.send_money(receiver, amount)
+        if player.last_profit < 0 :
+          receiver.requested_flouze = (player, amount)
+          player.request_money(receiver, amount)
+        else:
+          player.send_money(receiver, amount)
     player.last_profit = 0

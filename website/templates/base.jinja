@@ -74,20 +74,31 @@
     <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
   {% else %}
-<div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-  <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
-  <div class="w3-center">{{ message }}</div>
-  <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-</div>
+  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+    <div class="w3-center">{{ message }}</div>
+    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+  </div>
   {% endif %}
 {% endfor %}
 
-{% for message_id, message in player.messages_to_show %}
+{% for message_id, message, request in player.messages_to_show %}
+  {% if request %}
+  <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
+    <div class="w3-center">{{ message }}</div>
+    <form method="GET">
+      <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="accept" class="w3-hover-gray w3-round-large medium w3-green"><i class="fa fa-check"></i></button>
+      <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="reject" class="w3-hover-gray w3-round-large medium w3-red"><i class="fa fa-times"></i></button>
+    </form>
+  </div>
+  {% else %}
   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
+  {% endif %}
 {% endfor %}
 </div>
 
@@ -100,15 +111,28 @@
     socket.on('connect', function() {
         socket.emit('give_identity', '{{ player.name }}');
     });
-    socket.on('message', function(message_id, message) {
+    socket.on('message', function(message_id, message, request) {
+      if (request) {
         document.getElementById('messages').innerHTML += `
-  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-    <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
-    <div class="w3-center">` + message + `</div>
-    <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-  </div>
-`;
-        document.getElementById('history_list').innerHTML += message + '<br>';
+        <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+          <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
+          <div class="w3-center">{{ message }}</div>
+          <form method="GET">
+            <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="accept" class="w3-hover-gray w3-round-large medium w3-green"><i class="fa fa-check"></i></button>
+            <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="reject" class="w3-hover-gray w3-round-large medium w3-red"><i class="fa fa-times"></i></button>
+          </form>
+        </div>
+        `;
+      } else {
+        document.getElementById('messages').innerHTML += `
+        <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+          <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+          <div class="w3-center">` + message + `</div>
+          <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+        </div>
+        `;
+      }
+      document.getElementById('history_list').innerHTML += message + '<br>';
     });
     socket.on('waiting_count', function(count) {
         document.getElementById('count').innerHTML = count;
