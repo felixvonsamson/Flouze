@@ -19,6 +19,7 @@
 
 <body style="background-image: url({{ url_for("static", filename="images/" + config["background"]) }}); min-height: 100vh; display:flex; flex-direction:column; justify-content:flex-start;">
 
+{% block player_money %}
 <!--Top bar with money-->
 <div class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
   <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
@@ -29,23 +30,22 @@
 <div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)</div>
 <div style="height:28px">*</div>
 {% endif %}
+{% endblock %}
 
 <!--Stars Table-->
-{% if page["heading"] in ["dons", "etoiles"] %}
+{% block stars_table %}
 <div class="w3-display-topleft" style="width:115px">
   {% for player_it in engine.players %}
     <div class="w3-border-0 w3-padding-small" style="background-color:{{ player_it.color["primary"] }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
   {% endfor %}
 </div>
-{% endif %}
+{% endblock %}
 
 <!--Donation button-->
 {% block donation_button %}
-{% if page["heading"] == "dons" %}
 <form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
 <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">Faire un don</button>
 </form>
-{% endif %}
 {% endblock %}
 
 <!--History button-->

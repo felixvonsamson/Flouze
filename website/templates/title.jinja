@@ -2,6 +2,7 @@
 {% set config = game.config %}
 {% extends "base.jinja" %}
 {% block title %}Flouze - Jeu {{game.game_nb}}{% endblock %}
+{% block donation_button %}{% if game.game_nb == 5 %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
 
 <div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{ config["theme_colors"][1] }}">

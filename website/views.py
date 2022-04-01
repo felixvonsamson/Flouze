@@ -110,7 +110,6 @@ def home():
         else:
           flash_error("Cette couleur n'est plus disponible.")
       else:
-        game.owner[color_id] = player
         player.color = game.colors[color_id]
         game.engine.log(f"{player.name} a choisis la couleur "\
                         f"{player.color['name']}.")
@@ -118,6 +117,7 @@ def home():
                             f"{player.color['name']}.")
         player.is_done = True
         game.engine.force_refresh()
+        game.engine.save_data()
 
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):

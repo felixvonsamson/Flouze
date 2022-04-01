@@ -1,6 +1,9 @@
 {% set game = engine.current_game %}
+{% set stage = engine.current_stage %}
 {% extends "base.jinja" %}
 {% block title %}Résultats{% endblock %}
+{% block stars_table %}{% if stage[0] == 5 and stage[1] %}{% else %}{{ super() }}{% endif %}{% endblock %}
+{% block donation_button %}{% if stage[0] == 5 %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
 
 <div class="w3-panel w3-large w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding w3-margin animate__animated animate__fadeIn">

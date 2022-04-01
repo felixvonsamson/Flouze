@@ -15,28 +15,32 @@ colors = [
 ]
 
 games_config = {
+  "colors": {
+    "background": "2.jpg",
+    "theme_colors": (None, None),
+  },
   "game1": {
     "background": "10.jpg",
-    "theme_colors": ["#b65612","#dfaa84"],
+    "theme_colors": ("#b65612", "#dfaa84"),
     "prizes": [200, 400, 600],
     "3rd_round_stars": 1
   },
   "game2": {
     "background": "9.jpg",
-    "theme_colors": ["#017e68","#6ecdbc"],
+    "theme_colors": ("#017e68", "#6ecdbc"),
     "prizes": [50, 100, 150],
     "3rd_round_stars": 2
   },
   "game3": {
     "background": "8.jpg",
-    "theme_colors": ["#3f6203","#a6ca68"],
+    "theme_colors": ("#3f6203", "#a6ca68"),
     "initial_flouze": 100,
     "interests": [1.2, 1.5, 2],
     "3rd_round_stars": 2
   },
   "game4": {
     "background": "6.jpg",
-    "theme_colors": ["#024b66","#60a7c1"],
+    "theme_colors": ("#024b66", "#60a7c1"),
     "prizes": [[[150, 100, 50, 0, "star"]],
                [[250, 150, 0, -150, "star"],
                 [400, 250, 0, -250, "star"]],
@@ -46,7 +50,7 @@ games_config = {
   },
   "game5": {
     "background": "7.jpg",
-    "theme_colors": ["#6b017f","#c470d4"],
+    "theme_colors": ("#6b017f", "#c470d4"),
     "prize": 2500,
     "bonus": 500,
     "quiz_prize": 30
@@ -174,6 +178,7 @@ class Colors(Game):
   def __init__(game, engine):
     game.engine = engine
     game.game_nb = 0
+    game.config = games_config["colors"]
     game.colors = colors
     game.owner = [None]*5
     game.is_done = [[False]*5]
