@@ -48,13 +48,7 @@
   {% endif %}
 {% endfor %}
 
-{% for message_id, message in player.messages_to_show %}
-  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-    <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
-    <div class="w3-center">{{ message }}</div>
-    <span onclick="this.parentElement.style.display='none'; hide_message({{message_id}});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-  </div>
-{% endfor %}
+
 </div>
 
 <script type="text/javascript" charset="utf-8">

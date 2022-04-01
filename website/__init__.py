@@ -17,7 +17,8 @@ def init_engine():
 def create_app():
   app = Flask(__name__)
   app.config["SECRET_KEY"] = "BxclfIEmzsq8HTqvFnyW"
-
+  app.jinja_env.globals.update(zip=zip)
+  
   global engine
   engine = gameEngine.load_data() if os.path.isfile("data.pck")  \
        else init_engine()

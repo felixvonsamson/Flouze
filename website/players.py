@@ -43,18 +43,10 @@ class Player(object):
   def color(player):
     return player.__color
   @color.setter
-  def color(player, color_id):
-    current_game = player.engine.current_game
-    if player.color != None:
-      current_game.colors[player.color["id"]].pop("player")
-    player.__color = current_game.colors[color_id]
-    current_game.colors[color_id]["player"] = player
-    current_game.engine.log(f"{player.name} a choisis la couleur "\
-                f"{player.__color['name']}.")
-    player.flash_message("Vous avez choisis la couleur "\
-                        f"{player.__color['name']}.")
-    player.is_done = True
-    current_game.engine.force_refresh()
+  def color(player, color):
+    game = player.engine.current_game
+    game.owner[color["id"]] = player
+    player.__color = color
 
   def emit(player, *args):
     if player.sid:

@@ -63,4 +63,4 @@ def home():
           f"Félicitation ! Vous remportez {quiz_prize} {icons['coin']} !")
     engine.save_data()
   
-  return render_template("monitoring.jinja", engine=engine, zip=zip)
+  return render_template("monitoring.jinja", engine=engine)

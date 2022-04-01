@@ -172,9 +172,11 @@ class Game(ABC):
 
 class Colors(Game):
   def __init__(game, engine):
-    super().__init__(engine)
+    game.engine = engine
     game.game_nb = 0
     game.colors = colors
+    game.owner = [None]*5
+    game.is_done = [[False]*5]
   
   def logic(game):
     pass

@@ -101,14 +101,23 @@ def home():
   if request.method == "POST":
 
     if "couleurs" in request.form:
-      color_id = int(request.form.get("couleurs"))
-      if "player" in game.colors[color_id] :
-        if game.colors[color_id]["player"] == player :
+      color_id = request.form.get("couleurs")
+      assert color_id in map(str, range(5))
+      color_id = int(color_id)
+      if game.owner[color_id] :
+        if game.owner[color_id] == player :
           flash_error("Vous avez déjà selectioné cette couleur.")
         else:
           flash_error("Cette couleur n'est plus disponible.")
       else:
-        player.color = color_id
+        game.owner[color_id] = player
+        player.color = game.colors[color_id]
+        game.engine.log(f"{player.name} a choisis la couleur "\
+                        f"{player.color['name']}.")
+        player.flash_message("Vous avez choisis la couleur "\
+                            f"{player.color['name']}.")
+        player.is_done = True
+        game.engine.force_refresh()
 
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):

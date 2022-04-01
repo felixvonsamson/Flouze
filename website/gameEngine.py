@@ -25,14 +25,14 @@ class gameEngine(object):
       player.other_players.pop(i)
     engine.players_by_name = { p.name: p for p in engine.players }
 
-    engine.games = {
-      0: Colors(engine),
-      1: Game1(engine),
-      2: Game2(engine),
-      3: Game3(engine),
-      4: Game4(engine),
-      5: Game5(engine)
-    }
+    engine.games = [
+      Colors(engine),
+      Game1(engine),
+      Game2(engine),
+      Game3(engine),
+      Game4(engine),
+      Game5(engine)
+    ]
 
     # pointeur pour indiquer sur quelle page on est (l'array 'pages')
     engine.iterator = 0
@@ -49,12 +49,12 @@ class gameEngine(object):
   
   @property
   def current_game_nb(engine):
-    assert (engine.current_stage[0] in [0, 1, 2, 3, 4, 5])
+    assert (engine.current_stage[0] in range(6))
     return engine.current_stage[0]
   
   @property
   def current_game(engine):
-    assert (engine.current_stage[0] in [0, 1, 2, 3, 4, 5])
+    assert (engine.current_stage[0] in range(6))
     return engine.games[engine.current_stage[0]]
 
   def passive_previous_page(engine):
