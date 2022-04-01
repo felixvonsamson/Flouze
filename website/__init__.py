@@ -6,6 +6,7 @@ from flask import request, session
 from flask_socketio import SocketIO
 
 from website.gameEngine import gameEngine
+from website.players import Player
 
 def init_engine():
   with open("players.txt", "r") as file:
@@ -26,15 +27,25 @@ def create_app():
   socketio = SocketIO(app)
   engine.socketio = socketio
   @socketio.on("give_identity")
-  def give_identity(name):
-    if name == "admin":
+  def give_identity():
+    if session["ID"] == "admin":
       engine.admin_sid = request.sid
     else:
-      engine.players_by_name[name].sid = request.sid
-  
+      player = engine.players[int(session["ID"])]
+      player.sid = request.sid
   @socketio.on("hide_message")
-  def hide_message(player_id, message_id):
-    engine.players[player_id].messages[message_id][1] = datetime.datetime.now()
+  def hide_message(message_id):
+    player = engine.players[int(session["ID"])]
+    player.messages[message_id][1] = datetime.datetime.now()
+  @socketio.on("answer_flouze_request")
+  def accept_flouze_request(message_id, accept):
+    player = engine.players[int(session["ID"])]
+    requester, amount = player.requested_flouze
+    if accept: 
+      player.send_money(requester, amount)
+    else:
+      requester.send_message(f"Votre demande à été refusée par {player.name}.")
+    player.requested_flouze = None
 
   from .auth import auth
   from .views import views

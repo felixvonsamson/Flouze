@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 from flask import Markup, flash
 
 from .html_icons import icons
@@ -18,7 +18,7 @@ class Player(object):
     player.last_profit = 0
     player.__message = None
     player.messages = []
-    player.requested_flouze = None
+    player.flouze_request = None
 
   @property
   def choice(player):
@@ -57,14 +57,21 @@ class Player(object):
   def flash_message(player, message):
     flash(Markup(message))
     player.send_message(message, timeout=-1, emit=False)
-    
+
+  def send_request(player, message, timeout=600):
+    message = Markup(message)
+    now = datetime.now()
+    timeout = timedelta(seconds=timeout)
+    player.messages.append([now, now + timeout, True, message])
+    player.emit("request", (len(player.messages) - 1, message))
+  
   def send_message(player, message, timeout=30, emit=True, request=False):
     message = Markup(message)
-    now = datetime.datetime.now()
-    timeout = datetime.timedelta(seconds=timeout)
-    player.messages.append([now, now + timeout, message, request])
+    now = datetime.now()
+    timeout = timedelta(seconds=timeout)
+    player.messages.append([now, now + timeout, False, message])
     if emit:
-      player.emit("message", (len(player.messages) - 1, message, request))
+      player.emit("message", (len(player.messages) - 1, message))
   
   @property
   def message(player):
@@ -77,8 +84,8 @@ class Player(object):
   @property
   def messages_to_show(player):
     now = datetime.datetime.now()
-    return [(message_id, message, request) 
-      for message_id, (_, limit, message, request) in enumerate(player.messages) 
+    return [(is_request, msg_id, message) 
+      for msg_id, (_, limit, is_request, message) in enumerate(player.messages) 
       if now <= limit]
 
 
@@ -97,13 +104,12 @@ class Player(object):
       f"de la part de {player.name}.")
     player.engine.save_data()
 
-  def request_money(player, recipient, inv_amount):
-    amount = -inv_amount
+  def request_money(player, receiver, amount):
+    receiver.flouze_request = (player, amount)
     player.engine.log(
-      f"{player.name} réclame {amount} Pièces de la part de {recipient.name}.")
-    recipient.send_message(
-      f"{player.name} vous réclame {amount} {icons['coin']}.<br> ", 
-      timeout=1000, request=True)
+      f"{player.name} réclame {amount} Pièces de la part de {receiver.name}.")
+    receiver.send_request(
+      f"{player.name} vous réclame {amount} {icons['coin']}.<br> ")
 
 
   def send_stars(player, receiver, sent_stars):
@@ -129,8 +135,7 @@ class Player(object):
     for receiver, amount in zip(player.other_players, amounts):
       if amount:
         if player.last_profit < 0 :
-          receiver.requested_flouze = (player, -amount)
-          player.request_money(receiver, amount)
+          player.request_money(receiver, -amount)
         else:
           player.send_money(receiver, amount)
     player.last_profit = 0

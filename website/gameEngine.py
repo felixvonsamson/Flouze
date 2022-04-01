@@ -25,7 +25,6 @@ class gameEngine(object):
     for i, player in enumerate(engine.players):
       player.other_players = engine.players.copy()
       player.other_players.pop(i)
-    engine.players_by_name = { p.name: p for p in engine.players }
 
     engine.games = [
       Colors(engine),
@@ -38,7 +37,7 @@ class gameEngine(object):
 
     # pointeur pour indiquer sur quelle page on est (l'array 'pages')
     engine.iterator = 0
-
+    
     engine.log("LE JEU A COMMENCÉ !")
 
   def get_nonce(engine):
