@@ -110,7 +110,6 @@ class gameEngine(object):
       engine.force_refresh()
 
   def refresh_monitoring(engine):
-    print(f"\n\n{engine.admin_sid}\n\n")
     if engine.admin_sid:
       engine.socketio.emit("refresh", None, room=engine.admin_sid)
   
