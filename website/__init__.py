@@ -1,5 +1,6 @@
 import os.path
 import datetime
+from turtle import update
 from flask import Flask
 from flask import redirect, url_for
 from flask import request, session
@@ -43,7 +44,8 @@ def create_app():
     if accept: 
       player.send_money(requester, amount)
     else:
-      requester.send_message(f"Votre demande à été refusée par {player.name}.")
+      requester.send_message(f"Votre demande à été refusée par {player.name}.", 
+                             update_sender=True)
     player.requested_flouze = None
 
   from .auth import auth
