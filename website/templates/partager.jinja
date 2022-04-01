@@ -4,22 +4,23 @@
 {% block title %}Partager{% endblock %}
 {% block content %}
 
-  <div class="w3-large w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:260px;">
+  <div class="w3-large w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:270px;">
   <header id="total" class="w3-container w3-text-white w3-xlarge w3-padding" style="background-color:{{ engine.current_game.config["theme_colors"][0] }}">
-      <img src="{{ url_for("static", filename="images/coin.png") }}" style="width:22px" alt="Coin"> &nbsp; à partager
+      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin"> &nbsp; à partager
   </header>
   {% if player.last_profit < 0 %}
-  <div class="w3-text-red"> <i class="fa fa-info-circle"></i> votre demande peut être refusée par les joueurs</div>
+  <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
+  <div class="w3-text-red small" style="margin:5px 30px 0">Votre demande peut être refusée par les joueurs</div>
   {% endif %}
   <form method="POST">
   {% for other_player in player.other_players %}
   <div class="w3-row" style="background-color:{{ other_player.color["primary"] }}; margin:8px">
-    <div class="w3-col w3-padding" style="width:120px;"><b>{{ other_player.name }}</b></div>
+    <div class="w3-col w3-padding" style="width:150px;"><b>{{ other_player.name }}</b></div>
     <div class="w3-rest"><input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:99px; height:30px; margin-top:5px"></div>
   </div>
   {% endfor %}
   <div class="w3-row" style="background-color:{{ player.color["primary"] }}; margin:8px">
-    <div class="w3-col w3-padding" style="width:120px;"><b>{{ player.name }}</b></div>
+    <div class="w3-col w3-padding" style="width:150px;"><b>{{ player.name }}</b></div>
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>
     <button type="submit" formaction="/" class="w3-button w3-red" style="margin:10px">en fait non</button>

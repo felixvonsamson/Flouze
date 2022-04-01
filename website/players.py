@@ -110,8 +110,8 @@ class Player(object):
       f"{player.name} réclame {amount} Pièces de la part de {recipient.name}.")
     
     recipient.send_message(
-      f"{player.name} réclame {amount} {icons['coin']}.<br> "\
-       "Voulez-vous lui envoyer cette somme ?", timeout=1000, request=True)
+      f"{player.name} vous réclame {amount} {icons['coin']}.<br> ", 
+      timeout=1000, request=True)
 
 
   def send_stars(player, receiver, sent_stars):
@@ -143,7 +143,7 @@ class Player(object):
     for receiver, amount in zip(player.other_players, amounts):
       if amount:
         if player.last_profit < 0 :
-          receiver.requested_flouze = (player, amount)
+          receiver.requested_flouze = (player, -amount)
           player.request_money(receiver, amount)
         else:
           player.send_money(receiver, amount)

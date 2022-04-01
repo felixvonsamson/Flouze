@@ -127,6 +127,8 @@ def home():
         else:
           flash_error("Cette couleur n'est plus disponible.")
       else:
+        if player.color != None :
+          game.owner[player.color["id"]] = None
         player.color = game.colors[color_id]
         game.engine.log(f"{player.name} a choisis la couleur "\
                         f"{player.color['name']}.")
