@@ -242,7 +242,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .coin-medium{width:25px!important; position:relative; top:5px}
 .coin-large{width:27px!important; position:relative; top:4px}
 
-.toast{position:absolute; bottom:5px; display:flex; flex-direction: column; align-items:center; width:100%; font-size:18px;}
+.toast{margin:auto; display:flex; flex-direction: column; align-items:center; font-size:18px;}
 
 .circle {display:inline-block;border-radius: 50%;width: 55px;height: 55px;font-size:28px!important; margin:5px; border:5px solid #009688;background-color: #bff5ea;}
 .circle.checked {background-color:lightgray;}
