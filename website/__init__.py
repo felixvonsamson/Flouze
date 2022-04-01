@@ -37,7 +37,7 @@ def create_app():
     player = engine.players[int(session["ID"])]
     player.messages[message_id][1] = datetime.datetime.now()
   @socketio.on("answer_flouze_request")
-  def accept_flouze_request(message_id, accept):
+  def answer_flouze_request(message_id, accept):
     player = engine.players[int(session["ID"])]
     requester, amount = player.requested_flouze
     if accept: 
