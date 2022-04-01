@@ -113,7 +113,7 @@
     }
     var socket = io();
     socket.on('connect', function() {
-        socket.emit('give_identity', '{{ player.name }}');
+        socket.emit('give_identity');
     });
     socket.on('message', function(message_id, message) {
       document.getElementById('messages').innerHTML += `
@@ -174,7 +174,7 @@
       socket.emit('hide_message', message_id);
     }
     function answer_flouze_request(answer) {
-      socket.emit('answer_flouze_request');
+      socket.emit('answer_flouze_request', answer);
     }
     function disableBack() { window.history.forward(); }
     setTimeout("disableBack()", 0);

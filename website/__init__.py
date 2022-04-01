@@ -6,7 +6,6 @@ from flask import request, session
 from flask_socketio import SocketIO
 
 from website.gameEngine import gameEngine
-from website.players import Player
 
 def init_engine():
   with open("players.txt", "r") as file:
