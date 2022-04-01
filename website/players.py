@@ -38,7 +38,6 @@ class Player(object):
       current_game.update_waiting_count()
     else:
       player.engine.next_page()
-    player.engine.refresh_monitoring()
 
   @property
   def color(player):
@@ -83,13 +82,13 @@ class Player(object):
   
   @property
   def messages_to_show(player):
-    now = datetime.datetime.now()
+    now = datetime.now()
     return [(is_request, msg_id, message) 
       for msg_id, (_, limit, is_request, message) in enumerate(player.messages) 
       if now <= limit]
 
 
-  def send_money(player, receiver, amount):
+  def send_money(player, receiver, amount, update_sender=False):
     assert (player.flouze >= amount)
     player.flouze -= amount
     receiver.flouze += amount
@@ -97,6 +96,9 @@ class Player(object):
       f"{player.name} a fait un don de {amount} Pièces à {receiver.name}.")
     updates = [("flouze", receiver.flouze)]
     player.engine.update_fields(updates, [receiver])
+    if update_sender:
+      updates = [("flouze", player.flouze)]
+      player.engine.update_fields(updates, [player])
     player.flash_message(
       f"Vous avez envoyé {amount} {icons['coin']}&nbsp; à {receiver.name}.")
     receiver.send_message(

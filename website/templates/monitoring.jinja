@@ -97,7 +97,7 @@
    <script type="text/javascript" charset="utf-8">
      var socket = io();
      socket.on('connect', function() {
-         socket.emit('give_identity', 'admin');
+         socket.emit('give_identity');
      });
      socket.on('refresh', function() {
          window.location = window.location;

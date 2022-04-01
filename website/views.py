@@ -52,7 +52,6 @@ def partager_profit():
     if not engine.use_nonce(request.form.get("envoyer")):
       return redirect(url_for("views.home"))
     amounts = []
-
     if player.last_profit < 0 : 
       for receiver in player.other_players:
         amount = request.form.get(receiver.name)

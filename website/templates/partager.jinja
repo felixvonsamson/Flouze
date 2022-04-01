@@ -24,7 +24,7 @@
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>
     <button type="submit" formaction="/" class="w3-button w3-red" style="margin:10px">en fait non</button>
-    <button type="submit" name="send" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white" style="margin:10px; background-color:{{ config["theme_colors"][0] }}">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
+    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white" style="margin:10px; background-color:{{ config["theme_colors"][0] }}">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
 </form>
   </div>
 

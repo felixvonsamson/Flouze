@@ -18,13 +18,14 @@ class gameEngine(object):
     engine.admin_sid = None
 
     engine.logs = []
-    engine.nonces = {}
+    engine.nonces = set()
 
     engine.players = [Player(*player_raw, engine)
               for player_raw in players_raw]
     for i, player in enumerate(engine.players):
       player.other_players = engine.players.copy()
       player.other_players.pop(i)
+    engine.players_by_name = { player.name:player for player in engine.players }
 
     engine.games = [
       Colors(engine),
@@ -109,12 +110,12 @@ class gameEngine(object):
       engine.force_refresh()
 
   def refresh_monitoring(engine):
+    print(f"\n\n{engine.admin_sid}\n\n")
     if engine.admin_sid:
       engine.socketio.emit("refresh", None, room=engine.admin_sid)
   
   def force_refresh(engine):
-    print("\n\nrefresh2\n\n")
-    engine.socketio.emit("refresh", None, broadcast=True)
+    engine.socketio.emit("refresh", broadcast=True)
 
   def update_fields(engine, updates, players=None):
     socketio = engine.socketio
