@@ -49,6 +49,8 @@ def partager_profit():
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST":
+    if not engine.use_nonce(request.form.get("envoyer")):
+      return redirect(url_for("views.home"))
     amounts = []
 
     if player.last_profit < 0 : 
@@ -92,6 +94,8 @@ def donner_etoiles():
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST" and "don_etoiles" not in request.form:
+    if not engine.use_nonce(request.form.get("envoyer")):
+      return redirect(url_for("views.home"))
     receiver_level = request.form.get("destinataire")
     amount = request.form.get("quantité")
     if receiver_level == None:
