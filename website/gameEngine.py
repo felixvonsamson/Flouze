@@ -1,5 +1,6 @@
 import datetime
 import pickle
+import secrets
 
 from flask import Markup
 
@@ -17,13 +18,14 @@ class gameEngine(object):
     engine.admin_sid = None
 
     engine.logs = []
+    engine.nonces = set()
 
     engine.players = [Player(*player_raw, engine)
               for player_raw in players_raw]
     for i, player in enumerate(engine.players):
       player.other_players = engine.players.copy()
       player.other_players.pop(i)
-    engine.players_by_name = { p.name: p for p in engine.players }
+    engine.players_by_name = { player.name:player for player in engine.players }
 
     engine.games = [
       Colors(engine),
@@ -36,8 +38,20 @@ class gameEngine(object):
 
     # pointeur pour indiquer sur quelle page on est (l'array 'pages')
     engine.iterator = 0
-
+    
     engine.log("LE JEU A COMMENCÉ !")
+
+  def get_nonce(engine):
+    while True:
+      nonce = secrets.token_hex(16)
+      if nonce not in engine.nonces:
+        return nonce
+  
+  def use_nonce(engine, nonce):
+    if nonce in engine.nonces:
+      return False
+    engine.nonces.add(nonce)
+    return True
 
   @property
   def current_page(engine):
@@ -100,8 +114,7 @@ class gameEngine(object):
       engine.socketio.emit("refresh", None, room=engine.admin_sid)
   
   def force_refresh(engine):
-    print("\n\nrefresh2\n\n")
-    engine.socketio.emit("refresh", None, broadcast=True)
+    engine.socketio.emit("refresh", broadcast=True)
 
   def update_fields(engine, updates, players=None):
     socketio = engine.socketio

@@ -54,7 +54,7 @@
 <div id="history" class="w3-modal">
   <div id="history_list" class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
     <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright w3-xlarge" style="padding:1px 16px;">&times;</span>
-    {% for time, _, msg, _ in player.messages %}
+    {% for time, _, _, msg in player.messages %}
     {{ time.strftime('%H:%M : ') + msg }}<br>
     {% endfor %}
   </div>
@@ -85,17 +85,15 @@
   {% endif %}
 {% endfor %}
 
-{% for message_id, message, request in player.messages_to_show %}
-  {% if request %}
+{% for is_request, message_id, message in player.messages_to_show %}
+  {% if is_request %}
   <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="margin-bottom:5px;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
       <div class="w3-center">{{ message }}</div>
     </div>
-    <form method="POST" style="display:flex; justify-content:space-evenly; align-items:center;">
-      <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="accept" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
-      <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="reject" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
-    </form>
+    <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
+    <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
   </div>
   {% else %}
   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
@@ -115,31 +113,29 @@
     }
     var socket = io();
     socket.on('connect', function() {
-        socket.emit('give_identity', '{{ player.name }}');
+        socket.emit('give_identity');
     });
-    socket.on('message', function(message_id, message, request) {
-      if (request) {
-        document.getElementById('messages').innerHTML += `
-        <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
-            <div class="w3-center">` + message + `</div>
-          </div>
-          <form method="POST" style="display:flex; justify-content:space-evenly; align-items:center;">
-            <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="accept" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
-            <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" name="request_validation" value="reject" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
-          </form>
-        </div>
-        `;
-      } else {
-        document.getElementById('messages').innerHTML += `
-        <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-          <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+    socket.on('message', function(message_id, message) {
+      document.getElementById('messages').innerHTML += `
+      <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+        <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+        <div class="w3-center">` + message + `</div>
+        <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+      </div>
+      `;
+      document.getElementById('history_list').innerHTML += message + '<br>';
+    });
+    socket.on('request', function(message_id, message) {
+      document.getElementById('messages').innerHTML += `
+      <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
           <div class="w3-center">` + message + `</div>
-          <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
         </div>
-        `;
-      }
+        <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
+        <button onclick="this.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
+      </div>
+      `;
       document.getElementById('history_list').innerHTML += message + '<br>';
     });
     socket.on('waiting_count', function(count) {
@@ -175,7 +171,10 @@
       prev = obj;
     }
     function hide_message(message_id) {
-      socket.emit('hide_message', {{ player.ID }}, message_id);
+      socket.emit('hide_message', message_id);
+    }
+    function answer_flouze_request(answer) {
+      socket.emit('answer_flouze_request', answer);
     }
     function disableBack() { window.history.forward(); }
     setTimeout("disableBack()", 0);

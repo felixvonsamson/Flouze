@@ -32,6 +32,7 @@ def home():
       if engine.current_page["url"] == "results.jinja":
         for player in engine.players:
           player.last_profit = 0
+          player.flouze_request = None
       engine.next_page()
       engine.save_data()
 

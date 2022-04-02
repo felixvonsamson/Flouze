@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 from flask import Markup, flash
 
 from .html_icons import icons
@@ -18,7 +18,7 @@ class Player(object):
     player.last_profit = 0
     player.__message = None
     player.messages = []
-    player.requested_flouze = None
+    player.flouze_request = None
 
   @property
   def choice(player):
@@ -38,7 +38,6 @@ class Player(object):
       current_game.update_waiting_count()
     else:
       player.engine.next_page()
-    player.engine.refresh_monitoring()
 
   @property
   def color(player):
@@ -57,14 +56,21 @@ class Player(object):
   def flash_message(player, message):
     flash(Markup(message))
     player.send_message(message, timeout=-1, emit=False)
-    
+
+  def send_request(player, message, timeout=600):
+    message = Markup(message)
+    now = datetime.now()
+    timeout = timedelta(seconds=timeout)
+    player.messages.append([now, now + timeout, True, message])
+    player.emit("request", (len(player.messages) - 1, message))
+  
   def send_message(player, message, timeout=30, emit=True, request=False):
     message = Markup(message)
-    now = datetime.datetime.now()
-    timeout = datetime.timedelta(seconds=timeout)
-    player.messages.append([now, now + timeout, message, request])
+    now = datetime.now()
+    timeout = timedelta(seconds=timeout)
+    player.messages.append([now, now + timeout, False, message])
     if emit:
-      player.emit("message", (len(player.messages) - 1, message, request))
+      player.emit("message", (len(player.messages) - 1, message))
   
   @property
   def message(player):
@@ -76,65 +82,53 @@ class Player(object):
   
   @property
   def messages_to_show(player):
-    now = datetime.datetime.now()
-    return [(message_id, message, request) 
-      for message_id, (_, limit, message, request) in enumerate(player.messages) 
+    now = datetime.now()
+    return [(is_request, msg_id, message) 
+      for msg_id, (_, limit, is_request, message) in enumerate(player.messages) 
       if now <= limit]
 
 
-  def send_money(player, receiver, amount):
+  def send_money(player, receiver, amount, update_sender=False):
     assert (player.flouze >= amount)
-
     player.flouze -= amount
     receiver.flouze += amount
-
     player.engine.log(
       f"{player.name} a fait un don de {amount} Pièces à {receiver.name}.")
-
     updates = [("flouze", receiver.flouze)]
     player.engine.update_fields(updates, [receiver])
-
+    if update_sender:
+      updates = [("flouze", player.flouze)]
+      player.engine.update_fields(updates, [player])
     player.flash_message(
       f"Vous avez envoyé {amount} {icons['coin']}&nbsp; à {receiver.name}.")
-    
     receiver.send_message(
       f"Vous avez reçu {amount} {icons['coin']}&nbsp; "\
       f"de la part de {player.name}.")
-
     player.engine.save_data()
 
-  def request_money(player, recipient, inv_amount):
-    amount = -inv_amount
-
+  def request_money(player, receiver, amount):
+    receiver.flouze_request = (player, amount)
     player.engine.log(
-      f"{player.name} réclame {amount} Pièces de la part de {recipient.name}.")
-    
-    recipient.send_message(
-      f"{player.name} vous réclame {amount} {icons['coin']}.<br> ", 
-      timeout=1000, request=True)
+      f"{player.name} réclame {amount} Pièces de la part de {receiver.name}.")
+    receiver.send_request(
+      f"{player.name} vous réclame {amount} {icons['coin']}.<br> ")
 
 
   def send_stars(player, receiver, sent_stars):
     assert (player.stars >= sent_stars)
-
     player.stars -= sent_stars
     receiver.stars += sent_stars
-
     player.engine.log(
       f"{player.name} a légué {sent_stars} "\
       f"étoile({'s' if sent_stars > 1 else ''}) à {receiver.name}.")
-
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
-           (f"player{receiver.ID}_star", f" {receiver.stars}")]
+               (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)
-
     player.flash_message(
       f"Vous avez envoyé {sent_stars} {icons['star']} à {receiver.name}.")
-
     receiver.send_message(
       f"Vous avez reçu {sent_stars} {icons['star']}"\
       f"de la part de {player.name}.")
-
     player.engine.save_data()
 
 
@@ -143,8 +137,7 @@ class Player(object):
     for receiver, amount in zip(player.other_players, amounts):
       if amount:
         if player.last_profit < 0 :
-          receiver.requested_flouze = (player, -amount)
-          player.request_money(receiver, amount)
+          player.request_money(receiver, -amount)
         else:
           player.send_money(receiver, amount)
     player.last_profit = 0

@@ -26,15 +26,26 @@ def create_app():
   socketio = SocketIO(app)
   engine.socketio = socketio
   @socketio.on("give_identity")
-  def give_identity(name):
-    if name == "admin":
+  def give_identity():
+    if session["ID"] == "admin":
       engine.admin_sid = request.sid
     else:
-      engine.players_by_name[name].sid = request.sid
-  
+      player = engine.players[int(session["ID"])]
+      player.sid = request.sid
   @socketio.on("hide_message")
-  def hide_message(player_id, message_id):
-    engine.players[player_id].messages[message_id][1] = datetime.datetime.now()
+  def hide_message(message_id):
+    player = engine.players[int(session["ID"])]
+    player.messages[message_id][1] = datetime.datetime.now()
+  @socketio.on("answer_flouze_request")
+  def answer_flouze_request(accept):
+    player = engine.players[int(session["ID"])]
+    requester, amount = player.flouze_request
+    if accept: 
+      player.send_money(requester, amount)
+    else:
+      requester.send_message(f"Votre demande à été refusée par {player.name}.", 
+                             update_sender=True)
+    player.requested_flouze = None
 
   from .auth import auth
   from .views import views
