@@ -35,7 +35,7 @@ def home():
             player.last_profit = 0
             player.flouze_request = None
         engine.next_page()
-      elif request.form["page"] == "precedant" and engine.iterator:
+      elif request.form["page"] == "suivant_passif" and engine.iterator:
         engine.passive_next_page()
         
     elif "quiz" in request.form:
