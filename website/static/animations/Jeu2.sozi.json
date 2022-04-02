@@ -455,17 +455,17 @@
           "clipHeightFactor": 0.9956140350877193
         },
         "layer7": {
-          "cx": 126.75613053491412,
-          "cy": 130.9865277680405,
-          "width": 142.36751465510127,
-          "height": 142.36751465510127,
+          "cx": 127.05856863034892,
+          "cy": 89.36122985979922,
+          "width": 173.04860386024225,
+          "height": 173.04860386024225,
           "opacity": 1,
           "angle": 0,
           "clipped": true,
-          "clipXOffset": 0,
-          "clipYOffset": -0.10452827801402444,
-          "clipWidthFactor": 0.9941520467836258,
-          "clipHeightFactor": 0.9956140350877194
+          "clipXOffset": 0.10155434498840507,
+          "clipYOffset": 56.39802095327942,
+          "clipWidthFactor": 0.9941656942823804,
+          "clipHeightFactor": 0.9953325554259044
         },
         "__sozi_auto__": {
           "cx": 127.13722183820151,
@@ -525,10 +525,10 @@
           "deltaAngle": 0
         },
         "layer7": {
-          "deltaX": -33.852847736570254,
-          "deltaY": 87.79804357614597,
-          "widthFactor": 4.7921026178742245,
-          "heightFactor": 4.7921026178742245,
+          "deltaX": -33.55040964113546,
+          "deltaY": 46.17274566790469,
+          "widthFactor": 5.824830682667484,
+          "heightFactor": 5.824830682667484,
           "deltaAngle": 0
         },
         "__sozi_auto__": {
@@ -555,7 +555,7 @@
           "link": false,
           "referenceElementId": "path6543-6-36-3",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -563,7 +563,7 @@
           "link": false,
           "referenceElementId": "",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -571,7 +571,7 @@
           "link": false,
           "referenceElementId": "path815-6",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -579,7 +579,7 @@
           "link": false,
           "referenceElementId": "path815",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -587,7 +587,7 @@
           "link": false,
           "referenceElementId": "path815-3",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -595,7 +595,7 @@
           "link": false,
           "referenceElementId": "path815-60",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -603,7 +603,7 @@
           "link": false,
           "referenceElementId": "path815-9",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -611,7 +611,7 @@
           "link": false,
           "referenceElementId": "path1046-3",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         },
@@ -619,7 +619,7 @@
           "link": false,
           "referenceElementId": "path815-3",
           "outlineElementId": "",
-          "transitionTimingFunction": "easeIn",
+          "transitionTimingFunction": "linear",
           "transitionRelativeZoom": 0,
           "transitionPathId": ""
         }
@@ -724,10 +724,10 @@
           "opacity": 1,
           "angle": 0,
           "clipped": true,
-          "clipXOffset": 0.2537369558068067,
-          "clipYOffset": -0.2537369558068067,
-          "clipWidthFactor": 0.9970760233918128,
-          "clipHeightFactor": 0.9970760233918128
+          "clipXOffset": 0.7092155895911565,
+          "clipYOffset": 23.809380507703107,
+          "clipWidthFactor": 0.9964994165694283,
+          "clipHeightFactor": 0.9964994165694283
         },
         "__sozi_auto__": {
           "cx": 127.13722183820151,
@@ -1606,7 +1606,7 @@
   "elementsToHide": [],
   "customFiles": [],
   "selectedFrames": [
-    "frame1127"
+    "frame1328"
   ],
   "selectedLayers": [
     "layer8",
