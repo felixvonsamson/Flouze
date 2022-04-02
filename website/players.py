@@ -137,7 +137,12 @@ class Player(object):
     for receiver, amount in zip(player.other_players, amounts):
       if amount:
         if player.last_profit < 0 :
-          player.request_money(receiver, -amount)
+          if receiver.flouze >= amount:
+            player.request_money(receiver, -amount)
+          else:
+            receiver.send_message(
+              f"{player.name} vous réclame {amount} {icons['star']} "\
+               "mais vous n'avez pas cette somme !")
         else:
           player.send_money(receiver, amount)
     player.last_profit = 0
