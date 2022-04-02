@@ -21,7 +21,7 @@
 
 {% block player_money %}
 <!--Top bar with money-->
-<div class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
+<div onclick="document.getElementById('history').style.display='block'" class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
   <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
 </div>
 
@@ -34,9 +34,9 @@
 
 <!--Stars Table-->
 {% block stars_table %}
-<div class="w3-display-topleft" style="width:115px">
+<div class="w3-display-topleft star-table">
   {% for player_it in engine.players %}
-    <div class="w3-border-0 w3-padding-small" style="background-color:{{ player_it.color["primary"] }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
+    <div class="w3-border-0 star-cell" style="background-color:{{ player_it.color["primary"] }}">{{ player_it.name }}<i id="player{{ loop.index0 }}_star" class="fa fa-star w3-right" style="position:relative; top:4px;"> {{ player_it.stars }}</i></div>
   {% endfor %}
 </div>
 {% endblock %}
@@ -49,20 +49,17 @@
 {% endblock %}
 
 <!--History button-->
-{% block history %}
-<button onclick="document.getElementById('history').style.display='block'" class="w3-button w3-circle medium w3-text-white" style="position:absolute; top:60px; right:10px; border:2px solid #fff; background-color:{{ config["theme_colors"][0] }}"><i class="fa fa-history" style="position:relative; top:1px;"></i></button>
-<div id="history" class="w3-modal">
+<div id="history" onclick="document.getElementById('history').style.display='none'" class="w3-modal">
   <div id="history_list" class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
-    <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright w3-xlarge" style="padding:1px 16px;">&times;</span>
+    <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright medium" style="padding:1px 16px;">&times;</span>
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
   </div>
 </div>
-{% endblock %}
 
 <!--Content-->
-<div style="width: 100%; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; flex-grow: 1">
+<div class="medium" style="width: 100%; display:flex; flex-direction:column; justify-content:space-evenly; align-items:center; flex-grow: 1">
 {% block content %} {% endblock %}
 </div>
 
@@ -70,13 +67,13 @@
 <div id="messages" class="toast">
 {% for category, message in get_flashed_messages(with_categories=true) %}
   {% if category == "error" %}
-  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
   {% else %}
-  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
@@ -86,13 +83,13 @@
 
 {% for is_request, message_id, message in player.messages_to_show %}
   {% if not is_request %}
-  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+  <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
   {% else %}
-  <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+  <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
       <div class="w3-center">{{ message }}</div>
@@ -116,7 +113,7 @@
     });
     socket.on('message', function(message_id, message) {
       document.getElementById('messages').innerHTML += `
-      <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+      <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
         <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
         <div class="w3-center">` + message + `</div>
         <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
@@ -127,7 +124,7 @@
     });
     socket.on('request', function(message_id, message) {
       document.getElementById('messages').innerHTML += `
-      <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+      <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
           <div class="w3-center">` + message + `</div>

@@ -21,7 +21,7 @@
     {% endif %}
   </div>
 </div>
-<iframe src="{{ url_for("static", filename="animations/Jeu%d.sozi.html" % game.game_nb) }}" style="width: 100%; flex-grow: 0.8; -webkit-backdrop-filter: blur(0.9vw); backdrop-filter: blur(0.9vw);" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{ game.frame_id }} % player.presentation.frames.length);">
+<iframe src="{{ url_for("static", filename="animations/Jeu%d.sozi.html" % game.game_nb) }}" class="anim" style="-webkit-backdrop-filter: blur(0.9vw); backdrop-filter: blur(0.9vw);" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{ game.frame_id }} % player.presentation.frames.length);">
   My Sozi presentation should play here.
 </iframe>
 

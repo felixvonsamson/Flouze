@@ -4,8 +4,8 @@
 {% block title %}Partager{% endblock %}
 {% block content %}
 
-  <div class="w3-large w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:270px;">
-  <header id="total" class="w3-container w3-text-white w3-xlarge w3-padding" style="background-color:{{ engine.current_game.config["theme_colors"][0] }}">
+  <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:270px;">
+  <header id="total" class="w3-container w3-text-white large w3-padding" style="background-color:{{ engine.current_game.config["theme_colors"][0] }}">
       <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin"> &nbsp; à partager
   </header>
   {% if player.last_profit < 0 %}

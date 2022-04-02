@@ -9,13 +9,13 @@
 {% block content %}
 
 <div class="w3-center w3-white animate__animated animate__fadeIn" style="width:320px;">
-  <header class="w3-text-white w3-padding medium" style="background-color:{{ config["theme_colors"][0] }}">
+  <header class="w3-text-white w3-padding large" style="background-color:{{ config["theme_colors"][0] }}">
       {{ player.message }}
   </header>
   <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
     {% for other_player in other_players %}
-    <div class="w3-card medium w3-padding w3-half" style="width:150px; height:150px; background-color:{{ other_player.color["primary"] }};">
-      <h4><b>{{ other_player.name }}</b></h4>
+    <div class="w3-card w3-padding w3-half" style="width:150px; height:150px; background-color:{{ other_player.color["primary"] }};">
+      <b class="large w3-padding">{{ other_player.name }}</b>
       <div class="w3-padding-small w3-text-white " style="background-color:{{ other_player.color["secondary"] }};">{{ proposition[loop.index0] }}</div>
       {% if other_player.choice == 0 %}
       <div class="w3-padding-small w3-white w3-text-red">Refusé</div>
@@ -27,7 +27,7 @@
   </div>
   <div class="w3-center">
       <form method="POST">
-        <button name="jeu5" value="nouvelle_proposition" type="submit" class="w3-button w3-large w3-margin w3-padding w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Faire une nouvelle proposition</button>
+        <button name="jeu5" value="nouvelle_proposition" type="submit" class="w3-button w3-margin w3-padding w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Faire une nouvelle proposition</button>
       </form>
   </div>
 </div>
