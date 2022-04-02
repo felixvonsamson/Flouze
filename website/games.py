@@ -493,6 +493,7 @@ class Game5(Game):
   def current_answer(game, answer):
     game.answers[game.question_id] = answer
     game.next_question()
+    game.engine.save_data()
     game.engine.refresh_monitoring()
   
   def next_question(game):

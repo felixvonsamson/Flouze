@@ -123,7 +123,7 @@
       </div>
       `;
       let timeofday = (new Date()).toLocaleTimeString([], { hour: "2-digit", minute:"2-digit" });
-      document.getElementById('history_list').innerHTML += timeofday + " :" message.replace('<br>', '') + '<br>';
+      document.getElementById('history_list').innerHTML += timeofday + " :" + message.replace('<br>', '') + '<br>';
     });
     socket.on('request', function(message_id, message) {
       document.getElementById('messages').innerHTML += `

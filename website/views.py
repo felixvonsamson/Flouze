@@ -137,7 +137,6 @@ def home():
         player.color = game.colors[color_id]
         player.is_done = True
         engine.force_refresh()
-        engine.save_data()
 
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):
@@ -151,7 +150,6 @@ def home():
       engine.log(f"{player.name} a choisis {tickets} tickets.")
       player.flash_message(f"Vous avez choisis {tickets} tickets.")
       player.is_done = True
-      engine.save_data()
 
     elif "jeu2" in request.form:
       if not game.is_allowed_to_play(player, 2):
@@ -163,7 +161,6 @@ def home():
       engine.log(f"{player.name} a choisis le nombre {player.choice}.")
       player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
       player.is_done = True
-      engine.save_data()
 
     elif "jeu3" in request.form:
       if not game.is_allowed_to_play(player, 3):
@@ -185,7 +182,6 @@ def home():
       player.flash_message(
         f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
       player.is_done = True
-      engine.save_data()
         
     elif "jeu4" in request.form:
       if not game.is_allowed_to_play(player, 4):
@@ -207,12 +203,10 @@ def home():
         player.flash_message(
           f"Vous avez choisis le prix : {prize} {icons['coin']}")
       player.is_done = True
-      engine.save_data()
     
     elif "don_etoiles" in request.form:
       assert request.form["don_etoiles"] == "terminer"
       player.is_done = True
-      engine.save_data()
 
     elif "jeu5" in request.form:
       assert request.form["jeu5"] in [
@@ -223,7 +217,6 @@ def home():
         answer = request.form.get("réponse")
         engine.log(f"{player.name} a donner la réponse {answer} au quiz")
         game.current_answer = answer
-        engine.save_data()
       
       elif request.form["jeu5"] == "proposition":
         if not game.is_allowed_to_play(player, 5):
@@ -253,14 +246,12 @@ def home():
             f"de {amount} {icons['coin']}"
         player.is_done = True
         engine.next_page()
-        engine.save_data()
       
       elif request.form["jeu5"] in ["refuser", "accepter"]:
         if not game.is_allowed_to_play(player, 5):
           return redirect(url_for("views.home"))
         player.choice = request.form["jeu5"] == "accepter"
         player.is_done = True
-        engine.save_data()
       
       elif request.form["jeu5"] == "nouvelle_proposition":
         engine.next_page(refresh=False)

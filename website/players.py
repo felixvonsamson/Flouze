@@ -38,6 +38,7 @@ class Player(object):
       current_game.update_waiting_count()
     else:
       player.engine.next_page()
+    player.engine.save_data()
 
   @property
   def color(player):

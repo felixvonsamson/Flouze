@@ -71,6 +71,14 @@ class gameEngine(object):
     assert (engine.current_stage[0] in range(6))
     return engine.games[engine.current_stage[0]]
 
+  def goto_page(engine, page_id):
+    engine.iterator = page_id
+    stage = engine.current_stage
+    engine.log(
+      f"Saut à la page : {engine.current_page['url']} "\
+      f"(jeu {stage[0]}, manche {stage[1]})")
+    engine.force_refresh()
+
   def passive_previous_page(engine):
     engine.iterator -= 1
     stage = engine.current_stage

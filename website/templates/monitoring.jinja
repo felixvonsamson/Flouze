@@ -74,9 +74,18 @@
           <p><button name="diapo" type="submit" class="w3-button w3-green w3-margin-right" value="precedant">Diapo précedante</button>
             <button name="diapo" type="submit" class="w3-button w3-green w3-margin-left" value="suivant">Diapo suivante</button></p>
         {% endif %}
-        <p>Jeu {{ engine.current_stage[0] }}, manche {{ engine.current_stage[1] }}</p>
-        <p><button name="page" type="submit" class="w3-button w3-red w3-margin" value="precedant">Page précedante</button>
-          <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant">Page suivante</button></p>
+        <p>
+        <select name="current_page_id" onchange="this.form.submit()">
+        {% for page in engine.pages %}
+          <option value="{{ loop.index0 }}" {% if engine.iterator == loop.index0 %}selected{% endif %}>Jeu {{ page["stage"][0] }}, manche {{ page["stage"][1] }}, page {{ page["url"] }}</option>
+        {% endfor %}
+        </select>
+        </p>
+        <p>
+          <button name="page" type="submit" class="w3-button w3-red w3-margin" value="precedant">Page précedante</button>
+          <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant">Page suivante</button>
+            <button name="page" type="submit" class="w3-button w3-teal w3-margin" value="suivant_passif">></button>
+        </p>
         {% if engine.current_stage[0] == 5 and engine.current_stage[1] %}
           {% for (_, (question, correct_answer)), player, answer, decision in zip(game.quiz, game.other_players, game.answers, game.is_answer_correct) %}
             {% if answer and decision == None %}
