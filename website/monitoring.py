@@ -22,7 +22,7 @@ def home():
     assert request.form["diapo"] in ["precedant", "suivant"]
     if request.form["diapo"] == "suivant":
       game.next_frame()
-    elif request.form["diapo"] == "précedant":
+    elif request.form["diapo"] == "precedant":
       game.previous_frame()
 
   elif "page" in request.form:

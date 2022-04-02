@@ -96,7 +96,9 @@ class gameEngine(object):
       f"(jeu {stage[0]}, manche {stage[1]})")
 
     current_game_nb, current_round_nb = engine.current_stage
-    if engine.current_stage == (3, 0):
+    if engine.current_stage == (1, 0):
+      engine.games[0].end()
+    elif engine.current_stage == (3, 0):
       engine.games[3].start()
     elif engine.current_stage == (4, 0):
       engine.games[3].end()

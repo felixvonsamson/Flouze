@@ -185,6 +185,13 @@ class Colors(Game):
   
   def logic(game):
     pass
+
+  def end(game):
+    for player in game.engine.players:
+      game.engine.log(f"{player.name} a choisis la couleur "\
+                      f"{player.color['name']}.")
+      player.send_message("Vous avez choisis la couleur "\
+                          f"{player.color['name']}.", emit=False)
   
 
 class Game1(Game):

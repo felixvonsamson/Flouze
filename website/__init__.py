@@ -41,10 +41,9 @@ def create_app():
     player = engine.players[int(session["ID"])]
     requester, amount = player.flouze_request
     if accept: 
-      player.send_money(requester, amount)
+      player.send_money(requester, amount, update_sender=True)
     else:
-      requester.send_message(f"Votre demande à été refusée par {player.name}.", 
-                             update_sender=True)
+      requester.send_message(f"Votre demande à été refusée par {player.name}.")
     player.requested_flouze = None
 
   from .auth import auth

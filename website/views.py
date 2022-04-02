@@ -135,13 +135,9 @@ def home():
         if player.color != None :
           game.owner[player.color["id"]] = None
         player.color = game.colors[color_id]
-        game.engine.log(f"{player.name} a choisis la couleur "\
-                        f"{player.color['name']}.")
-        player.flash_message("Vous avez choisis la couleur "\
-                            f"{player.color['name']}.")
         player.is_done = True
-        game.engine.force_refresh()
-        game.engine.save_data()
+        engine.force_refresh()
+        engine.save_data()
 
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):

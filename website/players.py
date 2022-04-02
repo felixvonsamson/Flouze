@@ -64,7 +64,7 @@ class Player(object):
     player.messages.append([now, now + timeout, True, message])
     player.emit("request", (len(player.messages) - 1, message))
   
-  def send_message(player, message, timeout=30, emit=True, request=False):
+  def send_message(player, message, timeout=30, emit=True):
     message = Markup(message)
     now = datetime.now()
     timeout = timedelta(seconds=timeout)
