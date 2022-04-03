@@ -199,7 +199,8 @@ def home():
       
       if request.form["jeu5"] == "quiz_reponse":
         answer = request.form.get("réponse")
-        engine.log(f"{player.name} a donner la réponse {answer} au quiz")
+        engine.log(f"{player.name} a donner la réponse {answer} à la question "\
+                   f": '{game.quiz.current_question[1][0]}'.")
         game.current_answer = answer
       
       elif request.form["jeu5"] == "proposition":
@@ -223,18 +224,21 @@ def home():
           return render_template_ctx("Jeu5-proposition.jinja")
         for i, other_player in enumerate(game.other_players):
           amount = int(request.form.get(other_player.name))
-          amount = int(amount)
           game.current_proposition[i] = amount
+          engine.log(f"{player.name} a proposé {amount} {icons['coin']} "\
+                     f"à {other_player.name}.")
           other_player.message = \
             f"{player.name} vous fait une proposition "\
             f"de {amount} {icons['coin']}"
         player.is_done = True
         engine.next_page()
       
-      elif request.form["jeu5"] in ["refuser", "accepter"]:
+      elif request.form["jeu5"] in ["refusé", "accepté"]:
         if not game.is_allowed_to_play(player, 5):
           return redirect(url_for("views.home"))
         player.choice = request.form["jeu5"] == "accepter"
+        engine.log(f"{player.name} a {request.form['jeu5']} "\
+                   f"la proposition de {game.master.name}.")
         player.is_done = True
       
       elif request.form["jeu5"] == "nouvelle_proposition":

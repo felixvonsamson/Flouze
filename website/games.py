@@ -515,6 +515,7 @@ class Game5(Game):
 
   def logic(game):
     if sum(game.current_choices) >= 3:
+      game.engine.log("La proposition a été accepté par la majorité.")
       game.master.message = "Votre proposition a été acceptée par la majorité."
       for i, player in enumerate(game.other_players):
         offer = game.current_proposition[i]
@@ -529,6 +530,8 @@ class Game5(Game):
         prize = games_config["game5"]["prize"] + \
             (game.bonuses == 3) * games_config["game5"]["bonus"]
         game.master.flouze -= prize
+        game.engine.log("La proposition a été refusée par la majorité."\
+          f"Les {prize} {icons['coin']} sont retirés à {game.master.name}.")
         game.master.message = \
           f"Votre dernière proposition a été refusée par "\
           f"la majorité. Les {prize} {icons['coin']} vous sont donc retirés."
@@ -539,6 +542,7 @@ class Game5(Game):
             f"{prize} {icons['coin']}."
         game.end()
       else:
+        game.engine.log("La proposition a été refusée par la majorité.")
         game.master.message = \
           "Votre proposition a été refusée par la majorité !"
         for player in game.other_players:
@@ -548,7 +552,11 @@ class Game5(Game):
   
   def end(game):
     for player in game.engine.players:
+      game.engine.log(
+        f"{player.name} repart avec {player.flouze} {icons['coin']}, ce qui "\
+        f"correspond à {str(player.flouze / 10).rstrip('0').rstrip('.')} €.")
       player.message += Markup(
         f"<br>Vous repartez donc avec {player.flouze} {icons['coin']}, ce qui "\
         f"correspond à {str(player.flouze / 10).rstrip('0').rstrip('.')} €.")
+    game.engine.log("FIN DU JEU")
     game.engine.iterator = len(pages) - 1
