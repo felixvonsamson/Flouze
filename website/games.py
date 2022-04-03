@@ -292,6 +292,7 @@ class Game3(Game):
     super().__init__(engine)
     game.game_nb = 3
     game.config = games_config["game3"]
+    game.real_gain = [0]*5
 
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
@@ -330,13 +331,13 @@ class Game3(Game):
 
     for player in game.engine.players:
       player.flouze += prize
+      game.real_gain[player.ID] += prize
       player.message = Markup(f"Vous avez reçu {prize} {icons['coin']}.")
 
     if game.current_round_id == 2:
-      flouzes = [player.flouze for player in game.engine.players]
-      winner_id = np.argmax(flouzes)
+      winner_id = np.argmax(game.real_gain)
       winner = game.engine.players[winner_id]
-      if flouzes.count(max(flouzes)) == 1:
+      if game.real_gain.count(max(game.real_gain)) == 1:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
         game.engine.log(
