@@ -14,7 +14,6 @@ def init_engine():
                    for player_id in range(5)]
   return gameEngine(players_raw)
 
-
 def create_app():
   app = Flask(__name__)
   app.config["SECRET_KEY"] = "BxclfIEmzsq8HTqvFnyW"
@@ -83,5 +82,12 @@ def create_app():
     if "ID" not in session \
        and request.endpoint not in ["auth.login", "static"]:
       return redirect(url_for("auth.login"))
+  @app.after_request
+  def add_header(response):
+    if request.endpoint == "static":
+      response.cache_control.no_cache = None
+      response.cache_control.private = True
+      response.cache_control.max_age = 604800
+    return response
 
   return socketio, app
