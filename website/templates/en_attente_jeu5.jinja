@@ -9,3 +9,9 @@
 </div>
 
 {% endblock %}
+{% block additionnal_script %}
+    socket.on('waiting_count', function(count) {
+        document.getElementById('count').innerHTML = count;
+    });
+{% endblock %}}
+

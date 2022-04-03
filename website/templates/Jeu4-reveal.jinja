@@ -27,3 +27,11 @@
 </div>
 
 {% endblock %}
+{% block additionnal_script %}
+    socket.on('reveal_card', function(card_id) {
+        var card = document.getElementById('card' + card_id);
+        if (card != null) {
+          card.style.transform = "rotateY(180deg)";
+        }
+    });
+{% endblock %}}

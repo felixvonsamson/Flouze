@@ -26,3 +26,12 @@
 </iframe>
 
 {% endblock %}
+{% block additionnal_script %}
+    socket.on('move_to_frame', function(frame_id) {
+        var frame = document.querySelector("iframe");
+        if (frame == null) return;
+        var player = frame.contentWindow.sozi.player;
+        player.moveToFrame(frame_id % player.presentation.frames.length);
+    });
+{% endblock %}}
+

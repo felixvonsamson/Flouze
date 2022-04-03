@@ -55,8 +55,9 @@ def create_app():
         player.send_message("Vous avez déjà selectioné cette couleur.", 
                             category="error", persistant=False)
       else:
-        player.send_message("Cette couleur n'est plus disponible.", 
-                            category="error", persistant=False)
+        player.send_message(
+          f"{game.owner[color_id]['name']} a été plus rapide que vous !", 
+          category="error", persistant=False)
     else:
       updates = []
       if player.color != None :

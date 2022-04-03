@@ -113,10 +113,19 @@
     if (navigator.userAgent.match(/Android/i)) {
       window.scrollTo(0, 1);
     }
+    function disableBack() { window.history.forward(); }
+    setTimeout("disableBack()", 0);
+    window.onunload = function () { null };
     var socket = io();
     socket.on('connect', function() {
         socket.emit('give_identity');
     });
+    socket.on('refresh', function() {
+        window.location = window.location;
+    });
+    function hide_message(message_id) {
+      socket.emit('hide_message', message_id);
+    }
     socket.on('message', function(message_id, category, message) {
       hiding_code = (message_id) ? `hide_message(${message_id})` : '';
       if (category == 'message') {
@@ -155,9 +164,6 @@
           document.getElementById('history_list').innerHTML += timeofday + " : " + message.replace('<br>', '') + '<br>';
       }
     });
-    socket.on('waiting_count', function(count) {
-        document.getElementById('count').innerHTML = count;
-    });
     socket.on('update_data', function(changes) {
       for (i = 0; i < changes.length; i++) {
         object_id = changes[i][0];
@@ -166,39 +172,10 @@
         if (obj != null) { obj.innerHTML = value; }
       }
     });
-    socket.on('reveal_card', function(card_id) {
-        var card = document.getElementById('card' + card_id);
-        if (card != null) {
-          card.style.transform = "rotateY(180deg)";
-        }
-    });
-    socket.on('move_to_frame', function(frame_id) {
-        var frame = document.querySelector("iframe");
-        if (frame == null) return;
-        var player = frame.contentWindow.sozi.player;
-        player.moveToFrame(frame_id % player.presentation.frames.length);
-    });
-    socket.on('refresh', function() {
-        window.location = window.location;
-    });
-    function update_choice(obj) {
-      if (typeof prev != 'undefined') 
-        prev.parentNode.classList.remove('checked');
-      obj.parentNode.classList.add('checked');
-      prev = obj;
-    }
-    function hide_message(message_id) {
-      socket.emit('hide_message', message_id);
-    }
-   function select_color(color_id) {
-      socket.emit('select_color', color_id);
-    }
     function answer_flouze_request(answer) {
       socket.emit('answer_flouze_request', answer);
     }
-    function disableBack() { window.history.forward(); }
-    setTimeout("disableBack()", 0);
-    window.onunload = function () { null };
+    {% block additionnal_script %}{% endblock %}}
   </script>
 
   </body>

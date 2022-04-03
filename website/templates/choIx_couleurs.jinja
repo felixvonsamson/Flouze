@@ -21,3 +21,9 @@
 </div>
 
 {% endblock %}
+{% block additionnal_script %}
+    function select_color(color_id) {
+      socket.emit('select_color', color_id);
+    }
+{% endblock %}}
+
