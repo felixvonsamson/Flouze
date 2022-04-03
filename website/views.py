@@ -122,22 +122,6 @@ def home():
   game = engine.current_game
   if request.method == "POST":
 
-    if "couleurs" in request.form:
-      color_id = request.form.get("couleurs")
-      assert color_id in map(str, range(5))
-      color_id = int(color_id)
-      if game.owner[color_id] :
-        if game.owner[color_id] == player :
-          flash_error("Vous avez déjà selectioné cette couleur.")
-        else:
-          flash_error("Cette couleur n'est plus disponible.")
-      else:
-        if player.color != None :
-          game.owner[player.color["id"]] = None
-        player.color = game.colors[color_id]
-        player.is_done = True
-        engine.force_refresh()
-
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):
         return redirect(url_for("views.home"))

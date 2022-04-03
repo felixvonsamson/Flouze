@@ -45,6 +45,22 @@ def create_app():
     else:
       requester.send_message(f"Votre demande à été refusée par {player.name}.")
     player.requested_flouze = None
+  @socketio.on("select_color")
+  def select_color(color_id):
+    assert color_id in range(5)
+    game = engine.current_game
+    if game.owner[color_id] :
+      if game.owner[color_id] == player :
+        player.send_message("Vous avez déjà selectioné cette couleur.", category=error)
+      else:
+        player.send_message("Cette couleur n'est plus disponible.", category=error)
+    else:
+      if player.color != None :
+        game.owner[player.color["id"]] = None
+      player.color = game.colors[color_id]
+      player.is_done = True
+      updates = [(player.color["name"], player.name)]
+      engine.update_fields(updates)
 
   from .auth import auth
   from .views import views
