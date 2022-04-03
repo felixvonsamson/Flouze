@@ -1,5 +1,6 @@
 import os.path
 import datetime
+from unicodedata import category
 from flask import Flask
 from flask import redirect, url_for
 from flask import request, session
@@ -43,7 +44,8 @@ def create_app():
     if accept: 
       player.send_money(requester, amount, update_sender=True)
     else:
-      requester.send_message(f"Votre demande à été refusée par {player.name}.")
+      requester.send_message(
+        f"Votre demande à été refusée par {player.name}.", category="error")
     player.requested_flouze = None
   @socketio.on("select_color")
   def select_color(color_id):
