@@ -64,9 +64,9 @@ def create_app():
         game.owner[player.color["id"]] = None
         updates.append((player.color["name"], ""))
       player.color = game.colors[color_id]
-      player.is_done = True
       updates.append((player.color["name"], player.name))
       engine.update_fields(updates)
+      player.is_done = True
 
   from .auth import auth
   from .views import views
