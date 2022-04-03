@@ -53,16 +53,18 @@ def create_app():
     if game.owner[color_id] :
       if game.owner[color_id] == player :
         player.send_message("Vous avez déjà selectioné cette couleur.", 
-                            category="error", persistant=False, timeout=-1)
+                            category="error", persistant=False)
       else:
         player.send_message("Cette couleur n'est plus disponible.", 
-                            category="error", persistant=False, timeout=-1)
+                            category="error", persistant=False)
     else:
+      updates = []
       if player.color != None :
         game.owner[player.color["id"]] = None
+        updates.append((player.color["name"], ""))
       player.color = game.colors[color_id]
       player.is_done = True
-      updates = [(player.color["name"], player.name)]
+      updates.append((player.color["name"], player.name))
       engine.update_fields(updates)
 
   from .auth import auth
