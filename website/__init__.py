@@ -56,7 +56,7 @@ def create_app():
                             category="error", persistant=False)
       else:
         player.send_message(
-          f"{game.owner[color_id]['name']} a été plus rapide que vous !", 
+          f"{game.owner[color_id].name} a été plus rapide que vous !", 
           category="error", persistant=False)
     else:
       updates = []
