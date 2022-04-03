@@ -66,29 +66,35 @@
 <!--Toasts-->
 <div id="messages" class="toast">
 {% for category, message in get_flashed_messages(with_categories=true) %}
-  {% if category == "error" %}
-  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-    <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
-    <div class="w3-center">{{ message }}</div>
-    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-  </div>
-  {% else %}
+  {% if category == "message" %}
   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
+  {% elif category == "error" %}
+  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
+    <div class="w3-center">{{ message }}</div>
+    <span onclick="this.parentElement.style.display='none'" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+  </div>  
   {% endif %}
 {% endfor %}
 
-{% for is_request, message_id, message in player.messages_to_show %}
-  {% if not is_request %}
+{% for message_id, category, message in player.messages_to_show %}
+  {% if category == "message" %}
   <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
-  {% else %}
+  {% elif category == "error" %}
+  <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+    <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
+    <div class="w3-center">{{ message }}</div>
+    <span onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+  </div>
+  {% elif category == "requet" %}
   <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
@@ -111,32 +117,43 @@
     socket.on('connect', function() {
         socket.emit('give_identity');
     });
-    socket.on('message', function(message_id, message) {
-      document.getElementById('messages').innerHTML += `
-      <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-        <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
-        <div class="w3-center">` + message + `</div>
-        <span onclick="this.parentElement.style.display='none'; hide_message(` + message_id + `);" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
-      </div>
-      `;
-      let timeofday = (new Date()).toLocaleTimeString([], { hour: "2-digit", minute:"2-digit" });
-      document.getElementById('history_list').innerHTML += timeofday + " :" + message.replace('<br>', '') + '<br>';
-    });
-    socket.on('request', function(message_id, message) {
-      document.getElementById('messages').innerHTML += `
-      <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
-          <div class="w3-center">` + message + `</div>
-        </div>
-        <div style="display:flex; justify-content:space-around;">
-          <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
-          <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
-        </div>
-      </div>
-      `;
-      let timeofday = (new Date()).toLocaleTimeString([], { hour: "2-digit", minute:"2-digit" });
-      document.getElementById('history_list').innerHTML += timeofday + " : " + message.replace('<br>', '') + '<br>';
+    socket.on('message', function(message_id, category, message) {
+      hiding_code = (message_id) ? `hide_message(${message_id})` : '';
+      if (category == 'message') {
+          document.getElementById('messages').innerHTML += `
+            <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+              <i class="fa fa-info-circle w3-text-green" style="margin-right: 6px;"></i>
+              <div class="w3-center">${message}</div>
+              <span onclick="this.parentElement.style.display='none'; ${hiding_code}" class="w3-hover-gray w3-center w3-large w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+            </div>
+            `;
+      } elseif (category == 'error') {
+          document.getElementById('messages').innerHTML += `
+            <div class="w3-pale-red w3-round-large w3-border w3-border-red w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+              <i class="fa fa-exclamation-circle w3-text-red" style="margin-right: 6px;"></i>
+              <div class="w3-center">${message}</div>
+              <span onclick="this.parentElement.style.display='none'; ${hiding_code}" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
+            </div>
+            `;
+      } elseif (category == "request") {
+          assert(message_id);
+          document.getElementById('messages').innerHTML += `
+            <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
+                <div class="w3-center">${message}</div>
+              </div>
+              <div style="display:flex; justify-content:space-around;">
+                <button onclick="this.parentElement.parentElement.style.display='none'; hide_message(${message_id}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
+                <button onclick="this.parentElement.parentElement.style.display='none'; hide_message(${message_id}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
+              </div>
+            </div>
+            `;
+      }
+      if (message_id) {
+          let timeofday = (new Date()).toLocaleTimeString([], { hour: "2-digit", minute:"2-digit" });
+          document.getElementById('history_list').innerHTML += timeofday + " : " + message.replace('<br>', '') + '<br>';
+      }
     });
     socket.on('waiting_count', function(count) {
         document.getElementById('count').innerHTML = count;
@@ -163,6 +180,9 @@
     });
     socket.on('refresh', function() {
         window.location = window.location;
+    });
+    socket.on('select_color', function(color_id) {
+        socket.emit('select_color', color_id);
     });
     function update_choice(obj) {
       if (typeof prev != 'undefined') 

@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from socket import timeout
 from flask import Markup, flash
 
 from .html_icons import icons
@@ -54,24 +55,23 @@ class Player(object):
       socketio = player.engine.socketio
       socketio.emit(*args, room=player.sid)
   
-  def flash_message(player, message):
+  def flash_message(player, message, category="message"):
     flash(Markup(message))
-    player.send_message(message, timeout=-1, emit=False)
+    player.send_message(message, category, emit=False, timeout=-1)
 
   def send_request(player, message, timeout=600):
-    message = Markup(message)
-    now = datetime.now()
-    timeout = timedelta(seconds=timeout)
-    player.messages.append([now, now + timeout, True, message])
-    player.emit("request", (len(player.messages) - 1, message))
+    player.send_message(message, category="request", timeout=timeout)
   
-  def send_message(player, message, timeout=30, emit=True):
+  def send_message(player, message, category="message", 
+                   emit=True, persistant=True, timeout=30):
     message = Markup(message)
-    now = datetime.now()
-    timeout = timedelta(seconds=timeout)
-    player.messages.append([now, now + timeout, False, message])
+    if persistant:
+      now = datetime.now()
+      timeout = timedelta(seconds=timeout)
+      player.messages.append([now, now + timeout, category, message])
     if emit:
-      player.emit("message", (len(player.messages) - 1, message))
+      msg_id = len(player.messages) - 1 if persistant else None
+      player.emit("message", (msg_id, category, message))
   
   @property
   def message(player):
@@ -84,8 +84,8 @@ class Player(object):
   @property
   def messages_to_show(player):
     now = datetime.now()
-    return [(is_request, msg_id, message) 
-      for msg_id, (_, limit, is_request, message) in enumerate(player.messages) 
+    return [(msg_id, category, message) 
+      for msg_id, (_, limit, category, message) in enumerate(player.messages) 
       if now <= limit]
 
 

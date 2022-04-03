@@ -48,12 +48,15 @@ def create_app():
   @socketio.on("select_color")
   def select_color(color_id):
     assert color_id in range(5)
+    player = engine.players[int(session["ID"])]
     game = engine.current_game
     if game.owner[color_id] :
       if game.owner[color_id] == player :
-        player.send_message("Vous avez déjà selectioné cette couleur.", category=error)
+        player.send_message("Vous avez déjà selectioné cette couleur.", 
+                            category="error", persistant=False, timeout=-1)
       else:
-        player.send_message("Cette couleur n'est plus disponible.", category=error)
+        player.send_message("Cette couleur n'est plus disponible.", 
+                            category="error", persistant=False, timeout=-1)
     else:
       if player.color != None :
         game.owner[player.color["id"]] = None

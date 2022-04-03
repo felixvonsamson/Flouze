@@ -1,3 +1,4 @@
+from unicodedata import category
 from flask import request, session
 from flask import render_template, redirect, url_for
 from flask import Blueprint
@@ -50,7 +51,7 @@ def home():
         for player in game.other_players:
           player.send_message(
             f'Perdu ! La bonne réponse à la question "{question}" était : '\
-            f'{correct_answer}')
+            f'{correct_answer}', category="error")
       elif decision == "valider":
         game.is_answer_correct[question_id] = True
         for player in game.other_players:
