@@ -1,6 +1,5 @@
 import os.path
 import datetime
-from unicodedata import category
 from flask import Flask
 from flask import redirect, url_for
 from flask import request, session

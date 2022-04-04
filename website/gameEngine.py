@@ -1,8 +1,7 @@
 import datetime
 import pickle
 import secrets
-
-from flask import Markup
+import logging
 
 from .players import Player
 
@@ -17,6 +16,11 @@ class gameEngine(object):
     engine.socketio = None
     engine.admin_sid = None
 
+    engine.logger = logging.getLogger("Flouze")
+    engine.logger.setLevel(logging.INFO)
+    s_handler = logging.StreamHandler()
+    s_handler.setLevel(logging.INFO)
+    engine.logger.addHandler(s_handler)
     engine.logs = []
     engine.nonces = set()
 
@@ -137,6 +141,7 @@ class gameEngine(object):
 
   def log(engine, message):
     log_message = datetime.datetime.now().strftime("%H:%M:%S : ") + message
+    engine.logger.info(log_message)
     engine.logs.append(log_message)
 
 
