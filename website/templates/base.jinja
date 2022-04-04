@@ -17,12 +17,12 @@
     <title>{% block title %}Home{% endblock %}</title>
   </head>
 
-<body style="background-image: url({{ url_for("static", filename="images/" + config["background"]) }}); min-height: 100vh; display:flex; flex-direction:column; justify-content:flex-start;">
+<body class="flex-vertical body" style="background-image: url({{ url_for("static", filename="images/" + config["background"]) }});">
 
 {% block player_money %}
 <!--Top bar with money-->
-<div onclick="document.getElementById('history').style.display='block'" class="w3-container w3-text-white" style="height:50px; background-color:{{ config["theme_colors"][0] }}">
-  <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin-large" alt="Coin"></div>
+<div onclick="document.getElementById('history').style.display='block'" class="w3-container w3-text-white top-bar" style="background-color:{{ config["theme_colors"][0] }}">
+  <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin" alt="Coin"></div>
 </div>
 
 <!--Saved Flouze for game 3-->
