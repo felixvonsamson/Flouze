@@ -27,7 +27,7 @@
 
 <!--Saved Flouze for game 3-->
 {% if player.saved_flouze %}
-<div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)</div>
+<div class="w3-text-white w3-text-white large w3-round-large" style="text-align:right; padding:2px 16px; position:absolute; top:40px; right:0; background-color:{{ config["theme_colors"][0] }}">({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">)</div>
 <div style="height:28px">*</div>
 {% endif %}
 {% endblock %}

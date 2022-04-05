@@ -27,9 +27,9 @@
           {{ player.stars }} <i class="fa fa-star"></i><br>
         </div>
         <div class="w3-half">
-          {{ player.flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin"><br>
+          {{ player.flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"><br>
           {% if stage[0] == 3 %}
-            ({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin">)<br>
+            ({{ player.saved_flouze }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">)<br>
           {% endif %}
         </div>
       </div>

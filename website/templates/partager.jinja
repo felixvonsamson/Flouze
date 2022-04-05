@@ -6,7 +6,7 @@
 
   <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:270px;">
   <header id="total" class="w3-container w3-text-white large w3-padding" style="background-color:{{ engine.current_game.config["theme_colors"][0] }}">
-      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-medium" alt="Coin"> &nbsp; à partager
+      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> &nbsp; à partager
   </header>
   {% if player.last_profit < 0 %}
   <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
@@ -41,7 +41,7 @@
                                                     document.getElementById('sent0').value -
                                                     document.getElementById('sent1').value -
                                                     document.getElementById('sent2').value -
-                                                    document.getElementById('sent3').value + '&nbsp; <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin-small" alt="Coin">'
+                                                    document.getElementById('sent3').value + '&nbsp; <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">'
   }
 </script>
 
