@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from socket import timeout
 from flask import Markup, flash
 
 from .html_icons import icons

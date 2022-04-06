@@ -1,4 +1,3 @@
-from unicodedata import category
 from flask import request, session
 from flask import render_template, redirect, url_for
 from flask import Blueprint
