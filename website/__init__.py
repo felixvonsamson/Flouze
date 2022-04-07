@@ -59,14 +59,7 @@ def create_app():
           f"{game.owner[color_id].name} a été plus rapide que vous !", 
           category="error", persistant=False)
     else:
-      updates = []
-      if player.color != None :
-        game.owner[player.color["id"]] = None
-        updates.append((player.color["name"], ""))
-      player.color = game.colors[color_id]
-      updates.append((player.color["name"], player.name))
-      engine.update_fields(updates)
-      player.is_done = True
+      player.choice = color_id
 
   from .auth import auth
   from .views import views

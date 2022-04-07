@@ -95,7 +95,6 @@ class Game(ABC):
     game.is_done = [[False]*5 for _ in range(3)]
     game.frame_id = 0
 
-
   @abstractmethod
   def logic(game):
     pass
@@ -181,13 +180,28 @@ class Colors(Game):
     game.config = games_config["colors"]
     game.colors = colors
     game.owner = [None]*5
+    game.choices = [[None]*5]
     game.is_done = [[False]*5]
+  
+  def set_choice(game, player, color_id):
+    updates = []
+    last_choice  = game.choices[0][player.ID]
+    if last_choice != None :
+      game.owner[last_choice] = None
+      updates.append((game.colors[last_choice]["name"], ""))
+    game.owner[color_id] = player
+    game.choices[0][player.ID] = color_id
+    updates.append((game.colors[color_id]["name"], player.name))
+    game.engine.update_fields(updates)
+    player.is_done = True
   
   def logic(game):
     pass
 
   def end(game):
     for player in game.engine.players:
+      color_id = game.choices[0][player.ID]
+      player.color = game.colors[color_id]
       game.engine.log(f"{player.name} a choisis la couleur "\
                       f"{player.color['name']}.")
       player.send_message("Vous avez choisis la couleur "\
@@ -199,8 +213,13 @@ class Game1(Game):
     super().__init__(engine)
     game.game_nb = 1
     game.config = games_config["game1"]
-    
-
+  
+  def set_choice(game, player, tickets):
+    game.current_choices[player.ID] = tickets
+    game.engine.log(f"{player.name} a choisis {tickets} tickets.")
+    player.flash_message(f"Vous avez choisis {tickets} tickets.")
+    player.is_done = True
+  
   def logic(game):
     assert game.is_everyone_done
     choices = game.current_choices
@@ -246,9 +265,14 @@ class Game2(Game):
     super().__init__(engine)
     game.game_nb = 2
     game.config = games_config["game2"]
-    
     game.reveal_states = [[False]*5 for _ in range(3)]
-
+  
+  def set_choice(game, player, number):
+    game.current_choices[player.ID] = number
+    game.engine.log(f"{player.name} a choisis le nombre {number}.")
+    player.flash_message(f"Vous avez choisis le nombre {number}.")
+    player.is_done = True
+  
   def logic(game):
     assert game.is_everyone_done
     choices = game.current_choices
@@ -293,7 +317,6 @@ class Game3(Game):
     game.game_nb = 3
     game.config = games_config["game3"]
     game.real_gain = [0]*5
-
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
 
@@ -309,7 +332,15 @@ class Game3(Game):
     game.engine.log(
        "L'argent des joueurs à été mis de coté. "\
       f"Ils leur restent tous {initial_flouze} Pièces")
-
+  
+  def set_choice(game, player, amount):
+    player.flouze -= amount
+    game.current_choices[player.ID] = amount
+    game.engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
+    player.flash_message(
+      f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
+    player.is_done = True
+  
   def logic(game):
     assert game.is_everyone_done
 
@@ -329,14 +360,15 @@ class Game3(Game):
       f"{5 * prize} Pièces ont été redistribué équitablement à "\
       f"tous les joueurs ce qui fait {prize} Pièces par joueur-")
 
-    for player in game.engine.players:
+    for player, shared in zip(game.engine.players, game.current_choices):
       player.flouze += prize
-      game.real_gain[player.ID] += prize
+      game.real_gain[player.ID] += prize - shared
       player.message = Markup(f"Vous avez reçu {prize} {icons['coin']}.")
 
     if game.current_round_id == 2:
       winner_id = np.argmax(game.real_gain)
       winner = game.engine.players[winner_id]
+      print(game.real_gain)
       if game.real_gain.count(max(game.real_gain)) == 1:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
@@ -385,6 +417,22 @@ class Game4(Game):
   @property
   def current_prizes(game):
     return game.config["prizes"][game.current_round_id][game.current_bonuses]
+  
+  def set_choice(game, player, prize_id):
+    game.current_choices[player.ID] = prize_id
+    prizes = game.current_prizes
+    prize = prizes[prize_id]
+    if prize == "star":
+      if player.choice == 3 :
+        game.engine.log(f"{player.name} a choisis la deuxième étoile.")
+      else :
+        game.engine.log(f"{player.name} a choisis l'etoile.")
+      player.flash_message(f"Vous avez choisis le prix : {icons['star']}")
+    else:
+      game.engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
+      player.flash_message(
+        f"Vous avez choisis le prix : {prize} {icons['coin']}")
+    player.is_done = True
   
   def logic(game):
     assert game.is_everyone_done
@@ -493,6 +541,9 @@ class Game5(Game):
   @current_answer.setter
   def current_answer(game, answer):
     game.answers[game.question_id] = answer
+    player = game.other_players[game.question_id]
+    game.engine.log(f"{player.name} a donner la réponse {answer} "\
+               f"à la question : '{game.current_question[1][0]}'.")
     game.next_question()
     game.engine.save_data()
     game.engine.refresh_monitoring()
@@ -512,7 +563,24 @@ class Game5(Game):
     if game.question_id:
       for player in game.other_players:
         player.emit("refresh", None)
-
+  
+  def make_proposition(game, amounts):
+    for i, (remittee, amount) in enumerate(zip(game.other_players, amounts)):
+      game.current_proposition[i] = amount
+      game.engine.log(f"{game.master.name} a proposé {amount} {icons['coin']} "\
+                      f"à {remittee.name}.")
+      remittee.message = \
+        f"{game.master.name} vous fait une proposition "\
+        f"de {amount} {icons['coin']}"
+    game.master.is_done = True
+    game.engine.next_page()
+  
+  def set_choice(game, player, decision):
+    game.current_choices[player.ID] = decision == "accepté"
+    game.engine.log(f"{player.name} a {decision} "\
+                    f"la proposition de {game.master.name}.")
+    player.is_done = True
+  
   def logic(game):
     if sum(game.current_choices) >= 3:
       game.engine.log("La proposition a été accepté par la majorité.")

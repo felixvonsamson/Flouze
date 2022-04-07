@@ -10,7 +10,7 @@ class Player(object):
     player.sid = None
     player.name = name
     player.password = password
-    player.__color = None
+    player.color = None
     player.flouze = 0
     # Dans le jeu 3 l'argent est mis de coté
     player.saved_flouze = 0
@@ -25,7 +25,7 @@ class Player(object):
     return player.engine.current_game.current_choices[player.ID]
   @choice.setter
   def choice(player, choice):
-    player.engine.current_game.current_choices[player.ID] = choice
+    player.engine.current_game.set_choice(player, choice)
 
   @property
   def is_done(player):
@@ -39,15 +39,6 @@ class Player(object):
     else:
       player.engine.next_page()
     player.engine.save_data()
-
-  @property
-  def color(player):
-    return player.__color
-  @color.setter
-  def color(player, color):
-    game = player.engine.current_game
-    game.owner[color["id"]] = player
-    player.__color = color
 
   def emit(player, *args):
     if player.sid:

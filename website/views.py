@@ -131,9 +131,7 @@ def home():
         return render_template_ctx(engine.current_page["url"])
       tickets = int(tickets)
       player.choice = tickets
-      engine.log(f"{player.name} a choisis {tickets} tickets.")
-      player.flash_message(f"Vous avez choisis {tickets} tickets.")
-      player.is_done = True
+      
 
     elif "jeu2" in request.form:
       if not game.is_allowed_to_play(player, 2):
@@ -142,9 +140,6 @@ def home():
         flash_error("Veuiller choisir un nombre !")
         return render_template_ctx(engine.current_page["url"])
       player.choice = int(request.form["choice"])
-      engine.log(f"{player.name} a choisis le nombre {player.choice}.")
-      player.flash_message(f"Vous avez choisis le nombre {player.choice}.")
-      player.is_done = True
 
     elif "jeu3" in request.form:
       if not game.is_allowed_to_play(player, 3):
@@ -160,12 +155,7 @@ def home():
       if amount > player.flouze:
         flash_error("Le montant indiqué dépasse votre solde !")
         return render_template_ctx(engine.current_page["url"])
-      player.flouze -= amount
       player.choice = amount
-      engine.log(f"{player.name} a versé {amount} Pièces dans le pot commun")
-      player.flash_message(
-        f"Vous avez versé {amount} {icons['coin']} dans le pot commun")
-      player.is_done = True
         
     elif "jeu4" in request.form:
       if not game.is_allowed_to_play(player, 4):
@@ -174,19 +164,6 @@ def home():
         flash_error("Veuiller choisir un prix !")
         return render_template_ctx(engine.current_page["url"])
       player.choice = int(request.form["choice"])
-      prizes = game.current_prizes
-      prize = prizes[player.choice]
-      if prize == "star":
-        if player.choice == 3 :
-          engine.log(f"{player.name} a choisis la deuxième étoile.")
-        else :
-          engine.log(f"{player.name} a choisis l'etoile.")
-        player.flash_message(f"Vous avez choisis le prix : {icons['star']}")
-      else:
-        engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
-        player.flash_message(
-          f"Vous avez choisis le prix : {prize} {icons['coin']}")
-      player.is_done = True
     
     elif "don_etoiles" in request.form:
       assert request.form["don_etoiles"] == "terminer"
@@ -195,13 +172,10 @@ def home():
     elif "jeu5" in request.form:
       assert request.form["jeu5"] in [
         "proposition", "nouvelle_proposition", 
-        "refuser", "accepter", "quiz_reponse"]
+        "refusé", "accepté", "quiz_reponse"]
       
       if request.form["jeu5"] == "quiz_reponse":
-        answer = request.form.get("réponse")
-        engine.log(f"{player.name} a donner la réponse {answer} à la question "\
-                   f": '{game.quiz.current_question[1][0]}'.")
-        game.current_answer = answer
+        game.current_answer = request.form.get("réponse")
       
       elif request.form["jeu5"] == "proposition":
         if not game.is_allowed_to_play(player, 5):
@@ -222,24 +196,14 @@ def home():
           flash_error(
             "Les propositions que vous avez faites dépasse vos moyens !")
           return render_template_ctx("Jeu5-proposition.jinja")
-        for i, other_player in enumerate(game.other_players):
-          amount = int(request.form.get(other_player.name))
-          game.current_proposition[i] = amount
-          engine.log(f"{player.name} a proposé {amount} {icons['coin']} "\
-                     f"à {other_player.name}.")
-          other_player.message = \
-            f"{player.name} vous fait une proposition "\
-            f"de {amount} {icons['coin']}"
-        player.is_done = True
-        engine.next_page()
+        amounts = [int(request.form.get(other_player.name)) 
+                   for other_player in game.other_players]
+        game.make_proposition(amounts)
       
       elif request.form["jeu5"] in ["refusé", "accepté"]:
         if not game.is_allowed_to_play(player, 5):
           return redirect(url_for("views.home"))
-        player.choice = request.form["jeu5"] == "accepter"
-        engine.log(f"{player.name} a {request.form['jeu5']} "\
-                   f"la proposition de {game.master.name}.")
-        player.is_done = True
+        player.choice = request.form["jeu5"]
       
       elif request.form["jeu5"] == "nouvelle_proposition":
         engine.next_page(refresh=False)
