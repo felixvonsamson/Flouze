@@ -21,7 +21,7 @@
 
 {% block player_money %}
 <!--Top bar with money-->
-<div onclick="document.getElementById('history').style.display='block'" class="w3-container w3-text-white top-bar" style="background-color:{{ config["theme_colors"][0] }}">
+<div onclick="document.getElementById('history').style.display='block'; scrollToBottom()" class="w3-container w3-text-white top-bar" style="background-color:{{ config["theme_colors"][0] }}">
   <div class="w3-right huge"><span id="flouze">{{ player.flouze }}</span> <img src="{{ url_for('static', filename="images/coin.png") }}" class="coin" alt="Coin"></div>
 </div>
 
@@ -48,10 +48,9 @@
 </form>
 {% endblock %}
 
-<!--History button-->
-<div id="history" onclick="document.getElementById('history').style.display='none'" class="w3-modal">
-  <div id="history_list" class="w3-modal-content w3-padding" style="background-color:{{ config["theme_colors"][1] }}">
-    <span onclick="document.getElementById('history').style.display='none'" class="w3-button w3-display-topright medium" style="padding:1px 16px;">&times;</span>
+<!--History-->
+<div id="history" onclick="document.getElementById('history').style.display='none'" class="w3-modal w3-animate-opacity">
+  <div id="history_list" class="w3-modal-content w3-padding w3-animate-top" style="background-color:{{ config["theme_colors"][1] }}">
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
@@ -173,6 +172,9 @@
     });
     function answer_flouze_request(answer) {
       socket.emit('answer_flouze_request', answer);
+    }
+    const scrollToBottom = () => {
+      scrollingElement.scrollTop = scrollingElement.scrollHeight;
     }
     {% block additionnal_script %}{% endblock %}
   </script>
