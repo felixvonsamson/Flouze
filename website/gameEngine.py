@@ -17,10 +17,7 @@ class gameEngine(object):
     engine.admin_sid = None
 
     engine.logger = logging.getLogger("Flouze")
-    engine.logger.setLevel(logging.INFO)
-    s_handler = logging.StreamHandler()
-    s_handler.setLevel(logging.INFO)
-    engine.logger.addHandler(s_handler)
+    engine.init_logger()
     engine.logs = []
     engine.nonces = set()
 
@@ -44,6 +41,12 @@ class gameEngine(object):
     engine.iterator = 0
     
     engine.log("LE JEU A COMMENCÉ !")
+
+  def init_logger(engine):
+    engine.logger.setLevel(logging.INFO)
+    s_handler = logging.StreamHandler()
+    s_handler.setLevel(logging.INFO)
+    engine.logger.addHandler(s_handler)
 
   def get_nonce(engine):
     while True:
@@ -157,6 +160,7 @@ class gameEngine(object):
   def load_data():
     with open("data.pck", "rb") as file:
       engine = pickle.load(file)
+    engine.init_logger()
     engine.admin_sid = None
     for player in engine.players:
       player.sid = None

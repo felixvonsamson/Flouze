@@ -234,27 +234,21 @@ class Game1(Game):
       prize //= len(lottery)
       winner.flouze += prize
       winner.last_profit = prize
-
       game.engine.log(
         f"Le gagnant de la lotterie est {winner.name} "\
         f"qui a reçu {prize} Pièces.")
-
       winner.message = Markup(
         f"Vous avez gagné la lotterie !<br>Vous avez reçu {prize} "\
         f"{icons['coin']} !")
-
       if game.current_round_id == 2:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
-
         game.engine.log(
           f"{winner.name} a reçu {won_stars} étoile(s) "\
            "car iel a gagné la dernière manche.")
-
         winner.message += Markup(
           f"<br>En plus vous recevez {won_stars} {icons['star']} "\
            "car vous avez remporté la dernière manche.")
-
     else:
       game.engine.log(
         "Il n'y a pas de gagnant à la lotterie car personne n'a participé.")
