@@ -5,7 +5,7 @@
 {% block content %}
 
 <div id="card2" class="w3-card-4 w3-center w3-white animate__animated animate__fadeIn">
-<header class="w3-text-white large w3-padding" style="background-color:{{ config["theme_colors"][0] }}">
+<header class="w3-text-white large w3-padding theme-dark-2">
     Choisissez un nombre
 </header>
 <form method="POST">
@@ -14,7 +14,7 @@
       <label class="circle w3-hover-opacity"><input type="radio" name="choice" value={{ choice }} onchange="update_choice(this)"/>{{ choice }}</label>
     {% endfor %}
   </div>
-  <p><button name="jeu2" type="submit" class="w3-button w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Valider</button></p>
+  <p><button name="jeu2" type="submit" class="w3-button w3-text-white theme-dark-2">Valider</button></p>
   </form>
 </div>
 

@@ -8,7 +8,7 @@
 {% block content %}
 
 <form method="POST" class="w3-card-4 w3-center medium w3-white animate__animated animate__fadeIn" style="width:320px;">
-<header class="large w3-text-white w3-padding" style="background-color:{{ config["theme_colors"][0] }}">
+<header class="large w3-text-white w3-padding theme-dark-5">
     Veuillez faire une offre aux autres joueurs
 </header>
 <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
@@ -22,7 +22,7 @@
 <div class="w3-card w3-margin w3-padding-small" style="background-color:{{ game.master.color["primary"] }}">
 Il vous restera <span id="rest"></span> <img src="/static/images/coin.png" class="coin" alt="Coin"><br>
 </div>
-<button type="submit" name="jeu5" value="proposition" class="w3-button w3-margin-bottom w3-text-white" style="background-color:{{ config["theme_colors"][0] }}">Faire une proposition</button>
+<button type="submit" name="jeu5" value="proposition" class="w3-button w3-margin-bottom w3-text-white theme-dark-5">Faire une proposition</button>
 </form>
 
 <script>

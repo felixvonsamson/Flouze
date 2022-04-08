@@ -6,8 +6,8 @@
 {% block donation_button %}{% if game.game_nb == 5 %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
 
-<div class="w3-card-4 w3-center animate__animated animate__zoomIn" style="background-color:{{ config["theme_colors"][1] }}">
-  <div class="w3-container w3-text-white" style="background-color:{{ config["theme_colors"][0] }}; margin:10px">
+<div class="w3-card-4 w3-center animate__animated animate__zoomIn theme-light-{{ game.game_nb }}">
+  <div class="w3-container w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px">
     {% if engine.current_game_nb == 1 %}
       <h2>Premier jeu</h2>
     {% elif engine.current_game_nb == 2 %}

@@ -5,7 +5,7 @@
 {% block content %}
 
   <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:270px;">
-  <header id="total" class="w3-container w3-text-white large w3-padding" style="background-color:{{ engine.current_game.config["theme_colors"][0] }}">
+  <header id="total" class="w3-container w3-text-white large w3-padding theme-dark-{{ game.game_nb }}">
       <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> &nbsp; à partager
   </header>
   {% if player.last_profit < 0 %}
@@ -24,7 +24,7 @@
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>
     <button type="submit" formaction="/" class="w3-button w3-red" style="margin:10px">en fait non</button>
-    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white" style="margin:10px; background-color:{{ config["theme_colors"][0] }}">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
+    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
 </form>
   </div>
 

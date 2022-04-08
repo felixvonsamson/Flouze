@@ -5,7 +5,7 @@
 {% block content %}
 
   <div class="w3-card-4 w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:250px;">
-  <header class="w3-container large" style="background-color:{{ config["theme_colors"][0] }}">
+  <header class="w3-container large theme-dark-{{ game.game_nb }}">
       À qui shouaitez-vous léguer des étoiles ?
   </header>
   <form class="w3-container" method="POST">
@@ -17,7 +17,7 @@
   </select>
   <br><input name="quantité" class="w3-input w3-border w3-round-large w3-center" placeholder="Quantitée" type="number" style="width:120px; display:inline-block;">
   <p>
-    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-margin-right w3-button" style="background-color:{{ config["theme_colors"][0] }}">Envoyer</button>
+    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-margin-right w3-button theme-dark-{{ game.game_nb }}">Envoyer</button>
     <button type="submit" formaction="/" class="w3-margin-left w3-button w3-red">Retour</button>
   </p>
   <p>
