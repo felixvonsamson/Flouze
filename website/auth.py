@@ -1,13 +1,13 @@
-from flask import request, session
+from flask import current_app, request, session
 from flask import render_template, redirect, url_for, flash
 from flask import Blueprint
 
-from . import engine
 
 auth = Blueprint("auth", __name__)
 
 @auth.route("/login", methods = ["GET", "POST"])
 def login():
+    engine = current_app.config["engine"]
     if request.method == "POST":
         first_name = request.form.get("firstName")
         password = request.form.get("password")

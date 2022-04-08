@@ -1,8 +1,7 @@
-from flask import request, session
+from flask import current_app, request, session
 from flask import render_template, redirect, url_for, flash
 from flask import Blueprint
 from functools import partial
-from website import engine
 
 from .html_icons import icons
 
@@ -18,6 +17,7 @@ def check_user():
 
 @views.route("/faire_un_don", methods=("GET", "POST"))
 def donner_flouze():
+  engine = current_app.config["engine"]
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST":
@@ -46,6 +46,7 @@ def donner_flouze():
 
 @views.route("/partager_profit", methods=["GET", "POST"])
 def partager_profit():
+  engine = current_app.config["engine"]
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST":
@@ -87,6 +88,7 @@ def partager_profit():
 
 @views.route("/donner_des_etoiles", methods=("GET", "POST"))
 def donner_etoiles():
+  engine = current_app.config["engine"]
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST" and "don_etoiles" not in request.form:
@@ -117,6 +119,7 @@ def donner_etoiles():
 
 @views.route("/", methods=["GET", "POST"])
 def home():
+  engine = current_app.config["engine"]
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   game = engine.current_game

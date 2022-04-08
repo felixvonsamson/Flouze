@@ -18,10 +18,10 @@ def create_app():
   app.config["SECRET_KEY"] = "BxclfIEmzsq8HTqvFnyW"
   app.jinja_env.globals.update(zip=zip)
   
-  global engine
   engine = gameEngine.load_data() if os.path.isfile("data.pck")  \
        else init_engine()
-  
+  app.config["engine"] = engine
+
   socketio = SocketIO(app)
   engine.socketio = socketio
   @socketio.on("give_identity")

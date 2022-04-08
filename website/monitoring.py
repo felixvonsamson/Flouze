@@ -1,7 +1,6 @@
-from flask import request, session
+from flask import current_app, request, session
 from flask import render_template, redirect, url_for
 from flask import Blueprint
-from website import engine
 
 from .html_icons import icons
 
@@ -9,6 +8,7 @@ monitoring = Blueprint("monitoring", __name__)
 
 @monitoring.route("/monitoring", methods=("GET", "POST"))
 def home():
+  engine = current_app.config["engine"]
   if session["ID"] != "admin":
     return redirect(url_for("views.home"))
   if request.method == "POST":
