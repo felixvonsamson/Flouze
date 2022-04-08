@@ -7,40 +7,35 @@ from .html_icons import icons
 from .pages_ordering import pages
 
 colors = [
-  {"id":0, "name":"bleu",  "primary":"#6d9eeb", "secondary":"#3c78d8"},
-  {"id":1, "name":"rouge", "primary":"#e06666", "secondary":"#cc0000"},
-  {"id":2, "name":"jaune", "primary":"#ffd966", "secondary":"#bf9000"},
-  {"id":3, "name":"vert",  "primary":"#93c47d", "secondary":"#6aa84f"},
-  {"id":4, "name":"violet","primary":"#8e7cc3", "secondary":"#674ea7"}
+  {"id":0, "name":"bleu"},
+  {"id":1, "name":"rouge"},
+  {"id":2, "name":"jaune"},
+  {"id":3, "name":"vert"},
+  {"id":4, "name":"violet"}
 ]
 
 games_config = {
   "colors": {
     "background": "2.jpg",
-    "theme_colors": (None, None),
   },
   "game1": {
     "background": "10.jpg",
-    "theme_colors": ("#b65612", "#dfaa84"),
     "prizes": [200, 400, 600],
     "3rd_round_stars": 1
   },
   "game2": {
     "background": "9.jpg",
-    "theme_colors": ("#017e68", "#6ecdbc"),
     "prizes": [50, 100, 150],
     "3rd_round_stars": 2
   },
   "game3": {
     "background": "8.jpg",
-    "theme_colors": ("#3f6203", "#a6ca68"),
     "initial_flouze": 100,
     "interests": [1.2, 1.5, 2],
     "3rd_round_stars": 2
   },
   "game4": {
     "background": "6.jpg",
-    "theme_colors": ("#024b66", "#60a7c1"),
     "prizes": [[[150, 100, 50, 0, "star"]],
                [[250, 150, 0, -150, "star"],
                 [400, 250, 0, -250, "star"]],
@@ -50,7 +45,6 @@ games_config = {
   },
   "game5": {
     "background": "7.jpg",
-    "theme_colors": ("#6b017f", "#c470d4"),
     "prize": 2500,
     "bonus": 500,
     "quiz_prize": 30
