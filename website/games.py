@@ -19,22 +19,26 @@ games_config = {
     "background": "2.jpg",
   },
   "game1": {
+    "title": "La loterie", 
     "background": "10.jpg",
     "prizes": [200, 400, 600],
     "3rd_round_stars": 1
   },
   "game2": {
+    "title": "L'enchère inversée", 
     "background": "9.jpg",
     "prizes": [50, 100, 150],
     "3rd_round_stars": 2
   },
   "game3": {
+    "title": "Le pot commun", 
     "background": "8.jpg",
     "initial_flouze": 100,
     "interests": [1.2, 1.5, 2],
     "3rd_round_stars": 2
   },
   "game4": {
+    "title": "Le con promis", 
     "background": "6.jpg",
     "prizes": [[[150, 100, 50, 0, "star"]],
                [[250, 150, 0, -150, "star"],
@@ -44,6 +48,7 @@ games_config = {
                 [1000, 300, -400, "star", "star"]]],
   },
   "game5": {
+    "title": "Le bras de fer", 
     "background": "7.jpg",
     "prize": 2500,
     "bonus": 500,

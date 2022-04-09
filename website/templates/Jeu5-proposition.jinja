@@ -12,14 +12,14 @@
     Veuillez faire une offre aux autres joueurs
 </header>
 <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
-  {% for player in other_players %}
-  <div class="w3-card w3-padding" style="background-color:{{ player.color["primary"] }}; width:140px">
-    <b class="large w3-padding">{{ player.name }}</b>
-    <input id=proposition{{ loop.index0 }} onchange="update_rest()" class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{ player.name }} type="number" style="width:110px;">
+  {% for other_player in other_players %}
+  <div class="w3-card w3-padding {{ other_player.color['name'] }}-light" style="width:140px">
+    <b class="large w3-padding">{{ other_player.name }}</b>
+    <input id=proposition{{ loop.index0 }} onchange="update_rest()" class="w3-input w3-border w3-round-large w3-center" placeholder="Montant" name={{ other_player.name }} type="number" style="width:110px;">
   </div>
   {% endfor %}
 </div>
-<div class="w3-card w3-margin w3-padding-small" style="background-color:{{ game.master.color["primary"] }}">
+<div class="w3-card w3-margin w3-padding-small {{ player.color['name'] }}-light">
 Il vous restera <span id="rest"></span> <img src="/static/images/coin.png" class="coin" alt="Coin"><br>
 </div>
 <button type="submit" name="jeu5" value="proposition" class="w3-button w3-margin-bottom w3-text-white theme-dark-5">Faire une proposition</button>

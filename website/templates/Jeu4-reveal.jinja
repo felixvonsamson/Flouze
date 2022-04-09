@@ -10,15 +10,15 @@
   {% for player_it in engine.players %}
     <div class="flip-card card-size">
       <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front" style="background-color:{{ player_it.color["primary"] }};">
+        <div class="flip-card-front {{ player_it.color['name'] }}-light">
           <b class="large w3-padding">{{ player_it.name}}</b>
         </div>
-        <div class="flip-card-back" style="background-color:{{ player_it.color["primary"] }};">
+        <div class="flip-card-back {{ player_it.color['name'] }}-light">
           <b class="large w3-padding">{{ player_it.name }}</b>
         {% if prizes[player_it.choice] == "star" %}
-        <div class="large w3-margin padding-reveal {% if player_it.choice == 3 %} w3-text-teal {% else %} w3-text-white {% endif %}" style="background-color:{{ player_it.color["secondary"] }}; position:relative; bottom:4px"><i class="fa fa-star"></i></div>
+        <div class="large w3-margin padding-reveal {% if player_it.choice == 3 %} w3-text-teal {% else %} w3-text-white {% endif %} {{ player_it.color['name'] }}-dark" style="position:relative; bottom:4px"><i class="fa fa-star"></i></div>
         {% else %}
-        <div class="large w3-margin w3-text-white padding-reveal" style="background-color:{{ player_it.color["secondary"] }}; position:relative; bottom:4px">{{ prizes[player_it.choice] }} <img src="/static/images/coin.png" class="coin" alt="Coin"></div>
+        <div class="large w3-margin w3-text-white padding-reveal {{ player_it.color['name'] }}-dark" style="position:relative; bottom:4px">{{ prizes[player_it.choice] }} <img src="/static/images/coin.png" class="coin" alt="Coin"></div>
         {% endif %}
         </div>
       </div>

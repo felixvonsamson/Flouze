@@ -14,12 +14,12 @@
   {% endif %}
   <form method="POST">
   {% for other_player in player.other_players %}
-  <div class="w3-row" style="background-color:{{ other_player.color["primary"] }}; margin:8px">
+  <div class="w3-row {{ other_player.color['name'] }}-light" style="margin:8px">
     <div class="w3-col w3-padding" style="width:150px;"><b>{{ other_player.name }}</b></div>
     <div class="w3-rest"><input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:99px; height:30px; margin-top:5px"></div>
   </div>
   {% endfor %}
-  <div class="w3-row" style="background-color:{{ player.color["primary"] }}; margin:8px">
+  <div class="w3-row {{ player.color['name'] }}-light" style="margin:8px">
     <div class="w3-col w3-padding" style="width:150px;"><b>{{ player.name }}</b></div>
     <div class="w3-rest w3-padding" id="rest"></div>
   </div>

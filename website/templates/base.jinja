@@ -24,7 +24,7 @@
   {% block stars_table %}
   <div class="flex-vertical star-table">
     {% for player_it in engine.players %}
-      <div class="star-cell medium space-between flex-horizontal {{ player_it.color['name'] }}-light">
+      <div class="star-cell small space-between flex-horizontal {{ player_it.color['name'] }}-light">
         {{ player_it.name }}
         <i id="player{{ loop.index0 }}_star" class="fa fa-star" style="padding: 0 0.3em"> {{ player_it.stars }}</i>
       </div>

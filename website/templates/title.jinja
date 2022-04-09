@@ -8,17 +8,7 @@
 
 <div class="w3-card-4 w3-center animate__animated animate__zoomIn theme-light-{{ game.game_nb }}">
   <div class="w3-container w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px">
-    {% if engine.current_game_nb == 1 %}
-      <h2>Premier jeu</h2>
-    {% elif engine.current_game_nb == 2 %}
-      <h2>Deuxième jeu</h2>
-    {% elif engine.current_game_nb == 3 %}
-      <h2>Troisième jeu</h2>
-    {% elif engine.current_game_nb == 4 %}
-      <h2>Quatrième jeu</h2>
-    {% elif engine.current_game_nb == 5 %}
-      <h2>Cinquième jeu</h2>
-    {% endif %}
+    {{ config["title"] }}
   </div>
 </div>
 <iframe src="{{ url_for("static", filename="animations/Jeu%d.sozi.html" % game.game_nb) }}" class="anim" style="-webkit-backdrop-filter: blur(0.9vw); backdrop-filter: blur(0.9vw);" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{ game.frame_id }} % player.presentation.frames.length);">

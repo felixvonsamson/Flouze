@@ -4,20 +4,21 @@
 {% block title %}Flouze - Jeu 1{% endblock %}
 {% block content %}
 
-<div class="w3-card-4 w3-center w3-white animate__animated animate__fadeIn" style="max-width:450px; width:90%; min-width:310px;">
-<header class="w3-text-white w3-padding medium theme-dark-1">
+<div class="w3-card-4 w3-center w3-white animate__animated animate__fadeIn container-jeu-1">
+<header class="w3-text-white w3-padding-large theme-dark-1" style="line-height:1.3em">
     Combien de tiquets voulez-vous mettre en jeu ?
 </header>
-<form method="POST">
-<select class="w3-select w3-border w3-margin" style="width:180px;" id="tickets" name="tickets">
-<option value="" disabled="" selected="">Nombre de tickets</option>
-<option value=0>Aucun ticket</option>
-<option value=1>1 ticket</option>
-{% for i in range(2, 21)%}
-<option value={{i}}>{{i}} tickets</option>
-{% endfor %}
-</select>
-<button name="jeu1" type="submit" class="w3-button w3-text-white theme-dark-1">Valider</button></form>
+<form method="POST" class="flex-vertical center-items">
+    <select class="w3-select w3-border w3-margin small" id="tickets" name="tickets" style="width:250px">
+        <option value="" disabled="" selected="">Nombre de tickets</option>
+        <option value=0>Aucun ticket</option>
+        <option value=1>1 ticket</option>
+        {% for i in range(2, 21)%}
+        <option value={{i}}>{{i}} tickets</option>
+        {% endfor %}
+    </select>
+    <button name="jeu1" type="submit" class="w3-button small w3-text-white theme-light-1 full-width">Valider</button>
+</form>
 </div>
 
 {% endblock %}

@@ -9,13 +9,13 @@
   {% for player_it in engine.players %}
   <div class="flip-card card-size">
     <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-      <div class="flip-card-front" style="background-color:{{ player_it.color["primary"] }};">
+      <div class="flip-card-front {{ player_it.color['name'] }}-light" }};">
         <b class="large w3-padding">{{ player_it.name }}</b>
       </div>
-      <div class="flip-card-back" style="background-color:{{ player_it.color["primary"] }};">
+      <div class="flip-card-back {{ player_it.color['name'] }}-light" }};">
         <b class="large w3-padding">{{ player_it.name }}</b>
         <div class="w3-display-container" style="height:50px;">
-          <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white" style="background-color:{{ player_it.color["secondary"] }};">{{ player_it.choice }}</div>
+          <div class="circle-big w3-lobster w3-xxlarge w3-display-middle w3-text-white {{ player_it.color['name'] }}-dark">{{ player_it.choice }}</div>
         </div>
       </div>
     </div>
