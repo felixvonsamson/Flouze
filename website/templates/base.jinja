@@ -58,8 +58,8 @@
 </div>
 
 <!--History-->
-<div id="history" onclick="document.getElementById('history').style.display='none'" class="w3-modal w3-animate-opacity">
-  <div id="history_list" class="w3-modal-content w3-padding w3-animate-top theme-light-{{game_nb}}">
+<div id="history" onclick="document.getElementById('history').style.display='none'" class="modal w3-animate-opacity" style="animate__animated animate__fadeOutUp">
+  <div id="history_list" class="w3-modal-content w3-padding theme-light-{{game_nb}}">
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
