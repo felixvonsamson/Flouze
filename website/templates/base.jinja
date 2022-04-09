@@ -34,7 +34,7 @@
 
   {% block player_money %}
   <!--Top bar with money-->
-  <div onclick="document.getElementById('history').style.display='block'; scrollToBottom()" class="top-bar theme-dark-{{game_nb}} huge">
+  <div onclick="document.getElementById('history').classList.remove('hidden'); var history_list = document.getElementById('history_list'); history_list.classList.remove('hidden'); history_list.scrollTop = history_list.scrollHeight;" class="top-bar theme-dark-{{game_nb}} huge">
     <span>
       <span id="flouze">{{ player.flouze }}</span>
       <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">
@@ -58,8 +58,8 @@
 </div>
 
 <!--History-->
-<div id="history" onclick="document.getElementById('history').style.display='none'" class="modal w3-animate-opacity" style="animate__animated animate__fadeOutUp">
-  <div id="history_list" class="w3-modal-content w3-padding theme-light-{{game_nb}}">
+<div id="history" onclick="document.getElementById('history_list').classList.add('hidden'); document.getElementById('history').classList.add('hidden');" class="hidden">
+  <div id="history_list" class="w3-modal-content w3-padding hidden theme-light-{{game_nb}}">
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
@@ -181,9 +181,6 @@
     });
     function answer_flouze_request(answer) {
       socket.emit('answer_flouze_request', answer);
-    }
-    const scrollToBottom = () => {
-      scrollingElement.scrollTop = scrollingElement.scrollHeight;
     }
     {% block additionnal_script %}{% endblock %}
   </script>
