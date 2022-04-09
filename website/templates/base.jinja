@@ -59,11 +59,10 @@
 
 <!--History-->
 <div id="history" onclick="document.getElementById('history_list').classList.add('hidden'); document.getElementById('history').classList.add('hidden');" class="hidden">
-  <div id="history_list" class="w3-padding hidden theme-light-{{game_nb}}">
+  <div id="history_list" class="w3-padding-large hidden theme-light-{{game_nb}}">
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
-    {{"Loooooooooooonguuuuue phrrrrraaaaaaaaaaseee <br/>"*100}}
   </div>
 </div>
 
