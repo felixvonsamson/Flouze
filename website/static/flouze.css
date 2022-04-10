@@ -196,7 +196,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .theme-light-4{color:#000;background-color:#60a7c1}
 .theme-dark-5{color:#fff;background-color:#6b017f}
 .theme-light-5{color:#000;background-color:#c470d4}
-.border-theme-dark-5{border:5px solid #c470d4;}
+.border-5{border:5px solid #c470d4;}
 
 /* Custom */
 .star-table{float:left;}

@@ -340,7 +340,7 @@ class Game3(Game):
     inputs = game.current_choices
     common_pot = sum(inputs)
     if game.sabotage:
-      common_pot = 1.2 * np.max(inputs)
+      common_pot = int(1.2 * np.max(inputs))
       game.engine.log(
         f"Cette manche a été sabotée car les participans on été trop "\
          "coopératifs. Le contenu du pot commun avant l'ajout de la "\
@@ -495,7 +495,7 @@ class Game5(Game):
       game.master.flouze += game.jackpot
       game.engine.log(
         f"{game.master.name} a le plus d'étoiles et remporte ainsi "\
-        f"la somme de {game.jackpot} pièces pour le cinquième jeu.")
+        f"la somme de {game.jackpot} Pièces pour le cinquième jeu.")
       for player in game.other_players:
         player.message = Markup(
           f"{game.master.name} a le plus d'étoiles et est ainsi "\
@@ -560,7 +560,7 @@ class Game5(Game):
   def make_proposition(game, amounts):
     for i, (remittee, amount) in enumerate(zip(game.other_players, amounts)):
       game.current_proposition[i] = amount
-      game.engine.log(f"{game.master.name} a proposé {amount} {icons['coin']} "\
+      game.engine.log(f"{game.master.name} a proposé {amount} Pièces "\
                       f"à {remittee.name}.")
       remittee.message = \
         f"{game.master.name} vous fait une proposition "\
@@ -592,7 +592,7 @@ class Game5(Game):
             (game.bonuses == 3) * games_config["game5"]["bonus"]
         game.master.flouze -= prize
         game.engine.log("La proposition a été refusée par la majorité."\
-          f"Les {prize} {icons['coin']} sont retirés à {game.master.name}.")
+          f"Les {prize} Pièces sont retirés à {game.master.name}.")
         game.master.message = \
           f"Votre dernière proposition a été refusée par "\
           f"la majorité. Les {prize} {icons['coin']} vous sont donc retirés."
@@ -614,7 +614,7 @@ class Game5(Game):
   def end(game):
     for player in game.engine.players:
       game.engine.log(
-        f"{player.name} repart avec {player.flouze} {icons['coin']}, ce qui "\
+        f"{player.name} repart avec {player.flouze} Pièces, ce qui "\
         f"correspond à {str(player.flouze / 10).rstrip('0').rstrip('.')} €.")
       player.message += Markup(
         f"<br>Vous repartez donc avec {player.flouze} {icons['coin']}, ce qui "\
