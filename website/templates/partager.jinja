@@ -16,14 +16,14 @@
   {% for other_player in player.other_players %}
   <div class="{{ other_player.color['name'] }}-light flex-horizontal space-around w3-padding center-items margins-partager">
     <span style="width:5em"><b>{{ other_player.name }}</b></span>
-    <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:5em; height:1.6em">
+    <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:5em; height:1.6em" required>
   </div>
   {% endfor %}
   <div class="{{ player.color['name'] }}-light flex-horizontal space-around w3-padding center-items margins-partager">
     <span style="width:5em;"><b>{{ player.name }}</b></span>
     <div id="rest" style="width:5em;"></div>
   </div>
-    <button type="submit" formaction="/" class="w3-button w3-red" style="margin:10px">en fait non</button>
+    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red" style="margin:10px">en fait non</button>
     <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
 </form>
   </div>
