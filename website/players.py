@@ -91,9 +91,9 @@ class Player(object):
       updates = [("flouze", player.flouze)]
       player.engine.update_fields(updates, [player])
     player.flash_message(
-      f"Vous avez envoyé {amount} {icons['coin']}&nbsp; à {receiver.name}.")
+      f"Vous avez envoyé {amount} {icons['coin']} à {receiver.name}.")
     receiver.send_message(
-      f"Vous avez reçu {amount} {icons['coin']}&nbsp; "\
+      f"Vous avez reçu {amount} {icons['coin']} "\
       f"de la part de {player.name}.")
     player.engine.save_data()
 

@@ -4,24 +4,24 @@
 {% block title %}Partager{% endblock %}
 {% block content %}
 
-  <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="width:270px;">
+  <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="min-width:270px">
   <header id="total" class="w3-container w3-text-white large w3-padding theme-dark-{{ game.game_nb }}">
-      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> &nbsp; à partager
+      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> à partager
   </header>
   {% if player.last_profit < 0 %}
   <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
-  <div class="w3-text-red small" style="margin:5px 30px 0">Votre demande peut être refusée par les joueurs</div>
+  <div class="w3-text-red small" style="margin:5px 0 0 2em; width:12.5em">Votre demande peut être refusée par les joueurs</div>
   {% endif %}
   <form method="POST">
   {% for other_player in player.other_players %}
-  <div class="w3-row {{ other_player.color['name'] }}-light" style="margin:8px">
-    <div class="w3-col w3-padding" style="width:150px;"><b>{{ other_player.name }}</b></div>
-    <div class="w3-rest"><input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:99px; height:30px; margin-top:5px"></div>
+  <div class="{{ other_player.color['name'] }}-light flex-horizontal space-around w3-padding center-items margins-partager">
+    <span style="width:5em"><b>{{ other_player.name }}</b></span>
+    <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:5em; height:1.6em">
   </div>
   {% endfor %}
-  <div class="w3-row {{ player.color['name'] }}-light" style="margin:8px">
-    <div class="w3-col w3-padding" style="width:150px;"><b>{{ player.name }}</b></div>
-    <div class="w3-rest w3-padding" id="rest"></div>
+  <div class="{{ player.color['name'] }}-light flex-horizontal space-around w3-padding center-items margins-partager">
+    <span style="width:5em;"><b>{{ player.name }}</b></span>
+    <div id="rest" style="width:5em;"></div>
   </div>
     <button type="submit" formaction="/" class="w3-button w3-red" style="margin:10px">en fait non</button>
     <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
@@ -41,7 +41,7 @@
                                                     document.getElementById('sent0').value -
                                                     document.getElementById('sent1').value -
                                                     document.getElementById('sent2').value -
-                                                    document.getElementById('sent3').value + '&nbsp; <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">'
+                                                    document.getElementById('sent3').value + ' <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">'
   }
 </script>
 

@@ -5,14 +5,14 @@
 {% block title %}Flouze - Jeu 4{% endblock %}
 {% block content %}
 
-<div id="card2" class="w3-card-4 w3-center w3-white w3-text-white animate__animated animate__fadeIn contrainte">
+<div id="card2" class="w3-card-4 w3-center w3-white w3-text-white animate__animated animate__fadeIn container-jeu-1">
 <header class="large w3-padding theme-dark-4">
     Choisissez un prix
 </header>
 <form method="POST">
   <div class="w3-margin" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px">
   {% for prize in prizes %}
-    <label value={{ loop.index0 }} class="prize-radio w3-border-0 w3-card large w3-padding-small w3-hover-opacity {% if prize == "star" and loop.index0 == 3 %} w3-text-teal {% else %} w3-text-black {% endif %}" style="white-space:nowrap;">
+    <label value={{ loop.index0 }} class="prize-radio w3-border-0 w3-card large w3-padding-small w3-hover-opacity {% if prize == 'star' and loop.index0 == 3 %} w3-text-teal {% else %} w3-text-black {% endif %}" style="white-space:nowrap;">
     <input type="radio" name="choice" value={{ loop.index0 }} onchange="update_choice(this)"/>
     {% if prize == "star" %}
       <i class="fa fa-star" style="position:relative; top:2px;"></i>
@@ -22,7 +22,7 @@
     </label>
   {% endfor %}
   </div>
-  <p><button name="jeu4" type="submit" class="w3-button theme-dark-4">Valider</button></p>
+  <button name="jeu4" type="submit" class="w3-button theme-light-4 full-width small">Valider</button>
 </form>
 </div>
 

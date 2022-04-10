@@ -26,7 +26,8 @@ def home():
 
     elif "page" in request.form:
       assert request.form["page"] in ["precedant", "suivant", "suivant_passif"]
-      if request.form["page"] == "precedant" or engine.iterator:
+      if request.form["page"] == "precedant" and engine.iterator:
+        for i, pl in enumerate(engine.players): pl.choice = i
         engine.passive_previous_page()
       elif request.form["page"] == "suivant" \
         and engine.iterator < len(engine.pages) - 1:
