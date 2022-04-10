@@ -7,46 +7,46 @@ from .html_icons import icons
 from .pages_ordering import pages
 
 colors = [
-  {"id":0, "name":"bleu"},
-  {"id":1, "name":"rouge"},
-  {"id":2, "name":"jaune"},
-  {"id":3, "name":"vert"},
-  {"id":4, "name":"violet"}
+  { "id": 0, "name": "bleu" }, 
+  { "id": 1, "name": "rouge" }, 
+  { "id": 2, "name": "jaune" }, 
+  { "id": 3, "name": "vert" }, 
+  { "id": 4, "name": "violet" }
 ]
 
 games_config = {
   "colors": {
-    "background": "2.jpg",
-  },
+    "background": "2.jpg", 
+  }, 
   "game1": {
     "title": "La loterie", 
-    "background": "10.jpg",
-    "prizes": [200, 400, 600],
+    "background": "10.jpg", 
+    "prizes": [200, 400, 600], 
     "3rd_round_stars": 1
-  },
+  }, 
   "game2": {
     "title": "L'enchère inversée", 
-    "background": "9.jpg",
-    "prizes": [50, 100, 150],
+    "background": "9.jpg", 
+    "prizes": [50, 100, 150], 
     "3rd_round_stars": 2
-  },
+  }, 
   "game3": {
     "title": "Le pot commun", 
-    "background": "8.jpg",
-    "initial_flouze": 100,
-    "interests": [1.2, 1.5, 2],
+    "background": "8.jpg", 
+    "initial_flouze": 100, 
+    "interests": [1.2, 1.5, 2], 
     "3rd_round_stars": 2
-  },
+  }, 
   "game4": {
     "title": "Le con promis", 
-    "background": "6.jpg",
-    "prizes": [[[150, 100, 50, 0, "star"]],
-               [[250, 150, 0, -150, "star"],
-                [400, 250, 0, -250, "star"]],
-               [[400, 200, -250, "star", "star"],
-                [600, 250, -300, "star", "star"],
-                [1000, 300, -400, "star", "star"]]],
-  },
+    "background": "6.jpg", 
+    "prizes": [[[150, 100, 50, 0, "star"]], 
+               [[250, 150, 0, -150, "star"], 
+                [400, 250, 0, -250, "star"]], 
+               [[400, 200, -250, "star", "star"], 
+                [600, 250, -300, "star", "star"], 
+                [1000, 300, -400, "star", "star"]]]
+  }, 
   "game5": {
     "title": "Le bras de fer", 
     "background": "7.jpg",
@@ -58,30 +58,30 @@ games_config = {
 
 
 quiz = [
-  (["_______ _______ _ a-t-il __ __ drapeau ______ ?",
-  "_______ d’étoiles _ ____ sur __ ______ valaisan ?",
-  "Combien _______ y ____ __ le _______ ______ ?"],
-  ["Combien d'etoiles y a-t-il sur le drapeau valaisan ?",
-  "13"]),
-  (["Quel ____ __ enclavé ____ le _______ ?",
-  "___ pays ___ ______ dans __ _______ ?",
-  "___ ____ est ______ ____ __ Sénégal ?"],
-  ["Quel pays est enclavé dans le Sénégal ?",
-  "La Gambie"]),
-  (["Combien _ ___ de _____ __ tram _ ________ ?",
-  "_______ y ___ __ lignes __ ____ à ________ ?",
-  "_______ _ a-t-il __ ____ de ____ _ Bordeaux ?"],
-  ["Combien y a-t-il de lignes de tram à Bordeaux ?",
-  "4"]),
-  (["Quel ____ ___ pseudo ___ ____ of ____ ?",
-  "____ était ___ ______ sur ____ __ clans ?",
-  "____ ____ mon _____ ___ clash __ ____ ?"],
-  ["Quel était mon pseudo sur clash of clans ?",
-  "FvS"]),
-  (["Comment _______ __ parc ______ _ l’université __ _______ ?",
-  "________ s’appelle __ ___ adjacent _ ________ de _______ ?",
-  "________ _______ le ____ ______ à _________ __ Montréal ?"],
-  ["Comment s'appelle le parc ajacent à l'université de Montréal ?",
+  (["_______ _______ _ a-t-il __ __ drapeau ______ ?", 
+  "_______ d’étoiles _ ____ sur __ ______ valaisan ?", 
+  "Combien _______ y ____ __ le _______ ______ ?"], 
+  ["Combien d'etoiles y a-t-il sur le drapeau valaisan ?", 
+  "13"]), 
+  (["Quel ____ __ enclavé ____ le _______ ?", 
+  "___ pays ___ ______ dans __ _______ ?", 
+  "___ ____ est ______ ____ __ Sénégal ?"], 
+  ["Quel pays est enclavé dans le Sénégal ?", 
+  "La Gambie"]), 
+  (["Combien _ ___ de _____ __ tram _ ________ ?", 
+  "_______ y ___ __ lignes __ ____ à ________ ?", 
+  "_______ _ a-t-il __ ____ de ____ _ Bordeaux ?"], 
+  ["Combien y a-t-il de lignes de tram à Bordeaux ?", 
+  "4"]), 
+  (["Quel ____ ___ pseudo ___ ____ of ____ ?", 
+  "____ était ___ ______ sur ____ __ clans ?", 
+  "____ ____ mon _____ ___ clash __ ____ ?"], 
+  ["Quel était mon pseudo sur clash of clans ?", 
+  "FvS"]), 
+  (["Comment _______ __ parc ______ _ l’université __ _______ ?", 
+  "________ s’appelle __ ___ adjacent _ ________ de _______ ?", 
+  "________ _______ le ____ ______ à _________ __ Montréal ?"], 
+  ["Comment s'appelle le parc ajacent à l'université de Montréal ?", 
   "Le parc du Mont-Royal"])
 ]
 
@@ -342,7 +342,7 @@ class Game3(Game):
     if game.sabotage:
       common_pot = int(1.2 * np.max(inputs))
       game.engine.log(
-        f"Cette manche a été sabotée car les participans on été trop "\
+         "Cette manche a été sabotée car les participans on été trop "\
          "coopératifs. Le contenu du pot commun avant l'ajout de la "\
         f"banque à été fixé à {common_pot}")
       game.sabotage = False
