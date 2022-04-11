@@ -91,7 +91,7 @@ def donner_etoiles():
   engine = current_app.config["engine"]
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
-  if request.method == "POST" and "don_etoiles" not in request.form:
+  if request.method == "POST":
     if not engine.use_nonce(request.form.get("envoyer")):
       return redirect(url_for("views.home"))
     receiver_level = request.form.get("destinataire")
@@ -234,5 +234,5 @@ def home():
 
   if "choix" in engine.current_page["url"] and player.is_done:
     return render_template_ctx("en_attente.jinja")
-
+  
   return render_template_ctx(engine.current_page["url"])
