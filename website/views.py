@@ -23,20 +23,9 @@ def donner_flouze():
   if request.method == "POST":
     if not engine.use_nonce(request.form.get("envoyer")):
       return redirect(url_for("views.home"))
-    receiver_level = request.form.get("destinataire")
-    if receiver_level == None:
-      flash_error("Veuillez choisir un destinataire !")
-      return render_template_ctx("faire_un_don.jinja")
-    amount = request.form.get("montant")
-    if amount == "":
-      flash_error("Veuiller indiquer un montant !")
-      return render_template_ctx("faire_un_don.jinja")
-    receiver_level = int(receiver_level)
+    receiver_level = int(request.form.get("destinataire"))
+    amount = int(request.form.get("montant"))
     receiver = player.other_players[receiver_level]
-    amount = int(amount)
-    if amount <= 0:
-      flash_error("Le montant à envoyer ne peut pas être negatif ou nul !")
-      return render_template_ctx("faire_un_don.jinja")
     if amount > player.flouze:
       flash_error("Le montant indiqué dépasse votre solde !")
       return render_template_ctx("faire_un_don.jinja")
@@ -55,8 +44,7 @@ def partager_profit():
     amounts = []
     if player.last_profit < 0 : 
       for receiver in player.other_players:
-        amount = request.form.get(receiver.name)
-        amount = 0 if amount == "" else int(amount)
+        amount = int(request.form.get(receiver.name))
         if amount > 0:
           flash_error("Si vous vouler donner de l'argent veuillez utiliser "\
                       "le boutton 'faire un don'...")
@@ -68,11 +56,7 @@ def partager_profit():
         return render_template_ctx("partager.jinja")
     else:
       for receiver in player.other_players:
-        amount = request.form.get(receiver.name)
-        amount = 0 if amount == "" else int(amount)
-        if amount < 0:
-          flash_error("Vous ne pouvez pas envoiyer des montants négatifs !")
-          return render_template_ctx("partager.jinja")
+        amount = int(request.form.get(receiver.name))
         amounts.append(amount)
       if sum(amounts) > player.last_profit:
         flash_error(
@@ -94,20 +78,8 @@ def donner_etoiles():
   if request.method == "POST":
     if not engine.use_nonce(request.form.get("envoyer")):
       return redirect(url_for("views.home"))
-    receiver_level = request.form.get("destinataire")
-    amount = request.form.get("quantité")
-    if receiver_level == None:
-      flash_error("Veuiller choisir un destinataire !")
-      return render_template_ctx("don_etoiles.jinja")
-    if amount == "":
-      flash_error("Veuiller indiquer un nombre d'étoiles !")
-      return render_template_ctx("don_etoiles.jinja")
-    receiver_level = int(receiver_level)
-    amount = int(amount)
-    if amount <= 0:
-      flash_error(
-        "Le nombre d'étoiles à envoyer ne peut pas être negatif ou nul")
-      return render_template_ctx("don_etoiles.jinja")
+    receiver_level = int(request.form.get("destinataire"))
+    amount = int(request.form.get("quantité"))
     if amount > player.stars:
       flash_error("Vous n'avez pas assez d'étoiles")
       return render_template_ctx("don_etoiles.jinja")
@@ -128,33 +100,19 @@ def home():
     if "jeu1" in request.form:
       if not game.is_allowed_to_play(player, 1):
         return redirect(url_for("views.home"))
-      tickets = request.form.get("tickets")
-      if tickets == None:
-        flash_error("Veuiller faire un choix !")
-        return render_template_ctx(engine.current_page["url"])
-      tickets = int(tickets)
+      tickets = int(request.form.get("tickets"))
       player.choice = tickets
       
 
     elif "jeu2" in request.form:
       if not game.is_allowed_to_play(player, 2):
         return redirect(url_for("views.home"))
-      if "choice" not in request.form:
-        flash_error("Veuiller choisir un nombre !")
-        return render_template_ctx(engine.current_page["url"])
       player.choice = int(request.form["choice"])
 
     elif "jeu3" in request.form:
       if not game.is_allowed_to_play(player, 3):
         return redirect(url_for("views.home"))
-      amount = request.form.get("montant")
-      if amount == "":
-        flash_error("Veuiller indiquer un montant !")
-        return render_template_ctx(engine.current_page["url"])
-      amount = int(amount)
-      if amount < 0:
-        flash_error("Le montant à investir ne peut pas être negatif !")
-        return render_template_ctx(engine.current_page["url"])
+      amount = int(request.form.get("montant"))
       if amount > player.flouze:
         flash_error("Le montant indiqué dépasse votre solde !")
         return render_template_ctx(engine.current_page["url"])
@@ -163,9 +121,6 @@ def home():
     elif "jeu4" in request.form:
       if not game.is_allowed_to_play(player, 4):
         return redirect(url_for("views.home"))
-      if "choice" not in request.form:
-        flash_error("Veuiller choisir un prix !")
-        return render_template_ctx(engine.current_page["url"])
       player.choice = int(request.form["choice"])
     
     elif "don_etoiles" in request.form:
@@ -185,11 +140,7 @@ def home():
           return redirect(url_for("views.home"))
         total = 0
         for other_player in game.other_players:
-          amount = request.form.get(other_player.name)
-          if amount == "":
-            flash_error("Veuiller indiquer un montant pour tous les joueurs !")
-            return render_template_ctx("Jeu5-proposition.jinja")
-          amount = int(amount)
+          amount = int(request.form.get(other_player.name))
           if amount + other_player.flouze < 0:
             flash_error(f"{other_player.name} ne peut pas accepter votre "\
                          "proposition car il n'a pas assez d'argent !")

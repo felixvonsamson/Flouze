@@ -16,7 +16,7 @@
     {% endfor %}}
   </select>
   <br>
-  <input name="quantité" class="w3-input w3-border w3-round-large w3-center small" placeholder="Quantitée" type="number" style="width:120px; display:inline-block;" min="0" required>
+  <input name="quantité" class="w3-input w3-border w3-round-large w3-center small" placeholder="Quantitée" type="number" style="width:120px; display:inline-block;" min="1" required>
   <div class="flex-horizontal space-around" style="margin:0.5em 0">
     <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button theme-dark-{{ game.game_nb }}">Envoyer</button>
     <button type="button" onclick="window.location.href='/'" class="w3-button w3-red">Retour</button>

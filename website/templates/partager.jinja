@@ -16,7 +16,7 @@
   {% for other_player in player.other_players %}
   <div class="{{ other_player.color['name'] }}-light flex-horizontal space-around w3-padding center-items margins-partager">
     <span style="width:5em"><b>{{ other_player.name }}</b></span>
-    <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:5em; height:1.6em" {% if player.last_profit >= 0 %}min="0"{% else %}max="0"{% endif %} required>
+    <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:5em; height:1.6em" {% if player.last_profit >= 0 %}min="0"{% endif %} required>
   </div>
   {% endfor %}
   <div class="{{ player.color['name'] }}-light flex-horizontal space-around w3-padding center-items margins-partager">

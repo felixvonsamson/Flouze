@@ -17,7 +17,7 @@
     <title>{% block title %}Home{% endblock %}</title>
   </head>
 
-<body class="flex-vertical body" style="background-image: url({{ url_for("static", filename="images/" + game.config["background"]) }});">
+<body class="flex-vertical" style="background-image: url({{ url_for("static", filename="images/" + game.config["background"]) }});">
 
 <div>
   <!--Stars Table-->
@@ -134,7 +134,7 @@
       socket.emit('hide_message', message_id);
     }
     socket.on('message', function(message_id, category, message) {
-      hiding_code = (message_id == null) ? `hide_message(${message_id})` : '';
+      hiding_code = (message_id != null) ? `hide_message(${message_id})` : '';
       if (category == 'message') {
           document.getElementById('messages').innerHTML += `
             <div class="w3-pale-green w3-round-large w3-border w3-border-green w3-padding-small small" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; margin-left: 5px; margin-right: 5px;">

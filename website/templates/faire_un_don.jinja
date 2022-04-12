@@ -16,7 +16,7 @@
       <option value={{ loop.index0 }}>{{ other_player.name }}</option>
     {% endfor %}
   </select>
-  <input name="montant" class="w3-input w3-border w3-round-large w3-center small" placeholder="Montant" type="number" style="width:8em; display:inline-block;" min="0" required>
+  <input name="montant" class="w3-input w3-border w3-round-large w3-center small" placeholder="Montant" type="number" style="width:8em; display:inline-block;" min="1" required>
   <div class="flex-horizontal space-around" style="margin:0.5em 0">
     <button type="button" onclick="window.location.href='/'" class="w3-button w3-red small">en fait non</button>
     <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button theme-dark-{{ game.game_nb }} small">Envoyer</button>
