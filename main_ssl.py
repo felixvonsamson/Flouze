@@ -11,4 +11,4 @@ if __name__ == "__main__":
                host="0.0.0.0", 
                port=5443, 
                keyfile="server_privatekey.pem", 
-               certfile="server_cert.pem")
+               certfile="server_certificate.pem")
