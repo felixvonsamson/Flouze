@@ -583,8 +583,13 @@ class Game5(Game):
         game.master.flouze -= offer
         player.flouze += offer
         player.message = \
-          f"La proposition à été acceptée par la majorité des joueurs.<br>"\
-          f"Vous avez recu {offer} {icons['coin']} de {game.master.name}."
+           "La proposition à été acceptée par la majorité des joueurs.<br>"
+        if offer >= 0:
+          player.message += f"Vous avez recu {offer} {icons['coin']} "\
+                            f"de {game.master.name}."
+        else:
+          player.message +=  "Vous vous êtes fait piller "\
+                            f"{-offer} {icons['coin']} de {game.master.name}."
       game.end()
     else:
       if game.current_round_id == 2:
