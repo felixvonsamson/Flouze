@@ -39,7 +39,8 @@ def partager_profit():
   player = engine.players[session["ID"]]
   render_template_ctx = partial(render_template, engine=engine, player=player)
   if request.method == "POST":
-    if not engine.use_nonce(request.form.get("envoyer")):
+    if not engine.use_nonce(request.form.get("envoyer")) \
+       or player.last_profit is None:
       return redirect(url_for("views.home"))
     amounts = []
     if player.last_profit < 0 : 
