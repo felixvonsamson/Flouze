@@ -39,6 +39,7 @@ class Player(object):
     else:
       player.engine.next_page()
     player.engine.save_data()
+    player.engine.refresh_monitoring()
 
   def emit(player, *args):
     if player.sid:
@@ -79,7 +80,7 @@ class Player(object):
       if now <= limit]
 
 
-  def send_money(player, receiver, amount, update_sender=False):
+  def send_money(player, receiver, amount, update_sender=False, save=True):
     assert (player.flouze >= amount)
     player.flouze -= amount
     receiver.flouze += amount
@@ -95,14 +96,16 @@ class Player(object):
     receiver.send_message(
       f"Vous avez reçu {amount} {icons['coin']} "\
       f"de la part de {player.name}.")
-    player.engine.save_data()
+    if save:
+      player.engine.save_data()
+      player.engine.refresh_monitoring()
 
   def request_money(player, receiver, amount):
     receiver.flouze_request = (player, amount)
     player.engine.log(
       f"{player.name} réclame {amount} Pièces de la part de {receiver.name}.")
     receiver.send_request(
-      f"{player.name} vous réclame {amount} {icons['coin']}.<br> ")
+      f"{player.name} vous réclame {amount} {icons['coin']}.")
 
 
   def send_stars(player, receiver, sent_stars):
@@ -121,6 +124,7 @@ class Player(object):
       f"Vous avez reçu {sent_stars} {icons['star']}"\
       f"de la part de {player.name}.")
     player.engine.save_data()
+    player.engine.refresh_monitoring()
 
 
   def share_profit(player, amounts):
@@ -135,5 +139,7 @@ class Player(object):
               f"{player.name} vous réclame {amount} {icons['star']} "\
                "mais vous n'avez pas cette somme !")
         else:
-          player.send_money(receiver, amount)
+          player.send_money(receiver, amount, save=False)
     player.last_profit = 0
+    player.engine.save_data()
+    player.engine.refresh_monitoring()

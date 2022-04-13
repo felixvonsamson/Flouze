@@ -225,8 +225,7 @@ class Game1(Game):
     lottery = []
     for player, nb_tickets in zip(game.engine.players, choices):
       lottery += [player] * nb_tickets
-      player.message = Markup(
-        f"Vous n'avez pas gagné la lotterie ! {icons['sad']}")
+      player.message = f"Vous n'avez pas gagné la loterie ! {icons['sad']}"
     if len(lottery) > 0:
       winner = random.choice(lottery)
       prize = game.config["prizes"][game.current_round_id]
@@ -234,11 +233,11 @@ class Game1(Game):
       winner.flouze += prize
       winner.last_profit = prize
       game.engine.log(
-        f"Le gagnant de la lotterie est {winner.name} "\
+        f"Le gagnant de la loterie est {winner.name} "\
         f"qui a reçu {prize} Pièces.")
-      winner.message = Markup(
-        f"Vous avez gagné la lotterie !<br>Vous avez reçu {prize} "\
-        f"{icons['coin']} !")
+      winner.message = \
+        f"Vous avez gagné la loterie !<br>Vous avez reçu {prize} "\
+        f"{icons['coin']} !"
       if game.current_round_id == 2:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
@@ -250,7 +249,7 @@ class Game1(Game):
            "car vous avez remporté la dernière manche.")
     else:
       game.engine.log(
-        "Il n'y a pas de gagnant à la lotterie car personne n'a participé.")
+        "Il n'y a pas de gagnant à la loterie car personne n'a participé.")
 
 
 class Game2(Game):
@@ -280,11 +279,10 @@ class Game2(Game):
       winner.last_profit = prize
       game.engine.log(
         f"{winner.name} a remporté {prize} Pièces.")
-      winner.message = Markup(
-          f"Vous avez gagné et remportez {prize} {icons['coin']}.")
+      winner.message = f"Vous avez gagné et remportez {prize} {icons['coin']}."
       for player in winner.other_players:
-        player.message = Markup(
-          f"{winner.name} a gagné et remporte {prize} {icons['coin']}.")
+        player.message = \
+          f"{winner.name} a gagné et remporte {prize} {icons['coin']}."
       if round_id == 2:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
@@ -356,7 +354,7 @@ class Game3(Game):
     for player, shared in zip(game.engine.players, game.current_choices):
       player.flouze += prize
       game.real_gain[player.ID] += prize - shared
-      player.message = Markup(f"Vous avez reçu {prize} {icons['coin']}.")
+      player.message = f"Vous avez reçu {prize} {icons['coin']}."
 
     if game.current_round_id == 2:
       winner_id = np.argmax(game.real_gain)
@@ -368,10 +366,10 @@ class Game3(Game):
         game.engine.log(
           f"{winner.name} a reçu {won_stars} étoile(s) car "\
            "iel a gagné le plus d'argent durant ce jeu.")
-        winner.message = Markup(
+        winner.message = \
           f"Vous avez reçu {prize} {icons['coin']}.<br>En plus "\
           f"vous recevez {won_stars} {icons['star']} "\
-          "car vous avez gagné le plus d'argent durant ce jeu.")
+          "car vous avez gagné le plus d'argent durant ce jeu."
       else:
         game.engine.log(
           "Dû à une égalité aucune étoile n'a été distribuée")
@@ -439,14 +437,13 @@ class Game4(Game):
         if prize == "star":
           player.stars += 1
           game.engine.log(f"{player.name} a gagné une étoile.")
-          player.message = Markup(
-            f"Vous avez remporté le prix {icons['star']}")
+          player.message = f"Vous avez remporté le prix {icons['star']}"
         else:
           player.flouze += prize
           player.last_profit = prize
           game.engine.log(f"{player.name} a remporté {prize} Pièces.")
-          player.message = Markup(
-            f"Vous avez remporté le prix {prize} {icons['coin']}.")
+          player.message = \
+            f"Vous avez remporté le prix {prize} {icons['coin']}."
       else:
         player.message = "Vous n'avez pas remporté le prix."
 
@@ -497,13 +494,13 @@ class Game5(Game):
         f"{game.master.name} a le plus d'étoiles et remporte ainsi "\
         f"la somme de {game.jackpot} Pièces pour le cinquième jeu.")
       for player in game.other_players:
-        player.message = Markup(
+        player.message = \
           f"{game.master.name} a le plus d'étoiles et est ainsi "\
           f"en possesion de la somme de {game.jackpot} {icons['coin']} "\
-           "pour le 5ème jeu")
-      game.master.message = Markup(
+           "pour le 5ème jeu"
+      game.master.message = \
           "Vous avez le plus d'étoiles et êtes ainsi en possesion de "\
-        f"la somme de {game.jackpot} {icons['coin']} pour le 5ème jeu.")
+        f"la somme de {game.jackpot} {icons['coin']} pour le 5ème jeu."
       game.next_question()
     else:
       game.engine.log(
@@ -511,7 +508,7 @@ class Game5(Game):
         "le gros lot et le cinquième jeu est annulé")
       for player in game.engine.players:
         player.message = "Dû à une égalité en terme d'étoiles, "\
-                         "personne ne remporte le gros lot"\
+                         "personne ne remporte le gros lot "\
                          "et le cinquième jeu est annulé."
       game.end()
   
@@ -583,13 +580,15 @@ class Game5(Game):
         game.master.flouze -= offer
         player.flouze += offer
         player.message = \
-           "La proposition à été acceptée par la majorité des joueurs.<br>"
+           "La proposition à été acceptée par la majorité des joueurs."
         if offer >= 0:
-          player.message += f"Vous avez recu {offer} {icons['coin']} "\
-                            f"de {game.master.name}."
+          player.message += Markup(
+            f"<br>Vous avez reçu {offer} {icons['coin']} "\
+            f"de {game.master.name}.")
         else:
-          player.message +=  "Vous vous êtes fait piller "\
-                            f"{-offer} {icons['coin']} de {game.master.name}."
+          player.message +=  Markup(
+            f"<br>Vous vous êtes fait racketter {-offer} {icons['coin']} "\
+            f"de {game.master.name}.")
       game.end()
     else:
       if game.current_round_id == 2:
@@ -612,9 +611,9 @@ class Game5(Game):
         game.master.message = \
           "Votre proposition a été refusée par la majorité !"
         for player in game.other_players:
-          player.message = Markup(
+          player.message = \
             "La proposition à été refusée par au moins 2 joueurs.<br>"\
-            "En attente d'une nouvelle proposition...")
+            "En attente d'une nouvelle proposition..."
   
   def end(game):
     for player in game.engine.players:
