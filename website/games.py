@@ -61,7 +61,7 @@ quiz = [
   (["_______ _______ _ a-t-il __ __ drapeau ______ ?", 
   "_______ d’étoiles _ ____ sur __ ______ valaisan ?", 
   "Combien _______ y ____ __ le _______ ______ ?"], 
-  ["Combien d'etoiles y a-t-il sur le drapeau valaisan ?", 
+  ["Combien d'étoiles y a-t-il sur le drapeau valaisan ?", 
   "13"]), 
   (["Quel ____ __ enclavé ____ le _______ ?", 
   "___ pays ___ ______ dans __ _______ ?", 
@@ -81,7 +81,7 @@ quiz = [
   (["Comment _______ __ parc ______ _ l’université __ _______ ?", 
   "________ s’appelle __ ___ adjacent _ ________ de _______ ?", 
   "________ _______ le ____ ______ à _________ __ Montréal ?"], 
-  ["Comment s'appelle le parc ajacent à l'université de Montréal ?", 
+  ["Comment s'appelle le parc adjacent à l'université de Montréal ?", 
   "Le parc du Mont-Royal"])
 ]
 
@@ -201,9 +201,9 @@ class Colors(Game):
     for player in game.engine.players:
       color_id = game.choices[0][player.ID]
       player.color = game.colors[color_id]
-      game.engine.log(f"{player.name} a choisis la couleur "\
+      game.engine.log(f"{player.name} a choisi la couleur "\
                       f"{player.color['name']}.")
-      player.send_message("Vous avez choisis la couleur "\
+      player.send_message("Vous avez choisi la couleur "\
                           f"{player.color['name']}.", emit=False)
   
 
@@ -215,8 +215,8 @@ class Game1(Game):
   
   def set_choice(game, player, tickets):
     game.current_choices[player.ID] = tickets
-    game.engine.log(f"{player.name} a choisis {tickets} tickets.")
-    player.flash_message(f"Vous avez choisis {tickets} tickets.")
+    game.engine.log(f"{player.name} a choisi {tickets} ticket(s).")
+    player.flash_message(f"Vous avez choisi {tickets} ticket(s).")
     player.is_done = True
   
   def logic(game):
@@ -261,8 +261,8 @@ class Game2(Game):
   
   def set_choice(game, player, number):
     game.current_choices[player.ID] = number
-    game.engine.log(f"{player.name} a choisis le nombre {number}.")
-    player.flash_message(f"Vous avez choisis le nombre {number}.")
+    game.engine.log(f"{player.name} a choisi le nombre {number}.")
+    player.flash_message(f"Vous avez choisi le nombre {number}.")
     player.is_done = True
   
   def logic(game):
@@ -297,9 +297,9 @@ class Game2(Game):
             f"<br>En plus iel recoit {won_stars} {icons['star']} "\
              "car iel a remporté la dernière manche.")
     else:
-      game.engine.log("Personne n'a remporté de lot a cette manche.")
+      game.engine.log("Personne n'a remporté de lot à cette manche.")
       for player in game.engine.players:
-        player.message = "Personne n'a remporté de lot a cette manche."
+        player.message = "Personne n'a remporté de lot à cette manche."
 
 
 class Game3(Game):
@@ -340,7 +340,7 @@ class Game3(Game):
     if game.sabotage:
       common_pot = int(1.2 * np.max(inputs))
       game.engine.log(
-         "Cette manche a été sabotée car les participans on été trop "\
+         "Cette manche a été sabotée car les participans ont été trop "\
          "coopératifs. Le contenu du pot commun avant l'ajout de la "\
         f"banque à été fixé à {common_pot}")
       game.sabotage = False
@@ -348,8 +348,8 @@ class Game3(Game):
     interest = game.config["interests"][game.current_round_id]
     prize = int(common_pot * interest  // 5)
     game.engine.log(
-      f"{5 * prize} Pièces ont été redistribué équitablement à "\
-      f"tous les joueurs ce qui fait {prize} Pièces par joueur-")
+      f"{5 * prize} Pièces ont été redistribuées équitablement à "\
+      f"tous les joueurs ce qui fait {prize} Pièces par joueur.")
 
     for player, shared in zip(game.engine.players, game.current_choices):
       player.flouze += prize
@@ -372,13 +372,13 @@ class Game3(Game):
           "car vous avez gagné le plus d'argent durant ce jeu."
       else:
         game.engine.log(
-          "Dû à une égalité aucune étoile n'a été distribuée")
+          "Dû à une égalité, aucune étoile n'a été distribuée")
 
   def end(game):
     for player in game.engine.players:
       player.flouze += player.saved_flouze
       player.saved_flouze = 0
-    game.engine.log("L'argent mis de coté à été remis en jeu")
+    game.engine.log("L'argent mis de coté a été remis en jeu")
 
 
 class Game4(Game):
@@ -386,7 +386,7 @@ class Game4(Game):
     super().__init__(engine)
     game.game_nb = 4
     game.config = games_config["game4"]
-    # combien de fois les joueurs ont tous choisis des objets differents
+    # combien de fois les joueurs ont tous choisi des objets differents
     game.bonuses = [False] * 3
     game.reveal_states = [[False]*5 for _ in range(3)]
 
@@ -415,14 +415,14 @@ class Game4(Game):
     prize = prizes[prize_id]
     if prize == "star":
       if player.choice == 3 :
-        game.engine.log(f"{player.name} a choisis la deuxième étoile.")
+        game.engine.log(f"{player.name} a choisi la deuxième étoile.")
       else :
-        game.engine.log(f"{player.name} a choisis l'etoile.")
-      player.flash_message(f"Vous avez choisis le prix : {icons['star']}")
+        game.engine.log(f"{player.name} a choisi l'étoile.")
+      player.flash_message(f"Vous avez choisi le prix : {icons['star']}")
     else:
-      game.engine.log(f"{player.name} a choisis le prix : {prize} Pièces")
+      game.engine.log(f"{player.name} a choisi le prix : {prize} Pièces")
       player.flash_message(
-        f"Vous avez choisis le prix : {prize} {icons['coin']}")
+        f"Vous avez choisi le prix : {prize} {icons['coin']}")
     player.is_done = True
   
   def logic(game):
@@ -450,7 +450,7 @@ class Game4(Game):
     if len(unique_choices) == 5:
       if game.current_round_id in [0, 1]:
         game.engine.log(
-          "Tous les joueurs ont choisis un prix différent "\
+          "Tous les joueurs ont choisi un prix différent "\
           "donc un bonus s'applique pour la manche suivante")
         game.current_bonus = True
       else:
@@ -458,7 +458,7 @@ class Game4(Game):
         master_prize_with_bonus = games_config["game5"]["prize"] \
                       + games_config["game5"]["bonus"]
         game.engine.log(
-          f"Tous les joueurs ont choisis un prix différent "\
+           "Tous les joueurs ont choisi un prix différent "\
           f"donc le gros lot passe de {master_prize} "\
           f"à {master_prize_with_bonus} Pièces.")
 
@@ -480,7 +480,7 @@ class Game5(Game):
     game.jackpot = game.config["prize"] + all_bonuses * game.config["bonus"]
     stars = [player.stars for player in game.engine.players]
     game.engine.log(
-       "Le nombre d'etoiles pour chaque joueur est "\
+       "Le nombre d'étoiles pour chaque joueur est "\
       f"respectivement : {stars}.")
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
@@ -504,10 +504,10 @@ class Game5(Game):
       game.next_question()
     else:
       game.engine.log(
-        "Dû à une égalité en terme d'étoiles, personne ne remporte "\
+        "Dû à l'égalité d'étoiles, personne ne remporte "\
         "le gros lot et le cinquième jeu est annulé")
       for player in game.engine.players:
-        player.message = "Dû à une égalité en terme d'étoiles, "\
+        player.message = "Dû à l'égalité d'étoiles, "\
                          "personne ne remporte le gros lot "\
                          "et le cinquième jeu est annulé."
       game.end()
@@ -532,7 +532,7 @@ class Game5(Game):
   def current_answer(game, answer):
     game.answers[game.question_id] = answer
     player = game.other_players[game.question_id]
-    game.engine.log(f"{player.name} a donner la réponse {answer} "\
+    game.engine.log(f"{player.name} a donné la réponse {answer} "\
                f"à la question : '{game.current_question[1][0]}'.")
     game.next_question()
     game.engine.save_data()
@@ -573,7 +573,7 @@ class Game5(Game):
   
   def logic(game):
     if sum(game.current_choices) >= 3:
-      game.engine.log("La proposition a été accepté par la majorité.")
+      game.engine.log("La proposition a été acceptée par la majorité.")
       game.master.message = "Votre proposition a été acceptée par la majorité."
       for i, player in enumerate(game.other_players):
         offer = game.current_proposition[i]
@@ -588,7 +588,7 @@ class Game5(Game):
         else:
           player.message +=  Markup(
             f"<br>Vous vous êtes fait racketter {-offer} {icons['coin']} "\
-            f"de {game.master.name}.")
+            f"par {game.master.name}.")
       game.end()
     else:
       if game.current_round_id == 2:
@@ -596,13 +596,13 @@ class Game5(Game):
             (game.bonuses == 3) * games_config["game5"]["bonus"]
         game.master.flouze -= prize
         game.engine.log("La proposition a été refusée par la majorité."\
-          f"Les {prize} Pièces sont retirés à {game.master.name}.")
+          f"Les {prize} Pièces sont retirées à {game.master.name}.")
         game.master.message = \
           f"Votre dernière proposition a été refusée par "\
-          f"la majorité. Les {prize} {icons['coin']} vous sont donc retirés."
+          f"la majorité. Les {prize} {icons['coin']} vous sont donc retirées."
         for player in game.other_players:
           player.message = \
-            f"Auccun accord à été trouvé apprès ces 3 essais donc "\
+            f"Aucun accord n'a été trouvé après ces 3 essais donc "\
             f"{game.master.name} ne remporte pas les "\
             f"{prize} {icons['coin']}."
         game.end()

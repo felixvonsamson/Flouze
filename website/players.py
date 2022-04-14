@@ -114,7 +114,7 @@ class Player(object):
     receiver.stars += sent_stars
     player.engine.log(
       f"{player.name} a légué {sent_stars} "\
-      f"étoile({'s' if sent_stars > 1 else ''}) à {receiver.name}.")
+      f"étoile(s) à {receiver.name}.")
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
                (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)

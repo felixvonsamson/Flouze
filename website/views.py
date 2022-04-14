@@ -47,8 +47,8 @@ def partager_profit():
       for receiver in player.other_players:
         amount = int(request.form.get(receiver.name))
         if amount > 0:
-          flash_error("Si vous vouler donner de l'argent veuillez utiliser "\
-                      "le boutton 'faire un don'...")
+          flash_error("Si vous voulez donner de l'argent veuillez utiliser "\
+                      "le boutton 'Faire un don'...")
           return render_template_ctx("partager.jinja")
         amounts.append(amount)
       if sum(amounts) < player.last_profit:
@@ -65,7 +65,7 @@ def partager_profit():
         return render_template_ctx("partager.jinja")
       if sum(amounts) > player.flouze:
         flash_error(
-          "Vous ne pouvez pas donner plus que ce que vous avez avez !")
+          "Vous ne pouvez pas donner plus que ce que vous avez !")
         return render_template_ctx("partager.jinja")
     player.share_profit(amounts)
     return redirect(url_for("views.home"))
@@ -82,7 +82,7 @@ def donner_etoiles():
     receiver_level = int(request.form.get("destinataire"))
     amount = int(request.form.get("quantité"))
     if amount > player.stars:
-      flash_error("Vous n'avez pas assez d'étoiles")
+      flash_error("Vous n'avez pas assez d'étoiles.")
       return render_template_ctx("don_etoiles.jinja")
     receiver = player.other_players[receiver_level]
     player.send_stars(receiver, amount)
@@ -144,7 +144,7 @@ def home():
           amount = int(request.form.get(other_player.name))
           if amount + other_player.flouze < 0:
             flash_error(f"{other_player.name} ne peut pas accepter votre "\
-                         "proposition car il n'a pas assez d'argent !")
+                         "proposition car iel n'a pas assez d'argent !")
             return render_template_ctx("Jeu5-proposition.jinja")
           total += amount
         if total > player.flouze:

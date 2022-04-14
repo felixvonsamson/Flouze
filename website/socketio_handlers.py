@@ -30,7 +30,7 @@ def add_handlers(socketio, engine):
     game = engine.current_game
     if game.owner[color_id] :
       if game.owner[color_id] == player :
-        player.send_message("Vous avez déjà selectioné cette couleur.", 
+        player.send_message("Vous avez déjà sélectionné cette couleur.", 
                             category="error", persistant=False)
       else:
         player.send_message(

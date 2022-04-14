@@ -35,7 +35,7 @@ def home():
             player.last_profit = 0
             player.flouze_request = None
         engine.next_page()
-      elif request.form["page"] == "suivant_passif" and engine.iterator:
+      elif request.form["page"] == "suivant_passif":
         engine.passive_next_page()
         
     elif "quiz" in request.form:
@@ -47,14 +47,14 @@ def home():
       question, correct_answer = game.quiz[question_id][1]
       if decision == "rejeter":
         game.is_answer_correct[question_id] = False
-        engine.log("La réponse a été rejeté.")
+        engine.log("La réponse a été rejetée.")
         for player in game.other_players:
           player.send_message(
-            f'Perdu ! La bonne réponse à la question "{question}" était : '\
-            f'{correct_answer}', category="error")
+            f"Perdu ! La bonne réponse à la question '{question}' était : "\
+            f"{correct_answer}", category="error")
       elif decision == "valider":
         game.is_answer_correct[question_id] = True
-        engine.log("La réponse a été validé.")
+        engine.log("La réponse a été validée.")
         for player in game.other_players:
           quiz_prize = game.config["quiz_prize"]
           player.flouze += quiz_prize
