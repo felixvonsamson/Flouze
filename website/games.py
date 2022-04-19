@@ -41,16 +41,16 @@ games_config = {
     "title": "Le con promis", 
     "background": "6.jpg", 
     "prizes": [[[150, 100, 50, 0, "star"]], 
-               [[250, 150, 0, -150, "star"], 
-                [400, 250, 0, -250, "star"]], 
-               [[400, 200, -250, "star", "star"], 
-                [600, 250, -300, "star", "star"], 
-                [1000, 300, -400, "star", "star"]]]
+               [[350, 150, 0, -50, "star"], 
+                [500, 200, 0, -100, "star"]], 
+               [[500, 250, -150, "star", "star"], 
+                [700, 300, -250, "star", "star"], 
+                [900, 400, -400, "star", "star"]]]
   }, 
   "game5": {
     "title": "Le bras de fer", 
     "background": "7.jpg",
-    "prize": 2500,
+    "prize": 3000,
     "bonus": 500,
     "quiz_prize": 30
   }
