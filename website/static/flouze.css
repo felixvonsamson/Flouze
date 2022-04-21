@@ -186,6 +186,8 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .border-vert{border:4px solid #6aa84f}
 .border-violet{border:4px solid #674ea7}
 
+.theme-dark-welcome{color:#fff;background-color:#463077}
+.theme-light-welcome{color:#fff;background-color:#675196}
 .theme-dark-1{color:#fff;background-color:#b65612}
 .theme-light-1{color:#000;background-color:#dfaa84}
 .theme-dark-2{color:#fff;background-color:#017e68}

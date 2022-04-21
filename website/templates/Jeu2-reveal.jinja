@@ -1,18 +1,19 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% set reveal_state = game.current_reveal_state %}
+{% set permutation = game.current_permutation %}
 {% extends "base.jinja" %}
 {% block title %}Flouze - Jeu 2{% endblock %}
 {% block content %}
 
 <div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">
-  {% for id in game.current_permutation %}
+  {% for id in permutation %}
   <div class="flip-card card-size">
     <div id="card{{ id }}" {% if reveal_state[id] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
       <div class="flip-card-front theme-light-2">
       </div>
       <div class="flip-card-back theme-light-2 flex-vertical center-items space-around">
-        <div class="circle-big w3-lobster w3-xxlarge w3-text-white theme-dark-2">{{ engine.players[id].choice }}</div>
+        <div class="circle-big w3-lobster w3-xxlarge w3-text-white theme-dark-2">{{ game.players[id].choice }}</div>
       </div>
     </div>
   </div>

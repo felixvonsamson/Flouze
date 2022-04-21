@@ -90,6 +90,7 @@ class Game(ABC):
   @abstractmethod
   def __init__(game, engine):
     game.engine = engine
+    game.players = engine.players
     game.choices = [[None]*5 for _ in range(3)]
     game.is_done = [[False]*5 for _ in range(3)]
     game.frame_id = 0
@@ -163,7 +164,7 @@ class Game(ABC):
   def update_waiting_count(game):
     is_done = game.current_done
     waiting_players = [player
-      for player, is_done in zip(game.engine.players, is_done)
+      for player, is_done in zip(game.players, is_done)
       if is_done
     ]
     if game.engine.current_page["url"] != "Jeu 5": 
@@ -198,7 +199,7 @@ class Colors(Game):
     pass
 
   def end(game):
-    for player in game.engine.players:
+    for player in game.players:
       color_id = game.choices[0][player.ID]
       player.color = game.colors[color_id]
       game.engine.log(f"{player.name} a choisi la couleur "\
@@ -223,7 +224,7 @@ class Game1(Game):
     assert game.is_everyone_done
     choices = game.current_choices
     lottery = []
-    for player, nb_tickets in zip(game.engine.players, choices):
+    for player, nb_tickets in zip(game.players, choices):
       lottery += [player] * nb_tickets
       player.message = f"Vous n'avez pas gagné la loterie ! {icons['sad']}"
     if len(lottery) > 0:
@@ -258,6 +259,11 @@ class Game2(Game):
     game.game_nb = 2
     game.config = games_config["game2"]
     game.reveal_states = [[False]*5 for _ in range(3)]
+    game.permutations = [np.random.permutation(5) for _ in range(3)]
+  
+  @property
+  def current_permutation(game):
+    return game.permutations[game.current_round_id]
   
   def set_choice(game, player, number):
     game.current_choices[player.ID] = number
@@ -272,7 +278,7 @@ class Game2(Game):
     if 1 in counts:
       winning_value = values[list(counts).index(1)]
       winner_id = choices.index(winning_value)
-      winner = game.engine.players[winner_id]
+      winner = game.players[winner_id]
       round_id = game.current_round_id
       prize = game.config["prizes"][round_id] * int(winning_value)
       winner.flouze += prize
@@ -298,7 +304,7 @@ class Game2(Game):
              "car iel a remporté la dernière manche.")
     else:
       game.engine.log("Personne n'a remporté de lot à cette manche.")
-      for player in game.engine.players:
+      for player in game.players:
         player.message = "Personne n'a remporté de lot à cette manche."
 
 
@@ -314,7 +320,7 @@ class Game3(Game):
   def start(game):
     total_saved = 0
     initial_flouze = game.config["initial_flouze"]
-    for player in game.engine.players:
+    for player in game.players:
       player.saved_flouze = max(0, player.flouze - initial_flouze)
       total_saved += player.saved_flouze
       player.flouze = game.config["initial_flouze"]
@@ -351,14 +357,14 @@ class Game3(Game):
       f"{5 * prize} Pièces ont été redistribuées équitablement à "\
       f"tous les joueurs ce qui fait {prize} Pièces par joueur.")
 
-    for player, shared in zip(game.engine.players, game.current_choices):
+    for player, shared in zip(game.players, game.current_choices):
       player.flouze += prize
       game.real_gain[player.ID] += prize - shared
       player.message = f"Vous avez reçu {prize} {icons['coin']}."
 
     if game.current_round_id == 2:
       winner_id = np.argmax(game.real_gain)
-      winner = game.engine.players[winner_id]
+      winner = game.players[winner_id]
       print(game.real_gain)
       if game.real_gain.count(max(game.real_gain)) == 1:
         won_stars = game.config["3rd_round_stars"]
@@ -375,7 +381,7 @@ class Game3(Game):
           "Dû à une égalité, aucune étoile n'a été distribuée")
 
   def end(game):
-    for player in game.engine.players:
+    for player in game.players:
       player.flouze += player.saved_flouze
       player.saved_flouze = 0
     game.engine.log("L'argent mis de coté a été remis en jeu")
@@ -431,7 +437,7 @@ class Game4(Game):
     choices = game.current_choices
     values, count = np.unique(choices, return_counts=True)
     unique_choices = set(values[np.where(count == 1)])
-    for player, choice in zip(game.engine.players, choices):
+    for player, choice in zip(game.players, choices):
       if choice in unique_choices:
         prize = game.current_prizes[choice]
         if prize == "star":
@@ -478,13 +484,13 @@ class Game5(Game):
   def set_master(game):
     all_bonuses = game.engine.games[4].total_bonuses == 3
     game.jackpot = game.config["prize"] + all_bonuses * game.config["bonus"]
-    stars = [player.stars for player in game.engine.players]
+    stars = [player.stars for player in game.players]
     game.engine.log(
        "Le nombre d'étoiles pour chaque joueur est "\
       f"respectivement : {stars}.")
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
-      game.master = game.engine.players[master_id]
+      game.master = game.players[master_id]
       game.quiz.pop(master_id)
       game.other_players = game.master.other_players
       for i in range(3):
@@ -506,7 +512,7 @@ class Game5(Game):
       game.engine.log(
         "Dû à l'égalité d'étoiles, personne ne remporte "\
         "le gros lot et le cinquième jeu est annulé")
-      for player in game.engine.players:
+      for player in game.players:
         player.message = "Dû à l'égalité d'étoiles, "\
                          "personne ne remporte le gros lot "\
                          "et le cinquième jeu est annulé."
@@ -616,7 +622,7 @@ class Game5(Game):
             "En attente d'une nouvelle proposition..."
   
   def end(game):
-    for player in game.engine.players:
+    for player in game.players:
       game.engine.log(
         f"{player.name} repart avec {player.flouze} Pièces, ce qui "\
         f"correspond à {str(player.flouze / 10).rstrip('0').rstrip('.')} €.")
