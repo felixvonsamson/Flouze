@@ -6,15 +6,13 @@
 {% block content %}
 
 <div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">
-  {% for player_it in engine.players %}
+  {% for id in game.current_permutation %}
   <div class="flip-card card-size">
-    <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-      <div class="flip-card-front {{ player_it.color['name'] }}-light }}">
-        <b class="w3-xlarge">{{ player_it.name }}</b>
+    <div id="card{{ id }}" {% if reveal_state[id] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
+      <div class="flip-card-front theme-light-2">
       </div>
-      <div class="flip-card-back {{ player_it.color['name'] }}-light }} flex-vertical center-items">
-        <b class="w3-xlarge">{{ player_it.name }}</b>
-        <div class="circle-big w3-lobster w3-xxlarge w3-text-white {{ player_it.color['name'] }}-dark" style="margin:6px">{{ player_it.choice }}</div>
+      <div class="flip-card-back theme-light-2 flex-vertical center-items space-around">
+        <div class="circle-big w3-lobster w3-xxlarge w3-text-white theme-dark-2">{{ engine.players[id].choice }}</div>
       </div>
     </div>
   </div>
