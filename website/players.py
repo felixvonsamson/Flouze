@@ -16,6 +16,7 @@ class Player(object):
     player.saved_flouze = 0
     player.stars = 0
     player.last_profit = 0
+    player.last_page = None
     player.__message = None
     player.messages = []
     player.flouze_request = None
@@ -79,6 +80,9 @@ class Player(object):
       for msg_id, (_, limit, category, message) in enumerate(player.messages) 
       if now <= limit]
 
+  @property
+  def is_sharing_money(player):
+    return player.last_page in ["faire_un_don.jinja", "partager.jinja"]
 
   def send_money(player, receiver, amount, update_sender=False, save=True):
     assert (player.flouze >= amount)
@@ -106,7 +110,6 @@ class Player(object):
       f"{player.name} réclame {amount} Pièces de la part de {receiver.name}.")
     receiver.send_request(
       f"{player.name} vous réclame {amount} {icons['coin']}.")
-
 
   def send_stars(player, receiver, sent_stars):
     assert (player.stars >= sent_stars)

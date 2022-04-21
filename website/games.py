@@ -176,6 +176,7 @@ class Game(ABC):
 class Colors(Game):
   def __init__(game, engine):
     game.engine = engine
+    game.players = engine.players
     game.game_nb = 0
     game.config = games_config["colors"]
     game.colors = colors
