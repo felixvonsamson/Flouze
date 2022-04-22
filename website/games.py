@@ -366,7 +366,8 @@ class Game3(Game):
     if game.current_round_id == 2:
       winner_id = np.argmax(game.real_gain)
       winner = game.players[winner_id]
-      print(game.real_gain)
+      game.engime.log(
+        f"Les gains bruts sont de : {game.real_gain}")
       if game.real_gain.count(max(game.real_gain)) == 1:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
