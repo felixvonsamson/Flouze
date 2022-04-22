@@ -21,6 +21,17 @@
   <div style="display:flex; justify-content:space-evenly;">
     {% for player in engine.players %}
     <div class="w3-center w3-margin w3-xlarge {{ player.color['name'] }}-light" style="width:360px;">
+      {% if player.is_sharing_money %}
+        <div class="w3-white w3-center" style="font-size:50px!important;">
+        <i class="fa fa-exclamation-triangle w3-text-red"></i>
+        {% if player.last_page == "faire_un_don.jinja" %}
+          Donne
+        {% else %}
+          Partage
+        {% endif %}
+        <i class="fa fa-exclamation-triangle w3-text-red"></i>
+        </div>
+      {% endif %}
       <p><b>{{ player.name }}</b></p>
       <div class="w3-xlarge">{{ player.last_page }}</div>
       <div class="w3-row w3-xlarge">
