@@ -289,7 +289,7 @@ class Game2(Game):
       winner.message = f"Vous avez gagné et remportez {prize} {icons['coin']}."
       for player in winner.other_players:
         player.message = \
-          f"{winner.name} a gagné et remporte {prize} {icons['coin']}."
+          f"Un des paticipants a gagné et remporte {prize} {icons['coin']}."
       if round_id == 2:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
@@ -456,11 +456,11 @@ class Game4(Game):
         player.message = "Vous n'avez pas remporté le prix."
 
     if len(unique_choices) == 5:
+      game.current_bonus = True
       if game.current_round_id in [0, 1]:
         game.engine.log(
           "Tous les joueurs ont choisi un prix différent "\
           "donc un bonus s'applique pour la manche suivante")
-        game.current_bonus = True
       else:
         master_prize = games_config["game5"]["prize"]
         master_prize_with_bonus = games_config["game5"]["prize"] \
