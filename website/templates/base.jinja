@@ -101,7 +101,7 @@
     <div class="w3-center">{{ message }}</div>
     <span onclick="this.parentElement.style.display='none'; hide_message({{ message_id }});" class="w3-hover-gray w3-center w3-round-large" style="width: 25px; position:relative; left:3px">&times;</span>
   </div>
-  {% elif category == "requet" %}
+  {% elif category == "request" %}
   <div class="w3-pale-yellow w3-round-large w3-border w3-border-yellow w3-padding-small small" style="margin-bottom:5px; margin-left: 5px; margin-right: 5px;">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <i class="fa fa-question-circle w3-text-yellow" style="margin-right: 6px;"></i>
@@ -110,6 +110,7 @@
     <div style="display:flex; justify-content:space-around;">
       <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
       <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
+    </div>
   </div>
   {% endif %}
 {% endfor %}
