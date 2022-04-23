@@ -42,7 +42,6 @@ def create_app():
       return redirect(url_for("auth.login"))
   @app.after_request
   def add_header(response):
-    return response
     if request.endpoint == "static":
       response.cache_control.no_cache = None
       response.cache_control.private = True
