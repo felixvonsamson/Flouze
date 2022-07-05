@@ -289,7 +289,7 @@ class Game2(Game):
       winner.message = f"Vous avez gagné et remportez {prize} {icons['coin']}."
       for player in winner.other_players:
         player.message = \
-          f"Un des paticipants a gagné et remporte {prize} {icons['coin']}."
+          f"Vous n'avez pas gagné."
       if round_id == 2:
         won_stars = game.config["3rd_round_stars"]
         winner.stars += won_stars
@@ -344,8 +344,8 @@ class Game3(Game):
 
     inputs = game.current_choices
     common_pot = sum(inputs)
-    if game.sabotage:
-      common_pot = int(1.2 * np.max(inputs))
+    if game.sabotage and common_pot>299 :
+      common_pot -= 120
       game.engine.log(
          "Cette manche a été sabotée car les participans ont été trop "\
          "coopératifs. Le contenu du pot commun avant l'ajout de la "\
