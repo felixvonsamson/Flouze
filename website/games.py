@@ -600,19 +600,17 @@ class Game5(Game):
       game.end()
     else:
       if game.current_round_id == 2:
-        prize = games_config["game5"]["prize"] + \
-            (game.bonuses == 3) * games_config["game5"]["bonus"]
-        game.master.flouze -= prize
+        game.master.flouze -= game.jackpot
         game.engine.log("La proposition a été refusée par la majorité."\
-          f"Les {prize} Pièces sont retirées à {game.master.name}.")
+          f"Les {game.jackpot} Pièces sont retirées à {game.master.name}.")
         game.master.message = \
-          f"Votre dernière proposition a été refusée par "\
-          f"la majorité. Les {prize} {icons['coin']} vous sont donc retirées."
+          f"Votre dernière proposition a été refusée par la majorité. "\
+          f"Les {game.jackpot} {icons['coin']} vous sont donc retirées."
         for player in game.other_players:
           player.message = \
             f"Aucun accord n'a été trouvé après ces 3 essais donc "\
             f"{game.master.name} ne remporte pas les "\
-            f"{prize} {icons['coin']}."
+            f"{game.jackpot} {icons['coin']}."
         game.end()
       else:
         game.engine.log("La proposition a été refusée par la majorité.")
