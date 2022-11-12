@@ -299,10 +299,6 @@ class Game2(Game):
         winner.message += Markup(
           f"<br>En plus vous recevez {won_stars} {icons['star']} "\
            "car vous avez remporté la dernière manche.")
-        for player in winner.other_players:
-          player.message += Markup(
-            f"<br>En plus iel recoit {won_stars} {icons['star']} "\
-             "car iel a remporté la dernière manche.")
     else:
       game.engine.log("Personne n'a remporté de lot à cette manche.")
       for player in game.players:

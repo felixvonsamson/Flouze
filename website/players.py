@@ -139,7 +139,7 @@ class Player(object):
             player.request_money(receiver, -amount)
           else:
             receiver.send_message(
-              f"{player.name} vous réclame {amount} {icons['star']} "\
+              f"{player.name} vous réclame {amount} {icons['coin']} "\
                "mais vous n'avez pas cette somme !")
         else:
           player.send_money(receiver, amount, save=False)

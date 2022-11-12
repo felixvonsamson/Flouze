@@ -2,6 +2,7 @@ from flask import current_app, request, session
 from flask import render_template, redirect, url_for, flash
 from flask import Blueprint
 
+from .text import sentences, logs
 
 auth = Blueprint("auth", __name__)
 
@@ -24,8 +25,8 @@ def login():
         engine.refresh_monitoring()
         return redirect(url_for("views.home"))
       else:
-        flash("Mot de passe incorrect, réessayez.", category = "error")
+        flash(sentences["incorect password"][0], category = "error")
         return render_template("login.jinja")
     else:
-      flash("Vous n'êtes pas un participant", category = "error")
+      flash(sentences["not recognized"][0], category = "error")
   return render_template("login.jinja")

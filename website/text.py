@@ -60,7 +60,7 @@ logs = [
   "{name} a choisi le nombre {number}.",
   "{name} a remporté {prize} Pièces.",
   "{name} a reçu {stars} étoile(s) car iel a gagné la dernière manche.",
-  "Personne n'a remporté de lot à cette manche.",
+  "Personne n'a gagné à cette manche.",
   "L'argent des joueurs à été mis de coté. Ils leur restent tous {flouze} Pièces.",
   "{name} a versé {amount} Pièces dans le pot commun.",
   "Cette manche a été sabotée car les participans ont été trop coopératifs. Le contenu du pot commun avant l'ajout de la banque à été fixé à {common_pot}.",
@@ -90,63 +90,114 @@ logs = [
   "FIN DU JEU"
 ]
 
-sentences = [
-  "Mot de passe incorrect, réessayez.",
-  "Vous n'êtes pas un participant.",
-  "Vous êtes connecté !",
-  "Vous avez choisi la couleur {color}.",
-  "Vous avez déjà sélectionné cette couleur.",
-  "{name} a été plus rapide que vous !",
-  "Vous avez envoyé {amount} {coin} à {name}.",
-  "Vous avez envoyé {stars} {star} à {name}.",
-  "Vous avez reçu {amount} {coin} de la part de {name}.",
-  "Vous avez reçu {stars} {star} de la part de {name}.",
-  "{name} vous réclame {amount} {coin}.",
-  "{name} vous réclame {amount} {star} mais vous n'avez pas cette somme !",
-  "{name} ne peut pas accepter votre proposition car iel n'a pas assez d'argent !",
-  "Votre demande à été refusée par {name}.",
-  "Le montant indiqué dépasse votre solde !",
-  "Si vous voulez donner de l'argent veuillez utiliser le boutton 'Faire un don'...",
-  "Vous ne pouvez pas réclamer plus que ce que vous avez perdu !",
-  "Vous ne pouvez pas donner plus que ce que vous avez reçu !",
-  "Vous ne pouvez pas donner plus que ce que vous avez !",
-  "Vous n'avez pas assez d'étoiles.",
-  "Les propositions que vous avez faites dépasse vos moyens !",
-  "Vous avez choisi {tickets} ticket(s).",
-  "Vous n'avez pas gagné la loterie ! {smiley}",
-  "Vous avez gagné la loterie !<br>Vous avez reçu {prize} {coin} !",
-  "<br>En plus vous recevez {stars} {star} car vous avez remporté la dernière manche.",
-  "Vous avez choisi le nombre {number}.",
-  "Vous avez gagné et remportez {prize} {coin}.",
-  "Vous n'avez pas gagné.",
-  "<br>En plus vous recevez {stars} {star} car vous avez remporté la dernière manche.",
-  "<br>En plus iel recoit {stars} {star} car iel a remporté la dernière manche.",
-  "Personne n'a remporté de lot à cette manche.",
-  "Vous avez versé {amount} {coin} dans le pot commun.",
-  "Vous avez reçu {prize} {coin}.",
-  "Vous avez reçu {prize} {coin}.<br>En plus vous recevez {stars} {star} car vous avez gagné le plus d'argent durant ce jeu.",
-  "Vous avez choisi le prix : {star}.",
-  "Vous avez choisi le prix : {prize} {coin}.",
-  "Vous avez remporté le prix : {star}.",
-  "Vous avez remporté le prix {prize} {coin}.",
-  "Vous n'avez pas remporté le prix.",
-  "{name} a le plus d'étoiles et est ainsi en possesion de la somme de {jackpot} {coin} pour le 5ème jeu.",
-  "Vous avez le plus d'étoiles et êtes ainsi en possesion de la somme de {jackpot} {coin} pour le 5ème jeu.",
-  "Dû à l'égalité d'étoiles, personne ne remporte le gros lot et le cinquième jeu est annulé.",
-  "Perdu ! La bonne réponse à la question '{question}' était : {correct_answer}",
-  "Félicitation ! Vous remportez {prize} {coin} !",
-  "Veuillez attendre la proposition de {name} ...",
-  "{name} vous fait une proposition de {amount} {coin}.",
-  "Votre proposition a été acceptée par la majorité.",
-  "La proposition à été acceptée par la majorité des joueurs.",
-  "<br>Vous avez reçu {offer} {coin} de {name}.",
-  "<br>Vous vous êtes fait racketter {los} {coin} par {name}.",
-  "Votre dernière proposition n'a pas été acceptée par la majorité. Les {jackpot} {coin} vous sont donc retirés.",
-  "Aucun accord n'a été trouvé après ces 3 essais donc {name} ne remporte pas les {jackpot} {coin}.",
-  "Votre proposition n'a pas été acceptée par la majorité !",
-  "La proposition à été refusée par au moins 2 joueurs.<br>En attente d'une nouvelle proposition...",
-  "<br>Vous repartez donc avec {flouze} {coin}, ce qui correspond à {euros} €."
-]
+sentences = {
+  "incorect password" : [
+    "Mot de passe incorrect, réessayez."],
+  "not recognized" : [
+    "Vous n'êtes pas un participant."],
+  "connected" : [
+    "Vous êtes connecté !"],
+  "color selected" : [
+    "Vous avez choisi la couleur {color}."],
+  "color already selected" : [
+    "Vous avez déjà sélectionné cette couleur."],
+  "color not avalable" : [
+    "{name} a été plus rapide que vous !"],
+  "sent flouze" : [
+    "Vous avez envoyé {amount} {coin} à {name}."],
+  "sent stars" : [
+    "Vous avez envoyé {stars} {star} à {name}."],
+  "received flouze" : [
+    "Vous avez reçu {amount} {coin} de la part de {name}."],
+  "received stars" : [
+    "Vous avez reçu {stars} {star} de la part de {name}."],
+  "flouze claim" : [
+    "{name} vous réclame {amount} {coin}."],
+  "not enough money for flouze claim" : [
+    "{name} vous réclame {amount} {coin} mais vous n'avez pas cette somme !"],
+  "claim can't be accepted" : [
+    "{name} ne peut pas accepter votre proposition car iel n'a pas assez d'argent !"],
+  "claim rejected" : [
+    "Votre demande à été refusée par {name}."],
+  "not enough money" : [
+    "Le montant indiqué dépasse votre solde !"],
+  "please use donation" : [
+    "Si vous voulez donner de l'argent veuillez utiliser le boutton 'Faire un don'..."],
+  "claim too high" : [
+    "Vous ne pouvez pas réclamer plus que ce que vous avez perdu !"],
+  "donation too high" : [
+    "Vous ne pouvez pas donner plus que ce que vous avez reçu !"],
+  "not enough money for donation" : [
+    "Vous ne pouvez pas donner plus que ce que vous avez !"],
+  "not enough stars" : [
+    "Vous n'avez pas assez d'étoiles."],
+  "not enough money for offer" : [
+    "Les propositions que vous avez faites dépasse vos moyens !"],
+  "chosen tickets" : [
+    "Vous avez choisi {tickets} ticket(s)."],
+  "lottery looser" : [
+    "Vous n'avez pas gagné la loterie ! {smiley}"],
+  "lottery winner" : [
+    "Vous avez gagné la loterie !<br>Vous avez reçu {prize} {coin} !"],
+  "last round winner" : [
+    "<br>En plus vous recevez {stars} {star} car vous avez remporté la dernière manche."],
+  "chosen number" : [
+    "Vous avez choisi le nombre {number}."],
+  "winner number" : [
+    "Vous avez gagné et remportez {prize} {coin}."],
+  "looser number" : [
+    "Vous n'avez pas gagné."],
+  "no winner" : [
+    "Personne n'a gagné à cette manche."],
+  "flouze invested" : [
+    "Vous avez versé {amount} {coin} dans le pot commun."],
+  "return on investment" : [
+    "Vous avez reçu {prize} {coin}."],
+  "made the most money" : [
+    "Vous avez reçu {prize} {coin}.<br>En plus vous recevez {stars} {star} car vous avez gagné le plus d'argent durant ce jeu."],
+  "chosen star" : [
+    "Vous avez choisi le prix : {star}."],
+  "chosen prize" : [
+    "Vous avez choisi le prix : {prize} {coin}."],
+  "won star" : [
+    "Vous avez remporté le prix : {star}."],
+  "won prize" : [
+    "Vous avez remporté le prix {prize} {coin}."],
+  "prize not won" : [
+    "Vous n'avez pas remporté le prix."],
+  "starmaster announcement" : [
+    "{name} a le plus d'étoiles et est ainsi en possesion de la somme de {jackpot} {coin} pour le 5ème jeu."],
+  "you are the starmaster" : [
+    "Vous avez le plus d'étoiles et êtes ainsi en possesion de la somme de {jackpot} {coin} pour le 5ème jeu."],
+  "tie" : [
+    "Dû à l'égalité d'étoiles, personne ne remporte le gros lot et le cinquième jeu est annulé."],
+  "wrong awnser" : [
+    "Perdu ! La bonne réponse à la question '{question}' était : {correct_answer}"],
+  "right awnser" : [
+    "Félicitation ! Vous remportez {prize} {coin} !"],
+  "wait" : [
+    "Veuillez attendre la proposition de {name} ..."],
+  "offer" : [
+    "{name} vous fait une proposition de {amount} {coin}."],
+  "your offer is accepted" : [
+    "Votre proposition a été acceptée par la majorité."],
+  "offer accepted" : [
+    "La proposition à été acceptée par la majorité des joueurs."],
+  "offer received" : [
+    "<br>Vous avez reçu {offer} {coin} de {name}."],
+  "lost flouze" : [
+    "<br>Vous vous êtes fait racketter {los} {coin} par {name}."],
+  "your last offer is declined" : [
+    "Votre dernière proposition n'a pas été acceptée par la majorité. Les {jackpot} {coin} vous sont donc retirés."],
+  "last offer declined" : [
+    "Aucun accord n'a été trouvé après ces 3 essais donc {name} ne remporte pas les {jackpot} {coin}."],
+  "your offer is declined" : [
+    "Votre proposition n'a pas été acceptée par la majorité !"],
+  "offer declined" : [
+    "La proposition à été refusée par au moins 2 joueurs.<br>En attente d'une nouvelle proposition..."],
+  "final earnings" : [
+    "<br>Vous repartez donc avec {flouze} {coin}, ce qui correspond à {euros} €."]
+}
 
 html = [
   "Login",
