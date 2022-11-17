@@ -252,6 +252,9 @@ class Game1(Game):
     else:
       game.engine.log(
         "Il n'y a pas de gagnant à la loterie car personne n'a participé.")
+      if game.current_round_id == 2:
+        game.engine.log("Personne n'a remporté la dernière manche donc "\
+          "personne ne gange d'étoile.")
 
 
 class Game2(Game):
@@ -303,6 +306,9 @@ class Game2(Game):
       game.engine.log("Personne n'a remporté de lot à cette manche.")
       for player in game.players:
         player.message = "Personne n'a remporté de lot à cette manche."
+      if round_id == 2:
+        game.engine.log("Personne n'a remporté la dernière manche donc "\
+          "personne ne gange d'étoile.")
 
 
 class Game3(Game):

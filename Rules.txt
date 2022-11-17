@@ -1,0 +1,62 @@
+## FLOUZE ##
+strongly inspired by the video "Money" from Tom Scott : https://youtu.be/FJSI7QTAt_o
+
+[EN]
+The players need to be able to communicate freely and every player needs to have his own device (phone/computer).
+This game contains 5 games with 3 rounds each.
+The currency in this game is called 'Flouze'.
+At any time during the first 4 games, players are able to send Flouzes to each other.
+In addition to the Flouze, players can win stars. The player with the most Stars at the end of game 4 gets to control a large sum of money. There is no garantie that he will keep it but there is a big advantage to be in this position.
+Players cannot share stars.
+All actions during the game should be anonymous. Players are not allowed to show their screen to other players.
+The rules of every game are explained before each of them and the players will have time to discuss a strategy.
+Obviously lying is allowed.
+
+Every player has a name and password defined in 'players.txt' with wich they can log in to the game.
+Once all players are logged in they get to chose a color (fastest win).
+
+GAME 1 :
+At every round, players can choose a certain amount of lottery tickets from 0 to 10.
+There is always a winner unless everyone selected 0 tickets.
+Every ticket gives the owner a chance to win the lottery. So the more tickets one chooses the more chances he has to win but ...
+The winner will recieve the prize moey divided by the total amount of tickets chosen by all the players.
+The prize money is different at each round 200, 400, and 600 Flouzes.
+The winner of the last round will win a star in addition of the prize money. 
+The choices of the players and winner of the lotteries are anonymous but the number of stars everyone owns is public.
+
+GAME 2 :
+At every round, players can choose a number between 1 and 5. 
+Once everyone made their choices, the choosen numbers will be revealed anonymoously.
+The winner is the player who choosed the smallest number that no one else has choosen. 
+The winner will recieve the prize money multiplied by the number he chose.
+The prize money is different at each round 50, 100, and 150 Flouzes.
+The winner of the last round will win 2 stars in addition of the prize money.
+
+GAME 3 : 
+Every player has 100 Flouzes left. The rest of their money is set aside and will be put back at the end of the game. (If a player has less than 100 Flouzes the bank pays him the difference.)
+At every round, players choose to invest a certain amount of their money in a common pot.
+The bank will add a bonus to the common pot.
+Then the content of the common pot is redistributed equally to every player.
+The bonuses of the bank are 20%, 50% and 100% (of the content of the pot).
+The player that makes the most money during these 3 rounds is granted 2 stars.
+
+GAME 4 : 
+At every round, the players can choose one of [number of players] different prizes.
+A player recieves the choosen prize only if he is the only one that chose this prize.
+The choices will be revealed publicliy. 
+If all the prizes are distributed, then there will be a bonus at the next round.
+Round 3 : If all the prizes are distributed, then 500 Flouzes are added to the jackpot.
+
+Star barthering : 
+At the end of game 4 the players will be asked if they want to donate stars to other players. 
+They still have the possiblitiy to make Flouze donations.
+If there is more than one player with the most amount of stars, the fifth game is cancelled.
+
+GAME 5 : 
+For this game, the player with the most stars (Starmaster) is isolated from the other players.
+The Starmaster gets the jackpot money but to keep a part of it he must find an agreement with the other players.
+The starmaster has 3 attemps to make a monetary offer to the other players. (He has the option to offer negative values.)
+During the time when the starmaster gets the rules explained and makes the first proposition, the other players can awnser quiz questions and get some Flouzes.
+If the absolute majority accepts the offers, they all receive the proposed money and the starmaster keeps the rest.
+If half or more of the other players reject the offer then the starmaster gets to make a new offer.
+If the 3 offer is rejected, no one gets anything and the jackpot is withdrawn to the starmaster.
