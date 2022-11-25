@@ -2,6 +2,8 @@
 #[1] : French
 #[2] : German
 
+languages_name = ["gb", "fr", "de"]
+
 color_names = {
   "blue" : [
     "blue",

@@ -8,14 +8,16 @@ from .players import Player
 from .games import Colors, Game1, Game2, Game3, Game4, Game5
 from .pages_ordering import pages
 from .html_icons import icons
-from .text import all
+from .text import languages_name, color_names, game_names, quiz, logs_txt, player_txt, html_txt
 
 class gameEngine(object):
   pages = pages
 
   def __init__(engine, players_raw, lang_id):
     engine.lang_id = lang_id
+    engine.lang_txt = languages_name[lang_id]
     engine.text = {
+      "languages_name" : languages_name, 
       "color_names" : color_names,
       "game_names" : game_names,
       "quiz" : quiz,

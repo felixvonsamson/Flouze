@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lobster">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename="flouze.css") }}" type="text/css">
-    <link rel = "icon" href ="{{ url_for('static', filename="images/coin.png") }}" type="image/x-icon">
-    <title>{% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='flouze.css') }}" type="text/css">
+    <link rel = "icon" href ="{{ url_for('static', filename='images/coin.png') }}" type="image/x-icon">
+    <title>{% block title %}{% endblock %}</title>
   </head>
 
-<body class="flex-vertical" style="background-image: url({{ url_for("static", filename="images/" + game.config["background"]) }});">
+<body class="flex-vertical" style="background-image: url({{ url_for('static', filename='images/' + game.config['background']) }});">
 
 <div>
 
@@ -53,7 +53,7 @@
   <!--Donation button-->
   {% block donation_button %}
   <form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
-  <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">{{text["donation"][player.lang_id]}}</button>
+  <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">{{text["donate"][player.lang_id]}}</button>
   </form>
   {% endblock %}
 
@@ -65,6 +65,9 @@
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
+  </div>
+  <div class="w3-center">
+    <button type="submit" class="flag-container w3-btn medium theme-dark-{{game_nb}}"><img src="{{ url_for('static', filename='images/' + player.lang_txt + '.png') }}" class="flag" alt="flag"></button>
   </div>
 </div>
 

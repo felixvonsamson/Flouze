@@ -10,7 +10,8 @@ class Player(object):
     player.sid = None
     player.name = name
     player.password = password
-    player.lang_id = lang_id
+    player.lang_id = int(lang_id)
+    player.lang_txt = engine.text["languages_name"][int(lang_id)]
     player.color = None
     player.flouze = 0
     # Dans le jeu 3 l'argent est mis de coté

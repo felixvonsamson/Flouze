@@ -8,8 +8,8 @@ from website.gameEngine import gameEngine
 
 def init_engine(lang_id=0):
   with open("players.txt", "r") as file:
-    players_raw = [(player_id, *file.readline().split()) 
-                   for player_id in range(5)]
+    players_raw = [(player_id, *line.split()) 
+                   for player_id, line in enumerate(file) if line]
   return gameEngine(players_raw=players_raw, lang_id=lang_id)
 
 def create_app(lang_id=0):

@@ -1,7 +1,7 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Bienvenue{% endblock %}
+{% block title %}{{text["welcome"][player.lang_id]}}{% endblock %}
 {% block stars_table %}{% endblock %}
 {% block player_money %}{% endblock %}
 {% block donation_button %}{% endblock %}
@@ -9,7 +9,7 @@
 
 <div class="w3-card-4 w3-center animate__animated animate__zoomIn theme-light-welcome">
   <div class="w3-container w3-text-white theme-dark-welcome large" style="margin:0.3em; padding:0.3em 0.9em">
-    Bienvenue
+    {{text["welcome"][player.lang_id]}}
   </div>
 </div>
 {% endblock %}
