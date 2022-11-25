@@ -19,10 +19,22 @@ color_names = {
     "green",
     "verte",
     "grün"],
+  "teal" : [
+    "teal",
+    "sarcelle",
+    "teal"],
   "purple" : [
     "purple",
     "violette",
-    "lila"]
+    "lila"],
+  "magenta" : [
+    "magenta",
+    "magenta",
+    "magenta"],
+  "orange" : [
+    "orange",
+    "orange",
+    "orange"]
 }
 
 game_names = {
@@ -54,36 +66,36 @@ quiz = [
     ("Quel pays est enclavé dans le Sénégal ?", "La Gambie"),
     ("Welches Land wird von Senegal umschlossen?", "Gambia")],
   [
-    ("Who wrote 'The Lord of the Rings' ?", "J. R. R. Tolkien"),
+    ("Who wrote 'The Lord of the Rings'?", "J. R. R. Tolkien"),
     ("Qui est l'auteur du 'Segnieurs des anneaux' ?", "J. R. R. Tolkien"),
     ("Wer hat 'Herr der Ringe' geschrieben ?", "J. R. R. Tolkien")],
   [
-    ("What is the derivative of speed ?", "acceleration"),
+    ("What is the derivative of speed?", "acceleration"),
     ("Quel est la dérivée de la vitesse ?", "l'accélération"),
     ("Was ist die Ableitung der Geschwindigkeit ?", "die Beschleunigung")],
   [
-    ("In which year did the fall of the Berlin Wall happen ?", "1989"),
+    ("In which year did the fall of the Berlin Wall happen?", "1989"),
     ("En quelle année s'est déroulé la chute du mur de Berlin ?", "1989"),
-    ("In welchem Jahr ist die Berliner Mauer gefallen ? ?", "1989")],
+    ("In welchem Jahr ist die Berliner Mauer gefallen ?", "1989")],
   [
-    ("Who won the 2018 football world cup ?", "France"),
+    ("Who won the 2018 football world cup?", "France"),
     ("Qui a gagné la coupe du monde de foot 2018 ?", "la France"),
     ("Wer hat die Fußballweltmeisterschaft 2018 gewonne ?", "Frankreich")],
   [
-    ("Who is the actor that plays the Warden Supervisor in the moveie 'The Green Mile' ?", "Tom Hanks"),
+    ("Who is the actor that plays the Warden Supervisor in the moveie 'The Green Mile'?", "Tom Hanks"),
     ("Quel est l'acteur qui joue le gardien-chef dans le film 'La Ligne verte' ?", "Tom Hanks"),
     ("Welcher Schauspieler spielt den Oberaufseher in dem Film 'The Green Mile' ?", "Tom Hanks")],
   [
-    ("Which renewable energy is the most used ?", "biomass"),
+    ("Which renewable energy is the most used?", "biomass"),
     ("Quelle énergie renouvelable est la plus utilisée ?", "la biomasse"),
     ("Welche erneuerbare Energie wird am häufigsten genutzt ?", "Biomasse")],
   [
-    ("Who gave birth to communism ?", "Karl Marx"),
+    ("Who gave birth to communism?", "Karl Marx"),
     ("Qui a donné naissance au communisme ?", "Karl Marx"),
     ("wer hat den Kommunismus ins Leben gerufen ?", "Karl Marx")]
 ]
 
-logs = {
+logs_txt = {
   "start" : [
     "THE GAME HAS BEGUN !",
     "LE JEU A COMMENCÉ !",
@@ -266,7 +278,7 @@ logs = {
     "SPIELENDE"]
 }
 
-sentences = {
+player_txt = {
   "incorect password" : [
     "Wrong password, try again.",
     "Mot de passe incorrect, réessayez.",
@@ -481,7 +493,7 @@ sentences = {
     "<br>Ihr Endvermögen beträgt {flouze} {coin}."]
 }
 
-html = {
+html_txt = {
   "login" : [
     "Login",
     "Connexion",

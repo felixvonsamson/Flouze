@@ -9,14 +9,12 @@ pip install -r requirements.txt
 ## Running The App
 
 ```bash
-./main.py
-or for the server :
-./main_ssl.py
+./main.py --lang_id 0       #http connection
+./main_ssl.py --lang_id 0   #https connection
 ```
 
-## Viewing The App
+## Running on local network : 
 
-Go to 'localhost:5000'
-or '[localIP]:5000'
+Go to '[server_ip]:5000' for http or '[server_ip]:5443' for https
 
 ## The rules of the game are explained in 'Rules.txt'

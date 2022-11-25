@@ -5,6 +5,7 @@ from flask import Markup
 
 from .html_icons import icons
 from .pages_ordering import pages
+from text import 
 
 colors = [
   { "id": 0, "name": "bleu" }, 

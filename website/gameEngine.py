@@ -8,11 +8,22 @@ from .players import Player
 from .games import Colors, Game1, Game2, Game3, Game4, Game5
 from .pages_ordering import pages
 from .html_icons import icons
+from .text import all
 
 class gameEngine(object):
   pages = pages
 
-  def __init__(engine, players_raw):
+  def __init__(engine, players_raw, lang_id):
+    engine.lang_id = lang_id
+    engine.text = {
+      "color_names" : color_names,
+      "game_names" : game_names,
+      "quiz" : quiz,
+      "logs_txt" : logs_txt,
+      "player_txt" : player_txt,
+      "html_txt" : html_txt
+    }
+    
     engine.socketio = None
     engine.admin_sid = None
 
@@ -21,7 +32,7 @@ class gameEngine(object):
     engine.logs = []
     engine.nonces = set()
 
-    engine.players = [Player(*player_raw, engine)
+    engine.players = [Player(engine, *player_raw)
               for player_raw in players_raw]
     for i, player in enumerate(engine.players):
       player.other_players = engine.players.copy()

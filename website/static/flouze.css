@@ -169,22 +169,31 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .w3-border-red{border-color:#f44336}
 .w3-border-yellow{border-color:#ffeb3b}
 
-.bleu-light{color:#000;background-color:#6d9eeb}
-.bleu-dark{color:#fff;background-color:#3c78d8}
-.rouge-light{color:#000;background-color:#e06666}
-.rouge-dark{color:#fff;background-color:#cc0000}
-.jaune-light{color:#000;background-color:#ffd966}
-.jaune-dark{color:#fff;background-color:#bf9000}
-.vert-light{color:#000;background-color:#93c47d}
-.vert-dark{color:#fff;background-color:#6aa84f}
-.violet-light{color:#000;background-color:#8e7cc3}
-.violet-dark{color:#fff;background-color:#674ea7}
+.blue-light{color:#000;background-color:#6d9eeb}
+.blue-dark{color:#fff;background-color:#3c78d8}
+.red-light{color:#000;background-color:#e06666}
+.red-dark{color:#fff;background-color:#cc0000}
+.yellow-light{color:#000;background-color:#ffd966}
+.yellow-dark{color:#fff;background-color:#bf9000}
+.green-light{color:#000;background-color:#93c47d}
+.green-dark{color:#fff;background-color:#6aa84f}
+.teal-light{color:#000;background-color:#76a5af}
+.teal-dark{color:#fff;background-color:#45818e}
+.purple-light{color:#000;background-color:#8e7cc3}
+.purple-dark{color:#fff;background-color:#674ea7}
+.magenta-light{color:#000;background-color:#c27ba0}
+.magenta-dark{color:#fff;background-color:#a64d79}
+.orange-light{color:#000;background-color:#f6b26b}
+.orange-dark{color:#fff;background-color:#e69138}
 
-.border-bleu{border:4px solid #3c78d8}
-.border-rouge{border:4px solid #cc0000}
-.border-jaune{border:4px solid #bf9000}
-.border-vert{border:4px solid #6aa84f}
-.border-violet{border:4px solid #674ea7}
+.border-blue{border:4px solid #3c78d8}
+.border-red{border:4px solid #cc0000}
+.border-yellow{border:4px solid #bf9000}
+.border-green{border:4px solid #6aa84f}
+.border-teal{border:4px solid #45818e}
+.border-purple{border:4px solid #674ea7}
+.border-magenta{border:4px solid #a64d79}
+.border-orange{border:4px solid #e69138}
 
 .theme-dark-welcome{color:#fff;background-color:#463077}
 .theme-light-welcome{color:#fff;background-color:#675196}

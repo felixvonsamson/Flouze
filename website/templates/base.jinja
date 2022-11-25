@@ -1,6 +1,7 @@
 {% set game = engine.current_game %}
 {% set page = engine.current_page %}
 {% set game_nb = engine.current_game_nb %}
+{% set text = engine.text["html_txt"] %}
 
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,7 @@
 <body class="flex-vertical" style="background-image: url({{ url_for("static", filename="images/" + game.config["background"]) }});">
 
 <div>
+
   <!--Stars Table-->
   {% block stars_table %}
   <div class="flex-vertical star-table">
@@ -32,12 +34,12 @@
   </div>
   {% endblock %}
 
-  {% block player_money %}
   <!--Top bar with money-->
+  {% block player_money %}
   <div onclick="var history = document.getElementById('history'); history.classList.remove('hidden'); var history_list = document.getElementById('history_list').classList.remove('hidden'); history.scrollTop = history.scrollHeight;" class="top-bar theme-dark-{{game_nb}} huge space-between center-items">
     <span>
       <span id="flouze">{{ player.flouze }}</span>
-      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">
+      <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">
     </span>
     <!--Saved Flouze for game 3-->
     {% if player.saved_flouze %}
@@ -51,9 +53,10 @@
   <!--Donation button-->
   {% block donation_button %}
   <form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
-  <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">Faire un don</button>
+  <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">{{text["donation"][player.lang_id]}}</button>
   </form>
   {% endblock %}
+
 </div>
 
 <!--History-->
@@ -108,8 +111,8 @@
       <div class="w3-center">{{ message }}</div>
     </div>
     <div style="display:flex; justify-content:space-around;">
-      <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
-      <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
+      <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">{{text["accept"][player.lang_id]}}</i></button>
+      <button onclick="this.parentElement.parentElement.style.display='none'; hide_message({{ message_id }}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">{{text["reject"][player.lang_id]}}</button>
     </div>
   </div>
   {% endif %}
@@ -165,8 +168,8 @@
                 <div class="w3-center">${message}</div>
               </div>
               <div style="display:flex; justify-content:space-around;">
-                <button onclick="this.parentElement.parentElement.style.display='none'; hide_message(${message_id}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">Envoyer</i></button>
-                <button onclick="this.parentElement.parentElement.style.display='none'; hide_message(${message_id}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">Refuser</button>
+                <button onclick="this.parentElement.parentElement.style.display='none'; hide_message(${message_id}); answer_flouze_request(true);" class="w3-button w3-round-large w3-green w3-center" style="padding:3px; width:90px">{{text["accept"][player.lang_id]}}</i></button>
+                <button onclick="this.parentElement.parentElement.style.display='none'; hide_message(${message_id}); answer_flouze_request(false);" class="w3-button w3-round-large w3-red w3-center" style="padding:3px; width:90px">{{text["reject"][player.lang_id]}}</button>
               </div>
             </div>
             `;
