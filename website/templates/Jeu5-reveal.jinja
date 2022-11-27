@@ -3,7 +3,7 @@
 {% set other_players = engine.current_game.other_players %}
 {% set proposition = engine.current_game.current_proposition %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu 5{% endblock %}
+{% block title %}{{text["game 5"][player.lang_id]}}{% endblock %}
 {% block stars_table %}{% endblock %}
 {% block donation_button %}{% endblock %}
 {% block content %}
@@ -18,16 +18,16 @@
       <b class="w3-xlarge w3-padding">{{ other_player.name }}</b>
       <div class="w3-padding-small w3-text-white {{ other_player.color['name'] }}-dark">{{ proposition[loop.index0] }}</div>
       {% if other_player.choice == 0 %}
-      <div class="w3-padding-small w3-white w3-text-red">Refusé</div>
+      <div class="w3-padding-small w3-white w3-text-red">{{text["rejected"][player.lang_id]}}</div>
       {% else %}
-      <div class="w3-padding-small w3-white w3-text-green">Accepté</div>
+      <div class="w3-padding-small w3-white w3-text-green">{{text["accepted"][player.lang_id]}}</div>
       {% endif %}
     </div>
     {% endfor %}
   </div>
   <div class="w3-center">
       <form method="POST">
-        <button name="jeu5" value="nouvelle_proposition" type="submit" class="w3-button w3-padding theme-light-5 full-width small w3-margin-top">Faire une nouvelle proposition</button>
+        <button name="jeu5" value="nouvelle_proposition" type="submit" class="w3-button w3-padding theme-light-5 full-width small w3-margin-top">{{text["new offer"][player.lang_id]}}</button>
       </form>
   </div>
 </div>

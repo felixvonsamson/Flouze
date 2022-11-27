@@ -1,7 +1,7 @@
 {% set game = engine.current_game %}
 {% set stage = engine.current_stage %}
 {% extends "base.jinja" %}
-{% block title %}Résultats{% endblock %}
+{% block title %}{{text["game "+game.game_nb|string][player.lang_id]}}{% endblock %}
 {% block stars_table %}{% if stage[0] == 5 and stage[1] %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block donation_button %}{% if stage[0] == 5 %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
@@ -10,7 +10,7 @@
   {{ player.message }}
   {% if player.last_profit != 0 %}
     <form action="partager_profit" method="GET">
-      <button name="partager" type="submit" class="w3-btn w3-green w3-margin">Partager</button>
+      <button name="partager" type="submit" class="w3-btn w3-green w3-margin">{{text["share"][player.lang_id]}}</button>
     </form>
   {% endif %}
 </div>

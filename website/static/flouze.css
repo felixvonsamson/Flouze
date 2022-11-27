@@ -237,8 +237,10 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 }
 
 .coin{width:0.8em; height: 0.8em; position:relative; top:0.1em; margin-right: 0.2em;}
-.flag{width:3em; height: 3em; position:relative; margin-bottom: -0.5em;}
+.flag{width:3em; height: 3em; position:relative; margin-bottom: -0.45em; cursor:pointer;}
+.flag_select:hover{filter:sepia(50%)}
 .flag-container{border-radius:50%; padding:0.5em;}
+.flag_select-container{border-radius:2em; padding:0.5em; display:inline-block;}
 
 .toast{position:absolute; bottom:5px; width:100%; margin:auto; display:flex; flex-direction: column; align-items:center; font-size:18px;}
 
@@ -288,10 +290,13 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .flip-card-back {transform: rotateY(180deg);}
 
 #history.hidden {visibility: hidden; opacity:0;}
-#history {z-index:3;padding-bottom:15vh;position:fixed;bottom:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.4);transition: all 0.5s;}
+#history {z-index:3;padding-bottom:7em;position:fixed;bottom:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.4);transition: all 0.5s;}
 
 #history_list.hidden {transform: translateY(-100%);}
 #history_list {margin:auto;position:relative;width:100%;max-width:600px; transition: all 0.8s;}
+
+#language_list.hidden {visibility: hidden; opacity:0; transform: scale(0);}
+#language_list {transition: all 0.8s;}
 
 .flex-horizontal {display:flex; flex-direction:row;}
 .flex-vertical {display:flex; flex-direction:column;}

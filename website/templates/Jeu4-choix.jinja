@@ -2,12 +2,12 @@
 {% set config = game.config %}
 {% set prizes = engine.current_game.current_prizes %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu 4{% endblock %}
+{% block title %}{{text["game 4"][player.lang_id]}}{% endblock %}
 {% block content %}
 
 <div id="card2" class="w3-card-4 w3-center w3-white w3-text-white animate__animated animate__fadeIn container-jeu-1">
 <header class="large w3-padding theme-dark-4">
-    Choisissez un prix : 
+    {{text["choose prize"][player.lang_id]}}
 </header>
 <form method="POST">
   <div class="w3-margin" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px">
@@ -22,7 +22,7 @@
     </label>
   {% endfor %}
   </div>
-  <button name="jeu4" type="submit" class="w3-button theme-light-4 full-width small">Valider</button>
+  <button name="jeu4" type="submit" class="w3-button theme-light-4 full-width small">{{text["confirm"][player.lang_id]}}</button>
 </form>
 </div>
 

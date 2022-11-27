@@ -60,14 +60,24 @@
 </div>
 
 <!--History-->
-<div id="history" onclick="document.getElementById('history_list').classList.add('hidden'); document.getElementById('history').classList.add('hidden');" class="hidden">
-  <div id="history_list" class="w3-padding-large hidden theme-light-{{game_nb}}">
+<div id="history" class="hidden">
+  <div id="history_list" onclick="document.getElementById('history_list').classList.add('hidden'); document.getElementById('history').classList.add('hidden'); document.getElementById('language_list').classList.add('hidden');" class="w3-padding-large theme-light-{{game_nb}}">
     {% for time, _, _, msg in player.messages %}
     {{ time.strftime("%H:%M : ") + msg|replace("<br>", " ") }}<br>
     {% endfor %}
   </div>
-  <div class="w3-center">
-    <button type="submit" class="flag-container w3-btn medium theme-dark-{{game_nb}}"><img src="{{ url_for('static', filename='images/' + player.lang_txt + '.png') }}" class="flag" alt="flag"></button>
+  <!--Change language-->
+  <div class="w3-center w3-padding" style="position:fixed; bottom:0; width:100%">
+    <div id="language" onclick="document.getElementById('language_list').classList.remove('hidden');" class="w3-btn flag-container medium theme-dark-{{game_nb}}">
+      <img src="{{ url_for('static', filename='images/' + player.lang_txt + '.png') }}" class="flag" alt="flag">
+    </div>
+  </div>
+  <div id="language_list" class="hidden w3-center w3-padding" style="position:fixed; bottom:0; width:100%">
+    <div class="medium theme-dark-{{game_nb}} flag_select-container">
+      {% for lang in engine.text["languages_name"] %}
+      <img src="{{ url_for('static', filename='images/' + lang + '.png') }}" onclick="change_lang('{{lang}}');" class="flag_select flag" alt="flag">
+      {% endfor %}
+    </div>
   </div>
 </div>
 
@@ -192,6 +202,10 @@
     });
     function answer_flouze_request(answer) {
       socket.emit('answer_flouze_request', answer);
+    }
+    function change_lang(lang) {
+      socket.emit('change_language', lang);
+      window.location = window.location;
     }
     {% block additionnal_script %}{% endblock %}
   </script>

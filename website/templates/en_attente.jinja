@@ -1,10 +1,10 @@
 {% set game = engine.current_game %}
 {% extends "base.jinja" %}
-{% block title %}Flouze{% endblock %}
+{% block title %}{{text["game "+game.game_nb|string][player.lang_id]}}{% endblock %}
 {% block content %}
 
 <div class="w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding animate__animated animate__fadeIn">
-  En attente des autres joueurs...<br>
+  {{text["waiting"][player.lang_id]}}<br>
   <span class="large" id="count">{{ game.current_waiting_count }} / 5</span>
 </div>
 

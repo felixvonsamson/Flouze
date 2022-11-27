@@ -1,25 +1,25 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu 4{% endblock %}
+{% block title %}{{text["game 4"][player.lang_id]}}{% endblock %}
 {% block content %}
 
   <div class="w3-card-4 w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:13em;">
   <header class="w3-container w3-padding theme-dark-{{ game.game_nb }}">
-      À qui souhaitez-vous donner des étoiles ?
+      {{text["star recipient"][player.lang_id]}}
   </header>
   <form class="w3-container" method="POST">
   <select name="destinataire" class="w3-select w3-border w3-margin w3-round-large w3-center small" style="width:120px;" required>
-    <option value="" selected disabled>Destinataire</option>
+    <option value="" selected disabled>{{text["recipient"][player.lang_id]}}</option>
     {% for other_player in player.other_players %}
       <option value={{ loop.index0 }}>{{ other_player.name }}</option>
     {% endfor %}}
   </select>
   <br>
-  <input name="quantité" class="w3-input w3-border w3-round-large w3-center small" placeholder="Quantitée" type="number" style="width:120px; display:inline-block;" min="1" required>
+  <input name="quantité" class="w3-input w3-border w3-round-large w3-center small" placeholder="{{text['quantity'][player.lang_id]}}" type="number" style="width:120px; display:inline-block;" min="1" required>
   <div class="flex-horizontal space-around" style="margin:0.5em 0">
-    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button theme-dark-{{ game.game_nb }}">Envoyer</button>
-    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red">Retour</button>
+    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button theme-dark-{{ game.game_nb }}">{{text["send"][player.lang_id]}}</button>
+    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red">{{text["back"][player.lang_id]}}</button>
   </div>
   </form>
   </div>

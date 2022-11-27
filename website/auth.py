@@ -25,8 +25,8 @@ def login():
         engine.refresh_monitoring()
         return redirect(url_for("views.home"))
       else:
-        flash(player_txt["incorect password"][engine.lang.id], category = "error")
-        return render_template("login.jinja")
+        flash(player_txt["incorect password"][engine.lang_id], category = "error")
+        return render_template("login.jinja", engine=engine)
     else:
-      flash(player_txt["not recognized"][engine.lang.id], category = "error")
-  return render_template("login.jinja")
+      flash(player_txt["not recognized"][engine.lang_id], category = "error")
+  return render_template("login.jinja", engine=engine)

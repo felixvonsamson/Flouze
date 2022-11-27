@@ -1,16 +1,16 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Partager{% endblock %}
+{% block title %}{{text["share"][player.lang_id]}}{% endblock %}
 {% block content %}
 
   <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="min-width:270px">
   <header id="total" class="w3-container w3-text-white large w3-padding theme-dark-{{ game.game_nb }}">
-      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> à partager
+      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> {{text["to share"][player.lang_id]}}
   </header>
   {% if player.last_profit < 0 %}
   <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
-  <div class="w3-text-red small" style="margin:5px 0 0 2em; width:12.5em">Votre demande peut être refusée par les joueurs</div>
+  <div class="w3-text-red small" style="margin:5px 0 0 2em; width:12.5em">{{text["possible rejection"][player.lang_id]}}</div>
   {% endif %}
   <form method="POST">
   {% for other_player in player.other_players %}
@@ -23,8 +23,8 @@
     <span style="width:5em;"><b>{{ player.name }}</b></span>
     <div id="rest" style="width:5em;"></div>
   </div>
-    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red" style="margin:10px">en fait non</button>
-    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}Réclamer{% else %}Envoyer{% endif %}</button>
+    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red" style="margin:10px">{{text["actually no"][player.lang_id]}}</button>
+    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}{{text["claim"][player.lang_id]}}{% else %}{{text["send"][player.lang_id]}}{% endif %}</button>
 </form>
   </div>
 

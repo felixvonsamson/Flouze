@@ -1,6 +1,6 @@
 {% set game = engine.current_game %}
 {% extends "base.jinja" %}
-{% block title %}Couleurs{% endblock %}
+{% block title %}{{text["colors"][player.lang_id]}}{% endblock %}
 {% block player_money %}{% endblock %}
 {% block stars_table %}{% endblock %}
 {% block donation_button %}{% endblock %}

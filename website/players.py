@@ -4,13 +4,16 @@ from flask import Markup, flash
 from .html_icons import icons
 
 class Player(object):
-  def __init__(player, engine, ID, name, password, lang_id=0):
+  def __init__(player, engine, ID, name, password, lang_id=-1):
     player.engine = engine
     player.ID = ID
     player.sid = None
     player.name = name
     player.password = password
-    player.lang_id = int(lang_id)
+    if lang_id == None :
+      player.lang_id = engine.lang_id
+    else :
+      player.lang_id = int(lang_id)
     player.lang_txt = engine.text["languages_name"][int(lang_id)]
     player.color = None
     player.flouze = 0
@@ -87,47 +90,52 @@ class Player(object):
     return player.last_page in ["faire_un_don.jinja", "partager.jinja"]
 
   def send_money(player, receiver, amount, update_sender=False, save=True):
+    engine = player.engine
     assert (player.flouze >= amount)
     player.flouze -= amount
     receiver.flouze += amount
-    player.engine.log(
-      f"{player.name} a fait un don de {amount} Pièces à {receiver.name}.")
+    engine.log(engine.text["logs_txt"]["donation"][engine.lang_id].format(
+      name = player.name, amount = amount, receiver = receiver.name))
     updates = [("flouze", receiver.flouze)]
-    player.engine.update_fields(updates, [receiver])
+    engine.update_fields(updates, [receiver])
     if update_sender:
       updates = [("flouze", player.flouze)]
-      player.engine.update_fields(updates, [player])
-    player.flash_message(
-      f"Vous avez envoyé {amount} {icons['coin']} à {receiver.name}.")
-    receiver.send_message(
-      f"Vous avez reçu {amount} {icons['coin']} "\
-      f"de la part de {player.name}.")
+      engine.update_fields(updates, [player])
+    player.flash_message(engine.text["player_txt"]["sent flouze"]\
+      [player.lang_id].format(name = receiver.name, amount = amount,
+      coin = icons['coin']))
+    receiver.send_message(engine.text["player_txt"]["received flouze"]\
+      [receiver.lang_id].format(name = player.name, amount = amount,
+      coin = icons['coin']))
     if save:
-      player.engine.save_data()
-      player.engine.refresh_monitoring()
+      engine.save_data()
+      engine.refresh_monitoring()
 
   def request_money(player, receiver, amount):
     receiver.flouze_request = (player, amount)
-    player.engine.log(
-      f"{player.name} réclame {amount} Pièces de la part de {receiver.name}.")
-    receiver.send_request(
-      f"{player.name} vous réclame {amount} {icons['coin']}.")
+    player.engine.log(player.engine.text["logs_txt"]["claim"]\
+      [player.engine.lang_id].format(name = player.name, amount = amount,
+      donor = receiver.name))
+    receiver.send_request(player.engine.text["player_txt"]["flouze claim"]\
+      [receiver.lang_id].format(name = player.name, amount = amount,
+      coin = icons['coin']))
 
   def send_stars(player, receiver, sent_stars):
     assert (player.stars >= sent_stars)
     player.stars -= sent_stars
     receiver.stars += sent_stars
-    player.engine.log(
-      f"{player.name} a légué {sent_stars} "\
-      f"étoile(s) à {receiver.name}.")
+    player.engine.log(player.engine.text["logs_txt"]["star donation"]\
+      [player.engine.lang_id].format(name = player.name, stars = sent_stars,
+      receiver = receiver.name))
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
                (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)
-    player.flash_message(
-      f"Vous avez envoyé {sent_stars} {icons['star']} à {receiver.name}.")
-    receiver.send_message(
-      f"Vous avez reçu {sent_stars} {icons['star']}"\
-      f"de la part de {player.name}.")
+    player.flash_message(player.engine.text["player_txt"]["sent stars"]\
+      [player.lang_id].format(name = receiver.name, stars = sent_stars,
+      star = icons['star']))
+    receiver.send_message(player.engine.text["player_txt"]["received stars"]\
+      [receiver.lang_id].format(name = player.name, stars = sent_stars,
+      star = icons['star']))
     player.engine.save_data()
     player.engine.refresh_monitoring()
 
@@ -140,9 +148,9 @@ class Player(object):
           if receiver.flouze >= -amount:
             player.request_money(receiver, -amount)
           else:
-            receiver.send_message(
-              f"{player.name} vous réclame {amount} {icons['coin']} "\
-               "mais vous n'avez pas cette somme !")
+            receiver.send_message(player.engine.text["player_txt"]\
+              ["not enough money for flouze claim"][receiver.lang_id].format(
+                name = player.name, amount = amount, coin = icons['coin']))
         else:
           player.send_money(receiver, amount, save=False)
     player.last_profit = 0

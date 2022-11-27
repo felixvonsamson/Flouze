@@ -29,7 +29,8 @@ def donner_flouze():
     amount = int(request.form.get("montant"))
     receiver = g.player.other_players[receiver_level]
     if amount > g.player.flouze:
-      flash_error("Le montant indiqué dépasse votre solde !")
+      flash_error(g.engine.text["player_txt"]["not enough money"]\
+        [g.player.lang_id])
       return g.render_template_ctx("faire_un_don.jinja")
     g.player.send_money(receiver, amount)
     return redirect(url_for("views.home"))
@@ -47,25 +48,25 @@ def partager_profit():
       for receiver in g.player.other_players:
         amount = int(request.form.get(receiver.name))
         if amount > 0:
-          flash_error("Si vous voulez donner de l'argent veuillez utiliser "\
-                      "le boutton 'Faire un don'...")
+          flash_error(g.engine.text["player_txt"]["please use donation"]\
+            [g.player.lang_id])
           return g.render_template_ctx("partager.jinja")
         amounts.append(amount)
       if sum(amounts) < g.player.last_profit:
-        flash_error(
-          "Vous ne pouvez pas réclamer plus que ce que vous avez perdu !")
+        flash_error(g.engine.text["player_txt"]["claim too high"]\
+          [g.player.lang_id])
         return g.render_template_ctx("partager.jinja")
     else:
       for receiver in g.player.other_players:
         amount = int(request.form.get(receiver.name))
         amounts.append(amount)
       if sum(amounts) > g.player.last_profit:
-        flash_error(
-          "Vous ne pouvez pas donner plus que ce que vous avez reçu !")
+        flash_error(g.engine.text["player_txt"]["donation too high"]\
+          [g.player.lang_id])
         return g.render_template_ctx("partager.jinja")
       if sum(amounts) > g.player.flouze:
-        flash_error(
-          "Vous ne pouvez pas donner plus que ce que vous avez !")
+        flash_error(g.engine.text["player_txt"]\
+          ["not enough money for donation"][g.player.lang_id])
         return g.render_template_ctx("partager.jinja")
     g.player.share_profit(amounts)
     return redirect(url_for("views.home"))
@@ -80,7 +81,8 @@ def donner_etoiles():
     receiver_level = int(request.form.get("destinataire"))
     amount = int(request.form.get("quantité"))
     if amount > g.player.stars:
-      flash_error("Vous n'avez pas assez d'étoiles.")
+      flash_error(g.engine.text["player_txt"]["not enough stars"]\
+        [g.player.lang_id])
       return g.render_template_ctx("don_etoiles.jinja")
     receiver = g.player.other_players[receiver_level]
     g.player.send_stars(receiver, amount)
@@ -99,7 +101,6 @@ def home():
       tickets = int(request.form.get("tickets"))
       g.player.choice = tickets
       
-
     elif "jeu2" in request.form:
       if not game.is_allowed_to_play(g.player, 2):
         return redirect(url_for("views.home"))
@@ -110,7 +111,8 @@ def home():
         return redirect(url_for("views.home"))
       amount = int(request.form.get("montant"))
       if amount > g.player.flouze:
-        flash_error("Le montant indiqué dépasse votre solde !")
+        flash_error(g.engine.text["player_txt"]["not enough money"]\
+          [g.player.lang_id])
         return g.render_template_ctx(g.engine.current_page["url"])
       g.player.choice = amount
         
@@ -138,13 +140,13 @@ def home():
         for other_player in game.other_players:
           amount = int(request.form.get(other_player.name))
           if amount + other_player.flouze < 0:
-            flash_error(f"{other_player.name} ne peut pas accepter votre "\
-                         "proposition car iel n'a pas assez d'argent !")
+            flash_error(g.engine.text["player_txt"]["claim can't be accepted"]\
+              [g.player.lang_id].format(name = other_player.name))
             return g.render_template_ctx("Jeu5-proposition.jinja")
           total += amount
         if total > g.player.flouze:
-          flash_error(
-            "Les propositions que vous avez faites dépasse vos moyens !")
+          flash_error(g.engine.text["player_txt"]["not enough money for offer"]\
+            [g.player.lang_id])
           return g.render_template_ctx("Jeu5-proposition.jinja")
         amounts = [int(request.form.get(other_player.name)) 
                    for other_player in game.other_players]

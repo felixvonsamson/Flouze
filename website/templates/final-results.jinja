@@ -1,7 +1,7 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Flouze FIN{% endblock %}
+{% block title %}{{text["end"][player.lang_id]}}{% endblock %}
 {% block stars_table %}{% endblock %}
 {% block donation_button %}{% endblock %}
 {% block content %}
@@ -9,7 +9,7 @@
 <div class="w3-panel w3-center w3-padding w3-round-large animate__animated animate__fadeIn theme-dark-5 border-theme-dark-5" style="max-width:90%; border-style:solid; border-width: 5px;">
 <p>{{ player.message }}</p>
 </div>
-<audio id="coins_sound" src="{{ url_for("static", filename="sounds/Coins-falling-on-floor.mp3") }}" style="display:none" preload="auto"> 
+<audio id="coins_sound" src="{{ url_for('static', filename='sounds/Coins-falling-on-floor.mp3') }}" style="display:none" preload="auto"> 
 
 {% endblock %}
 {% block additionnal_script %}

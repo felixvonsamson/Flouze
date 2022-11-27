@@ -20,8 +20,8 @@ def add_handlers(socketio, engine):
     if accept: 
       player.send_money(requester, amount, update_sender=True)
     else:
-      requester.send_message(
-        f"Votre demande à été refusée par {player.name}.", category="error")
+      requester.send_message(engine.text["player_txt"]["claim rejected"]\
+        [requester.lang_id].format(name = player.name), category="error")
     player.requested_flouze = None
   @socketio.on("select_color")
   def select_color(color_id):
@@ -30,11 +30,22 @@ def add_handlers(socketio, engine):
     game = engine.current_game
     if game.owner[color_id] :
       if game.owner[color_id] == player :
-        player.send_message("Vous avez déjà sélectionné cette couleur.", 
-                            category="error", persistant=False)
+        player.send_message(engine.text["player_txt"]["color already selected"]\
+        [player.lang_id], category="error", persistant=False)
       else:
-        player.send_message(
-          f"{game.owner[color_id].name} a été plus rapide que vous !", 
-          category="error", persistant=False)
+        player.send_message(engine.text["player_txt"]["color not avalable"]\
+        [player.lang_id].format(name = game.owner[color_id].name), 
+        category="error", persistant=False)
     else:
       player.choice = color_id
+  @socketio.on("change_language")
+  def select_color(lang):
+    player = engine.players[int(session["ID"])]
+    languages = engine.text["languages_name"]
+    assert lang in languages
+    new_lang_id = languages.index(lang)
+    if new_lang_id != player.lang_id :
+      player.lang_id = new_lang_id
+      player.lang_txt = lang
+      player.send_message(engine.text["player_txt"]["language change"]\
+        [new_lang_id])

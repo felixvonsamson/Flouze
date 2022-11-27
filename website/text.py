@@ -2,7 +2,7 @@
 #[1] : French
 #[2] : German
 
-languages_name = ["gb", "fr", "de"]
+languages_name = ["en", "fr", "de"]
 
 color_names = {
   "blue" : [
@@ -42,7 +42,7 @@ color_names = {
 game_names = {
     "game 1" : [
       "The lottery",
-      "La lotterie",
+      "La loterie",
       "Das Lotteriespiel"],
     "game 2" : [
       "The reverse auction",
@@ -170,7 +170,7 @@ logs_txt = {
     "The players' money has been set aside. They all have {flouze} coins left.",
     "L'argent des joueurs à été mis de coté. Ils leur restent tous {flouze} Pièces.",
     "Das Geld der Spieler wurde beiseitegelegt. Sie haben alle {flouze} Münzen übrig."],
-  "investment in common pot " : [
+  "investment in common pot" : [
     "{name} contributed {amount} Coins to the common pot.",
     "{name} a versé {amount} Pièces dans le pot commun.",
     "{name} hat {amount} Münzen in den gemeinsamen Topf investiert."],
@@ -187,9 +187,9 @@ logs_txt = {
     "Les gains bruts sont de : {benefit}.",
     "Die Bruttogewinne betragen : {benefit}."],
   "largest benefit" : [
-    "{name} received {stars} star(s) because he won the most money during this game.",
+    "{name} received {stars} star(s) because she/he won the most money during this game.",
     "{name} a reçu {stars} étoile(s) car iel a gagné le plus d'argent durant ce jeu.",
-    "{name} hat {stars} Stern(e) erhalten, weil er während dieses Spiels das meiste Geld gewonnen hat"],
+    "{name} hat {stars} Stern(e) erhalten, weil er/sie während dieses Spiels das meiste Geld gewonnen hat"],
   "no stars" : [
     "No one won the last round so no one is ganging a star.",
     "Personne n'a remporté la dernière manche donc personne ne gange d'étoile.",
@@ -249,7 +249,11 @@ logs_txt = {
   "awnser accepted" : [
     "The answer has been validated.",
     "La réponse a été validée.",
-    "Die Antwort wurde bestätigt"],
+    "Die Antwort wurde bestätigt."],
+  "awnser refused" : [
+    "The answer has been refused.",
+    "La réponse a été refusée.",
+    "Die Antwort wurde nicht akzeptiert."],
   "gamemaster offer" : [
     "{gamemaster} offered {amount} coins to {name}.",
     "{gamemaster} a proposé {amount} Pièces à {name}.",
@@ -293,6 +297,10 @@ player_txt = {
     "You are logged in !",
     "Vous êtes connecté !",
     "Sie sind eingeloggt !"],
+  "language change" : [
+    "The language was changed to english.",
+    "La langue a été changée en français.",
+    "Die Sprache wurde auf Deutsch umgestellt."],
   "color selected" : [
     "You have chosen the color {color}.",
     "Vous avez choisi la couleur {color}.",
@@ -330,9 +338,9 @@ player_txt = {
     "{name} vous réclame {amount} {coin} mais vous n'avez pas cette somme.",
     "{name} Verlangt von ihnen {amount} {coin}, aber sie haben diesen betrag nicht."],
   "claim can't be accepted" : [
-    "{name} cannot accept your offer because he does not have enough money.",
+    "{name} cannot accept your offer because she/he does not have enough money.",
     "{name} ne peut pas accepter votre offre car iel n'a pas assez d'argent.",
-    "{name} kann Ihren Angebot nicht annehmen, weil er nicht genug Geld hat."],
+    "{name} kann Ihren Angebot nicht annehmen, weil er/sie nicht genug Geld hat."],
   "claim rejected" : [
     "Your request has been denied by {name}."
     "Votre demande à été refusée par {name}.",
@@ -470,9 +478,9 @@ player_txt = {
     "<br>Vous avez reçu {offer} {coin} de la part de {name}.",
     "<br>Sie haben {offer} {coin} von {name} erhalten."],
   "lost flouze" : [
-    "<br>You have been shaken down {los} {coin} by {name}"
-    "<br>Vous vous êtes fait racketter {los} {coin} par {name}.",
-    "<br>Sie wurden von {name} um {los} {coin} erpresst."],
+    "<br>You have been shaken down {loss} {coin} by {name}"
+    "<br>Vous vous êtes fait racketter {loss} {coin} par {name}.",
+    "<br>Sie wurden von {name} um {loss} {coin} erpresst."],
   "your last offer is declined" : [
     "Your last offer was not accepted by the majority. The {jackpot} {coin} are therefore withdrawn.",
     "Votre dernière offre n'a pas été acceptée par la majorité. Les {jackpot} {coin} vous sont donc retirés.",
@@ -544,10 +552,6 @@ html_txt = {
     "QUIZ",
     "QUIZ",
     "QUIZ"],
-  "results" : [
-    "Results",
-    "Résultats",
-    "Ergebnisse"],
   "donate" : [
     "Donate",
     "Faire un don",
@@ -592,6 +596,22 @@ html_txt = {
     "Send",
     "Envoyer",
     "Senden"],
+  "amount" : [
+    "Amount",
+    "Montant",
+    "Betrag"],
+  "quantity" : [
+    "Amount",
+    "Quantitée",
+    "Anzahl"],
+  "your awnser" : [
+    "Your awnser",
+    "Votre réponse",
+    "Ihre Antwort"],
+  "claim" : [
+    "Claim",
+    "Réclamer",
+    "Einfordern"],
   "back" : [
     "Back",
     "Retour",
@@ -652,6 +672,14 @@ html_txt = {
     "Make an offer",
     "Faire une proposition",
     "Angebot machen"],
+  "remaining money 1" : [
+    "You will have",
+    "Il vous restera",
+    "Sie haben dann noch"],
+  "remaining money 2" : [
+    "left",
+    "",
+    "übrig"],
   "rejected" : [
     "Rejected",
     "Refusé",

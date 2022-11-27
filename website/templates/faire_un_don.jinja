@@ -1,25 +1,25 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Faire un don{% endblock %}
+{% block title %}{{text["donate"][player.lang_id]}}{% endblock %}
 {% block donation_button %}{% endblock %}
 {% block content %}
 
   <div class="w3-card-4 w3-white w3-center w3-text-white animate__animated animate__fadeIn" style="width:12em;">
   <header class="w3-container w3-padding theme-dark-{{ game.game_nb }} large">
-      Faire un don
+      {{text["donate"][player.lang_id]}}
   </header>
   <form class="w3-container" method="POST">
   <select name="destinataire" class="w3-select w3-border w3-round-large w3-center small" style="width:8em; margin-top:16px; margin-bottom:8px" required>
-    <option value="" selected disabled>Destinataire</option>
+    <option value="" selected disabled>{{text["recipient"][player.lang_id]}}</option>
     {% for other_player in player.other_players %}
       <option value={{ loop.index0 }}>{{ other_player.name }}</option>
     {% endfor %}
   </select>
-  <input name="montant" class="w3-input w3-border w3-round-large w3-center small" placeholder="Montant" type="number" style="width:8em; display:inline-block;" min="1" required>
+  <input name="montant" class="w3-input w3-border w3-round-large w3-center small" placeholder="{{text['amount'][player.lang_id]}}" type="number" style="width:8em; display:inline-block;" min="1" required>
   <div class="flex-horizontal space-around" style="margin:0.5em 0">
-    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red small">en fait non</button>
-    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button theme-dark-{{ game.game_nb }} small">Envoyer</button>
+    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red small">{{text["actually no"][player.lang_id]}}</button>
+    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button theme-dark-{{ game.game_nb }} small">{{text["send"][player.lang_id]}}</button>
   </div>
   </form>
   </div>

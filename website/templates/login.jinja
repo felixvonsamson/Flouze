@@ -24,21 +24,22 @@
       background-size: cover;
     }
     </style>
-    <title>Login</title>
+    {% set text = engine.text["html_txt"] %}
+    <title>{{text["login"][engine.lang_id]}}</title>
   </head>
 
   <body class="medium">
     <div class="w3-card-4 w3-display-middle w3-white" style="width:300px;">
       <div class="w3-container w3-green w3-center large w3-padding">
-        Qui est-tu ?
+        {{text["who are you ?"][engine.lang_id]}}
       </div>
 
       <form class="w3-container w3-padding" method="POST">
-        <label>Prénom</label>
+        <label>{{text["name"][engine.lang_id]}}</label>
         <input type="text" class="w3-input w3-border w3-margin-bottom" id="firstName" name="firstName" required>
-        <label>Mot de passe</label>
+        <label>{{text["password"][engine.lang_id]}}</label>
         <input type="password" class="w3-input w3-border w3-margin-bottom" id="password" name="password" required>
-        <p class="w3-center"><button type="submit" class="w3-btn w3-green">Se connecter</button></p>
+        <p class="w3-center"><button type="submit" class="w3-btn w3-green">{{text["log in"][engine.lang_id]}}</button></p>
       </form>
     </div>
   </body>

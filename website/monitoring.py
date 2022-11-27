@@ -47,21 +47,21 @@ def home():
       question, correct_answer = game.quiz[question_id][1]
       if decision == "rejeter":
         game.is_answer_correct[question_id] = False
-        engine.log("La réponse a été rejetée.")
+        engine.log(engine.text["logs_txt"]["awnser refused"][engine.lang_id])
         for player in game.other_players:
-          player.send_message(
-            f"Perdu ! La bonne réponse à la question '{question}' était : "\
-            f"{correct_answer}", category="error")
+          player.send_message(engine.text["player_txt"]["wrong awnser"]\
+            [player.lang_id].format(question = question,
+            correct_answer = correct_answer), category="error")
       elif decision == "valider":
         game.is_answer_correct[question_id] = True
-        engine.log("La réponse a été validée.")
+        engine.log(engine.text["logs_txt"]["awnser accepted"][engine.lang_id])
         for player in game.other_players:
           quiz_prize = game.config["quiz_prize"]
           player.flouze += quiz_prize
           updates = [("flouze", player.flouze)]
           engine.update_fields(updates, [player])
-          player.send_message(
-            f"Félicitation ! Vous remportez {quiz_prize} {icons['coin']} !")
+          player.send_message(engine.text["player_txt"]["right awnser"]\
+            [player.lang_id].format(prize = quiz_prize, coin = icons['coin']))
         
     elif "current_page_id" in request.form:
       engine.goto_page(int(request.form["current_page_id"]))

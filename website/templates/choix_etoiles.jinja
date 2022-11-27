@@ -1,17 +1,17 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu 4{% endblock %}
+{% block title %}{{text["game 4"][player.lang_id]}}{% endblock %}
 {% block content%}
 
   <div class="w3-card-4 w3-white w3-center w3-text-white animate__animated animate__fadeIn container-jeu-1">
   <header class="w3-container w3-padding theme-dark-5">
-      Souhaitez-vous donner des étoiles ?
+      {{text["donate star"][player.lang_id]}}
   </header>
   <form class="w3-container" method="POST">
   <div class="flex-horizontal space-around" style="margin:0.5em 0">
-    <button type="button" name="don_etoiles" onclick="window.location.href='/donner_des_etoiles'" class="w3-button theme-dark-5" style="width:5em;">OUI</button>
-    <button type="submit" name="don_etoiles" value="terminer" class="w3-button w3-red" style="width:5em;">NON</button>
+    <button type="button" name="don_etoiles" onclick="window.location.href='/donner_des_etoiles'" class="w3-button theme-dark-5" style="width:5em;">{{text["yes"][player.lang_id]}}</button>
+    <button type="submit" name="don_etoiles" value="terminer" class="w3-button w3-red" style="width:5em;">{{text["no"][player.lang_id]}}</button>
   </div>
   <p>
 </form>

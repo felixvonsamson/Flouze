@@ -1,15 +1,15 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}QUIZ{% endblock %}
+{% block title %}{{text["quiz"][player.lang_id]}}{% endblock %}
 {% block donation_button %}{% endblock %}
 {% block content %}
 
 <div class="w3-card-4 w3-center w3-padding animate__animated animate__jackInTheBox theme-dark-5 border-5" style="max-width:90%">
 {% if player == game.current_guesser %}
 <form method="POST">
-  <p><input name="réponse" class="w3-input w3-border w3-round-large w3-center" placeholder="Votre réponse" type="text" style="width:10em;" required></p>
-  <p><button type="submit" name="jeu5" value="quiz_reponse" class="w3-button w3-text-white theme-light-5">Valider</button></p>
+  <p><input name="réponse" class="w3-input w3-border w3-round-large w3-center" placeholder="{{text['your awnser'][player.lang_id]}}" type="text" style="width:10em;" required></p>
+  <p><button type="submit" name="jeu5" value="quiz_reponse" class="w3-button w3-text-white theme-light-5">{{text["confirm"][player.lang_id]}}</button></p>
 </form>
 {% else %}
   <p>{{ player.question }}</p>

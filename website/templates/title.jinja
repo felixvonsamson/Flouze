@@ -1,7 +1,7 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu {{game.game_nb}}{% endblock %}
+{% block title %}{{text["game "+game.game_nb|string][player.lang_id]}}{% endblock %}
 {% block stars_table %}{% if game.game_nb == 5 %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block donation_button %}{% if game.game_nb == 5 %}{% else %}{{ super() }}{% endif %}{% endblock %}
 {% block content %}
@@ -11,7 +11,7 @@
     {{ config["title"] }}
   </div>
 </div>
-<iframe src="{{ url_for("static", filename="animations/Jeu%d.sozi.html" % game.game_nb) }}" class="anim" style="-webkit-backdrop-filter: blur(0.9vw); backdrop-filter: blur(0.9vw);" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{ game.frame_id }} % player.presentation.frames.length);">
+<iframe src="{{ url_for('static', filename='animations/Jeu%d.sozi.html' % game.game_nb) }}" class="anim" style="-webkit-backdrop-filter: blur(0.9vw); backdrop-filter: blur(0.9vw);" frameBorder="0" onload="var player = this.contentWindow.sozi.player; player.moveToFrame({{ game.frame_id }} % player.presentation.frames.length);">
   My Sozi presentation should play here.
 </iframe>
 

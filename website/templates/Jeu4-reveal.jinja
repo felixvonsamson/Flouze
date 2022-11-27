@@ -3,7 +3,7 @@
 {% set prizes = game.current_prizes %}
 {% set reveal_state = game.current_reveal_state %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu 4{% endblock %}
+{% block title %}{{text["game 4"][player.lang_id]}}{% endblock %}
 {% block content %}
 
 <div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">

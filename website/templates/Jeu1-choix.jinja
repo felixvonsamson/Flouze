@@ -1,23 +1,23 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
 {% extends "base.jinja" %}
-{% block title %}Flouze - Jeu 1{% endblock %}
+{% block title %}{{text["game 1"][player.lang_id]}}{% endblock %}
 {% block content %}
 
 <div class="w3-card-4 w3-center w3-white animate__animated animate__fadeIn container-jeu-1">
 <header class="w3-text-white w3-padding-large theme-dark-1" style="line-height:1.3em">
-    Combien de tickets voulez-vous mettre en jeu ?
+    {{text["how many tickets"][player.lang_id]}}
 </header>
 <form method="POST" class="flex-vertical center-items">
     <select class="w3-select w3-border w3-margin small" id="tickets" name="tickets" style="width:250px" required>
-        <option value="" selected disabled>Nombre de tickets</option>
-        <option value="0">Aucun ticket</option>
-        <option value="1">1 ticket</option>
+        <option value="" selected disabled>{{text["tickets amount"][player.lang_id]}}</option>
+        <option value="0">{{text["no ticket"][player.lang_id]}}</option>
+        <option value="1">{{text["1 ticket"][player.lang_id]}}</option>
         {% for i in range(2, 11)%}
-        <option value="{{i}}">{{i}} tickets</option>
+        <option value="{{i}}">{{i}} {{text["tickets"][player.lang_id]}}</option>
         {% endfor %}
     </select>
-    <button name="jeu1" type="submit" class="w3-button small theme-light-1 full-width">Valider</button>
+    <button name="jeu1" type="submit" class="w3-button small theme-light-1 full-width">{{text["confirm"][player.lang_id]}}</button>
 </form>
 </div>
 
