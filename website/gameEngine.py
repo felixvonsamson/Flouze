@@ -53,7 +53,7 @@ class gameEngine(object):
     # pointeur pour indiquer sur quelle page on est (l'array 'pages')
     engine.iterator = 0
     
-    engine.log(logs_txt["start"])
+    engine.log(logs_txt["start"][engine.lang_id])
 
   def init_logger(engine):
     engine.logger.setLevel(logging.INFO)
@@ -94,21 +94,21 @@ class gameEngine(object):
   def goto_page(engine, page_id):
     engine.iterator = page_id
     stage = engine.current_stage
-    engine.log(logs_txt["jump to page"].format(
+    engine.log(logs_txt["jump to page"][engine.lang_id].format(
       page = engine.current_page['url'], jeu = stage[0], manche = stage[1]))
     engine.force_refresh()
 
   def passive_previous_page(engine):
     engine.iterator -= 1
     stage = engine.current_stage
-    engine.log(logs_txt["back to page"].format(
+    engine.log(logs_txt["back to page"][engine.lang_id].format(
       page = engine.current_page['url'], jeu = stage[0], manche = stage[1]))
     engine.force_refresh()
 
   def passive_next_page(engine):
     engine.iterator += 1
     stage = engine.current_stage
-    engine.log(logs_txt["next page passive"].format(
+    engine.log(logs_txt["next page passive"][engine.lang_id].format(
       page = engine.current_page['url'], jeu = stage[0], manche = stage[1]))
     engine.force_refresh()
   
@@ -116,7 +116,7 @@ class gameEngine(object):
     engine.iterator += 1
     stage = engine.current_stage
     page = engine.current_page
-    engine.log(logs_txt["next page"].format(
+    engine.log(logs_txt["next page"][engine.lang_id].format(
       page = engine.current_page['url'], jeu = stage[0], manche = stage[1]))
 
     current_game_nb, current_round_nb = engine.current_stage

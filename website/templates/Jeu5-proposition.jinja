@@ -13,13 +13,13 @@
 </header>
 <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
   {% for other_player in other_players %}
-  <div class="w3-card w3-padding {{ other_player.color['name'] }}-light" style="width:140px">
+  <div class="w3-card w3-padding {{ other_player.color }}-light" style="width:140px">
     <b class="w3-xlarge w3-padding">{{ other_player.name }}</b>
     <input id=proposition{{ loop.index0 }} onchange="update_rest()" class="w3-input w3-border w3-round-large w3-center w3-large" placeholder="{{text['amount'][player.lang_id]}}" name={{ other_player.name }} type="number" style="width:110px;" required>
   </div>
   {% endfor %}
 </div>
-<div class="small w3-card w3-margin w3-padding-small {{ player.color['name'] }}-light">
+<div class="small w3-card w3-margin w3-padding-small {{ player.color }}-light">
 {{text["remaining money 1"][player.lang_id]}} <span id="rest"></span> <img src="/static/images/coin.png" class="coin" alt="Coin"> {{text["remaining money 2"][player.lang_id]}}<br>
 </div>
 <button type="submit" name="jeu5" value="proposition" class="w3-button theme-light-5 full-width">{{text["make offer"][player.lang_id]}}</button>

@@ -20,7 +20,7 @@
 <body>
   <div style="display:flex; justify-content:space-evenly;">
     {% for player in engine.players %}
-    <div class="w3-center w3-margin w3-xlarge {{ player.color['name'] }}-light" style="width:360px;">
+    <div class="w3-center w3-margin w3-xlarge {{ player.color }}-light" style="width:360px;">
       {% if player.is_sharing_money %}
         <div class="w3-white w3-center" style="font-size:50px!important;">
         <i class="fa fa-exclamation-triangle w3-text-red"></i>
@@ -47,7 +47,7 @@
       <div class="w3-large w3-margin-left" style="text-align:left;">
         message :
       </div>
-      <div class="w3-text-white w3-large {{ player.color['name'] }}-dark" style="margin:0 16px 16px;">
+      <div class="w3-text-white w3-large {{ player.color }}-dark" style="margin:0 16px 16px;">
         {{ player.message }}
       </div>
       {% if stage[1] in [1, 2, 3] %}
@@ -63,7 +63,7 @@
       {% if stage[0] in [2, 4] and "reveal" in page["url"] %}
         {% set reveal_state = game.current_reveal_state %}
         <form class="w3-center w3-margin w3-large" method="POST">
-          <button name="reveal" value={{ player.ID }} type="submit" class="w3-button {{ player.color['name'] }}-dark" {% if reveal_state[player.ID] %}disabled{% endif %}>Révéler</button>
+          <button name="reveal" value={{ player.ID }} type="submit" class="w3-button {{ player.color }}-dark" {% if reveal_state[player.ID] %}disabled{% endif %}>Révéler</button>
         </form>
       {% endif %}
     </div>

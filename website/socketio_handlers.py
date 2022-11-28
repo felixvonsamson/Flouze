@@ -24,22 +24,22 @@ def add_handlers(socketio, engine):
         [requester.lang_id].format(name = player.name), category="error")
     player.requested_flouze = None
   @socketio.on("select_color")
-  def select_color(color_id):
-    assert color_id in range(5)
-    player = engine.players[int(session["ID"])]
+  def select_color(color):
     game = engine.current_game
-    if game.owner[color_id] :
-      if game.owner[color_id] == player :
+    assert color in game.colors
+    player = engine.players[int(session["ID"])]
+    if color in game.owner :
+      if game.owner[color] == player :
         player.send_message(engine.text["player_txt"]["color already selected"]\
         [player.lang_id], category="error", persistant=False)
       else:
         player.send_message(engine.text["player_txt"]["color not avalable"]\
-        [player.lang_id].format(name = game.owner[color_id].name), 
+        [player.lang_id].format(name = game.owner[color].name),
         category="error", persistant=False)
     else:
-      player.choice = color_id
+      player.choice = color
   @socketio.on("change_language")
-  def select_color(lang):
+  def change_language(lang):
     player = engine.players[int(session["ID"])]
     languages = engine.text["languages_name"]
     assert lang in languages

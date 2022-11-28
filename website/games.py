@@ -7,14 +7,6 @@ from .html_icons import icons
 from .pages_ordering import pages
 from .text import color_names, game_names, quiz, logs_txt, player_txt
 
-colors = [
-  { "id": 0, "name": "bleu" }, 
-  { "id": 1, "name": "rouge" }, 
-  { "id": 2, "name": "jaune" }, 
-  { "id": 3, "name": "vert" }, 
-  { "id": 4, "name": "violet" }
-]
-
 games_config = {
   "colors": {
     "background": "2.jpg", 
@@ -180,20 +172,20 @@ class Colors(Game):
     game.players = engine.players
     game.game_nb = 0
     game.config = games_config["colors"]
-    game.colors = colors
-    game.owner = [None]*5
+    game.colors = list(color_names.keys())
+    game.owner = {}
     game.choices = [[None]*5]
     game.is_done = [[False]*5]
   
-  def set_choice(game, player, color_id):
+  def set_choice(game, player, color):
     updates = []
     last_choice  = game.choices[0][player.ID]
     if last_choice != None :
-      game.owner[last_choice] = None
-      updates.append((game.colors[last_choice]["name"], ""))
-    game.owner[color_id] = player
-    game.choices[0][player.ID] = color_id
-    updates.append((game.colors[color_id]["name"], player.name))
+      game.owner.pop(last_choice)
+      updates.append((last_choice, ""))
+    game.owner[color] = player
+    game.choices[0][player.ID] = color
+    updates.append((color, player.name))
     game.engine.update_fields(updates)
     player.is_done = True
   
@@ -203,12 +195,12 @@ class Colors(Game):
   def end(game):
     engine = game.engine
     for player in game.players:
-      color_id = game.choices[0][player.ID]
-      player.color = game.colors[color_id]
+      color = game.choices[0][player.ID]
+      player.color = color
       engine.log(logs_txt["color choice"][engine.lang_id].format(
-        name = player.name, color = player.color['name']))
+        name = player.name, color = player.color))
       player.send_message(player_txt["color selected"][player.lang_id].format(
-        color = player.color['name']))
+        color = player.color))
   
 
 class Game1(Game):
