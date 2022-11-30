@@ -18,14 +18,16 @@ def login():
     if first_name in engine.players_by_name.keys():
       player = engine.players_by_name[first_name]
       if player.password == password:
-        engine.log(logs_txt["connected"][engine.lang_id].format(name=first_name))
+        engine.log(logs_txt["connected"][engine.lang_id].format(
+          name=first_name))
         player.flash_message(player_txt["connected"][player.lang_id])
         session["ID"] = player.ID
         engine.save_data()
         engine.refresh_monitoring()
         return redirect(url_for("views.home"))
       else:
-        flash(player_txt["incorect password"][engine.lang_id], category = "error")
+        flash(player_txt["incorect password"][engine.lang_id],
+        category = "error")
         return render_template("login.jinja", engine=engine)
     else:
       flash(player_txt["not recognized"][engine.lang_id], category = "error")

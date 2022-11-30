@@ -198,9 +198,9 @@ class Colors(Game):
       color = game.choices[0][player.ID]
       player.color = color
       engine.log(logs_txt["color choice"][engine.lang_id].format(
-        name = player.name, color = player.color))
+        name = player.name, color = color_names[player.color][engine.lang_id]))
       player.send_message(player_txt["color selected"][player.lang_id].format(
-        color = player.color))
+        color = color_names[player.color][engine.lang_id]))
   
 
 class Game1(Game):
