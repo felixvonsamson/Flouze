@@ -680,16 +680,16 @@ html_txt = {
     "left",
     "",
     "übrig"],
-  "rejected" : [
-    "Rejected",
+  "declined" : [
+    "Declined",
     "Refusé",
     "Abgelehnt"],
   "accepted" : [
     "Accepted",
     "Accepté",
     "Angenommen"],
-  "reject" : [
-    "Reject",
+  "decline" : [
+    "Decline",
     "Refuser",
     "Ablehnen"],
   "accept" : [
