@@ -18,7 +18,7 @@
       <b class="w3-xlarge w3-padding">{{ other_player.name }}</b>
       <div class="w3-padding-small w3-text-white {{ other_player.color }}-dark">{{ proposition[loop.index0] }}</div>
       {% if other_player.choice == 0 %}
-      <div class="w3-padding-small w3-white w3-text-red">{{text["rejected"][player.lang_id]}}</div>
+      <div class="w3-padding-small w3-white w3-text-red">{{text["declined"][player.lang_id]}}</div>
       {% else %}
       <div class="w3-padding-small w3-white w3-text-green">{{text["accepted"][player.lang_id]}}</div>
       {% endif %}

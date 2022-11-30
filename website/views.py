@@ -152,7 +152,7 @@ def home():
                    for other_player in game.other_players]
         game.make_proposition(amounts)
       
-      elif request.form["jeu5"] in ["refusé", "accepté"]:
+      elif request.form["jeu5"] in ["declined", "accepted"]:
         if not game.is_allowed_to_play(g.player, 5):
           return redirect(url_for("views.home"))
         g.player.choice = request.form["jeu5"]

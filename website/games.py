@@ -550,9 +550,10 @@ class Game5(Game):
     engine.next_page()
   
   def set_choice(game, player, decision):
-    game.current_choices[player.ID] = decision == "accepté"
+    game.current_choices[player.ID] = decision == "accepted"
     game.engine.log(logs_txt["offer decision"][game.engine.lang_id].format(
-      gamemaster = game.master.name, decision = decision, name = player.name))
+      gamemaster = game.master.name, decision = game.engine.text["html_txt"]\
+      [decision][game.engine.lang_id], name = player.name))
     player.is_done = True
   
   def logic(game):
