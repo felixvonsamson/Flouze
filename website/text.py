@@ -94,7 +94,7 @@ quiz = [
   [
     ("Who gave birth to communism?", "Karl Marx"),
     ("Qui a donné naissance au communisme ?", "Karl Marx"),
-    ("wer hat den Kommunismus ins Leben gerufen ?", "Karl Marx")]
+    ("Wer hat den Kommunismus ins Leben gerufen ?", "Karl Marx")]
 ]
 
 logs_txt = {

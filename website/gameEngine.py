@@ -128,6 +128,7 @@ class gameEngine(object):
       engine.games[3].end()
     elif current_game_nb == 5 and page["url"] == "results.jinja":
       engine.games[5].set_master()
+      engine.games[5].dashed_questions(quiz, engine.lang_id)
     if page["url"] == "results.jinja"  and current_round_nb \
        or page["url"] == "Jeu 5" and page["phase"] == "reveal":
       engine.games[current_game_nb].logic()

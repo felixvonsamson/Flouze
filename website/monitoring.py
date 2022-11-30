@@ -44,7 +44,8 @@ def home():
       assert decision in ["rejeter", "valider"]
       assert question_id in map(str, range(4))
       question_id = int(question_id)
-      question, correct_answer = game.quiz[question_id][1]
+      question, correct_answer = engine.text["quiz"][question_id]\
+        [engine.lang_id]
       if decision == "rejeter":
         game.is_answer_correct[question_id] = False
         engine.log(engine.text["logs_txt"]["awnser refused"][engine.lang_id])

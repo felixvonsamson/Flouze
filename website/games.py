@@ -5,7 +5,7 @@ from flask import Markup
 
 from .html_icons import icons
 from .pages_ordering import pages
-from .text import color_names, game_names, quiz, logs_txt, player_txt
+from .text import color_names, game_names, logs_txt, player_txt
 
 games_config = {
   "colors": {
@@ -48,35 +48,6 @@ games_config = {
     "quiz_prize": 30
   }
 }
-
-
-quiz = [
-  (["_______ _______ _ a-t-il __ __ drapeau ______ ?", 
-    "_______ d’étoiles _ ____ sur __ ______ valaisan ?", 
-    "Combien _______ y ____ __ le _______ ______ ?"], 
-   ["Combien d'étoiles y a-t-il sur le drapeau valaisan ?", 
-   "13"]), 
-  (["Quel ____ __ enclavé ____ le _______ ?", 
-    "___ pays ___ ______ dans __ _______ ?", 
-    "___ ____ est ______ ____ __ Sénégal ?"], 
-   ["Quel pays est enclavé dans le Sénégal ?", 
-    "La Gambie"]), 
-  (["Combien _ ___ de _____ __ tram _ ________ ?", 
-    "_______ y ___ __ lignes __ ____ à ________ ?", 
-    "_______ _ a-t-il __ ____ de ____ _ Bordeaux ?"], 
-   ["Combien y a-t-il de lignes de tram à Bordeaux ?", 
-    "4"]), 
-  (["Quel ____ ___ pseudo ___ ____ of ____ ?", 
-    "____ était ___ ______ sur ____ __ clans ?", 
-    "____ ____ mon _____ ___ clash __ ____ ?"], 
-   ["Quel était mon pseudo sur clash of clans ?", 
-    "FvS"]), 
-  (["Quel __ __ nom __ _____ de ____ __ la ______ ______ LTT ?", 
-    "____ est __ ___ de _____ __ Linus, __ __ chaine ______ ___ ?", 
-    "____ __ le ___ __ famille __ ____ de __ ______ Youtube ___ ?"], 
-   ["Quel est le nom de famille de Linus, de la chaine LTT ?", 
-    "Sebastian"])
-]
 
 
 class Game(ABC):
@@ -200,7 +171,7 @@ class Colors(Game):
       engine.log(logs_txt["color choice"][engine.lang_id].format(
         name = player.name, color = color_names[player.color][engine.lang_id]))
       player.send_message(player_txt["color selected"][player.lang_id].format(
-        color = color_names[player.color][engine.lang_id]))
+        color = color_names[player.color][player.lang_id]))
   
 
 class Game1(Game):
@@ -474,7 +445,6 @@ class Game5(Game):
     game.game_nb = 5
     game.config = games_config["game5"]
     game.propositions = [[0]*5 for _ in range(3)]
-    game.quiz = quiz.copy()
     game.question_id = -1
     game.is_done_stars = [False]*5
     game.answers = [None]*4
@@ -509,6 +479,21 @@ class Game5(Game):
       for player in game.players:
         player.message = player_txt["tie"][player.lang_id]
       game.end()
+
+  def dashed_questions(game, quiz, lang_id):
+    questions = [None]*len(quiz)
+    for q_id, q in enumerate(quiz): 
+      questions[q_id] = {}
+      words = q[lang_id][0].split()
+      for p_id, p in enumerate(game.other_players):
+        questions[q_id][p.name] = []
+        for w_id, w in enumerate(words):
+          if p_id == (w_id + q_id)%len(game.other_players):
+            questions[q_id][p.name].append(w + ' ')
+          else :
+            questions[q_id][p.name].append("_"*len(w)+ ' ')
+        questions[q_id][p.name] = ''.join(questions[q_id][p.name])
+    game.quiz = questions
   
   @property
   def current_proposition(game):
