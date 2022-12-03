@@ -5,7 +5,7 @@
 
 <div class="w3-pale-blue w3-round-large w3-border w3-border-blue w3-center w3-padding animate__animated animate__fadeIn">
   {{text["waiting"][player.lang_id]}}<br>
-  <span class="large" id="count">{{ game.current_waiting_count }} / 5</span>
+  <span class="large" id="count">{{ game.current_waiting_count }} / {{ len(game.players) }}</span>
 </div>
 
 {% endblock %}

@@ -25,6 +25,7 @@ class gameEngine(object):
       "player_txt" : player_txt,
       "html_txt" : html_txt
     }
+    engine.n_players = [3, 4, 5, 6, 7, 8] # possible number of players
     
     engine.socketio = None
     engine.admin_sid = None
@@ -33,7 +34,8 @@ class gameEngine(object):
     engine.init_logger()
     engine.logs = []
     engine.nonces = set()
-
+    
+    assert (len(players_raw) in engine.n_players)
     engine.players = [Player(engine, *player_raw)
               for player_raw in players_raw]
     for i, player in enumerate(engine.players):

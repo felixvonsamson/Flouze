@@ -14,38 +14,38 @@ games_config = {
   "game1": {
     "title": game_names["game 1"], 
     "background": "10.jpg", 
-    "prizes": [200, 400, 600], 
+    "prizes": [200, 400, 600], #max : 1200
     "3rd_round_stars": 1
   }, 
   "game2": {
     "title": game_names["game 2"], 
     "background": "9.jpg", 
-    "prizes": [50, 100, 150], 
+    "prizes": [50, 100, 150], #max : 1500
     "3rd_round_stars": 2
   }, 
   "game3": {
     "title": game_names["game 3"], 
     "background": "8.jpg", 
-    "initial_flouze": 100, 
-    "interests": [1.2, 1.5, 2], 
+    "initial_flouze": 100, # 500 / n_players
+    "interests": [1.2, 1.5, 2], #max : 1800
     "3rd_round_stars": 2
   }, 
   "game4": {
     "title": game_names["game 4"], 
     "background": "6.jpg", 
-    "prizes": [[[150, 100, 50, 0, "star"]], 
-               [[350, 150, 0, -50, "star"], 
-                [500, 200, 0, -100, "star"]], 
-               [[500, 250, -150, "star", "star"], 
-                [700, 300, -250, "star", "star"], 
-                [900, 400, -400, "star", "star"]]]
+    # total Flouze per round depending on bonuses
+    "total_prizes" : [[300, None, None], [600, 750, None], [900, 1200, 1500]],    
+    # number of avalable stars depending on number of players and round
+    "star_number" : [[0, 1, 1], [1, 1, 1], [1, 1, 2], [1, 1, 2], [1, 2, 3],
+                    [2, 2, 3]],
+    "s_value" : [0, -0.2, -0.5], # multiplicator for negative prizes
   }, 
   "game5": {
     "title": game_names["game 5"], 
     "background": "7.jpg",
     "prize": 3000,
     "bonus": 500,
-    "quiz_prize": 30
+    "quiz_prize": 50
   }
 }
 
@@ -55,8 +55,8 @@ class Game(ABC):
   def __init__(game, engine):
     game.engine = engine
     game.players = engine.players
-    game.choices = [[None]*5 for _ in range(3)]
-    game.is_done = [[False]*5 for _ in range(3)]
+    game.choices = [[None]*len(engine.players) for _ in range(3)]
+    game.is_done = [[False]*len(engine.players) for _ in range(3)]
     game.frame_id = 0
 
   @abstractmethod
@@ -132,9 +132,9 @@ class Game(ABC):
       if is_done
     ]
     if game.engine.current_page["url"] != "Jeu 5": 
-      updates = [("count", f"{len(waiting_players)} / 5")]
+      updates = [("count", f"{len(waiting_players)} / {len(game.players)}")]
     else:
-      updates = [("count", f"{len(waiting_players) - 1} / 4")]
+      updates = [("count", f"{len(waiting_players)-1} / {len(game.players)-1}")]
     game.engine.update_fields(updates, waiting_players)
 
 class Colors(Game):
@@ -145,8 +145,8 @@ class Colors(Game):
     game.config = games_config["colors"]
     game.colors = list(color_names.keys())
     game.owner = {}
-    game.choices = [[None]*5]
-    game.is_done = [[False]*5]
+    game.choices = [[None]*len(game.players)]
+    game.is_done = [[False]*len(game.players)]
   
   def set_choice(game, player, color):
     updates = []
@@ -226,8 +226,9 @@ class Game2(Game):
     super().__init__(engine)
     game.game_nb = 2
     game.config = games_config["game2"]
-    game.reveal_states = [[False]*5 for _ in range(3)]
-    game.permutations = [np.random.permutation(5) for _ in range(3)]
+    game.reveal_states = [[False]*len(game.players) for _ in range(3)]
+    game.permutations = [np.random.permutation(len(game.players))\
+      for _ in range(3)]
   
   @property
   def current_permutation(game):
@@ -281,7 +282,7 @@ class Game3(Game):
     super().__init__(engine)
     game.game_nb = 3
     game.config = games_config["game3"]
-    game.real_gain = [0]*5
+    game.real_gain = [0]*len(game.players)
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
 
@@ -319,9 +320,9 @@ class Game3(Game):
       game.sabotage = False
 
     interest = game.config["interests"][game.current_round_id]
-    prize = int(common_pot * interest  // 5)
+    prize = int(common_pot * interest  // len(game.players))
     engine.log(logs_txt["pot distribution"][engine.lang_id].format(
-      total = 5 * prize, prize = prize))
+      total = len(game.players) * prize, prize = prize))
 
     for player, shared in zip(game.players, game.current_choices):
       player.flouze += prize
@@ -357,9 +358,11 @@ class Game4(Game):
     super().__init__(engine)
     game.game_nb = 4
     game.config = games_config["game4"]
+    game.config["remaning"] = np.subtract([[i]*3 for i in engine.n_players],
+      game.config["star_number"])
     # combien de fois les joueurs ont tous choisi des objets differents
     game.bonuses = [False] * 3
-    game.reveal_states = [[False]*5 for _ in range(3)]
+    game.reveal_states = [[False]*len(game.players) for _ in range(3)]
 
   @property
   def current_bonuses(game):
@@ -378,7 +381,14 @@ class Game4(Game):
 
   @property
   def current_prizes(game):
-    return game.config["prizes"][game.current_round_id][game.current_bonuses]
+    a = game.config["total_prizes"][game.current_round_id][game.current_bonuses]
+    b = game.config["remaning"][len(game.players)][game.current_round_id]
+    c = game.config["s_value"][game.current_round_id]
+    d = game.config["star_number"][len(game.players)][game.current_round_id]
+    prize = np.round(np.linspace(a*c, a/b*2-a*c, b)).astype(int).tolist()
+    for star in range(d):
+      prize.append("star")
+    return prize
   
   def set_choice(game, player, prize_id):
     engine = game.engine
@@ -427,7 +437,7 @@ class Game4(Game):
       else:
         player.message = player_txt["prize not won"][player.lang_id]
 
-    if len(unique_choices) == 5:
+    if len(unique_choices) == len(game.players):
       game.current_bonus = True
       if game.current_round_id in [0, 1]:
         engine.log(logs_txt["bonus"][engine.lang_id])
@@ -444,11 +454,11 @@ class Game5(Game):
     super().__init__(engine)
     game.game_nb = 5
     game.config = games_config["game5"]
-    game.propositions = [[0]*5 for _ in range(3)]
+    game.propositions = [[0]*len(game.players) for _ in range(3)]
     game.question_id = -1
-    game.is_done_stars = [False]*5
-    game.answers = [None]*4
-    game.is_answer_correct = [None]*4
+    game.is_done_stars = [False]*len(game.players)
+    game.answers = [None]*(len(game.players)-1)
+    game.is_answer_correct = [None]*(len(game.players)-1)
       
   def set_master(game):
     engine = game.engine
@@ -524,7 +534,7 @@ class Game5(Game):
   
   def next_question(game):
     game.question_id += 1
-    if game.question_id == 4:
+    if game.question_id == 8:
       for player in game.other_players:
         player.message = player_txt["wait"][player.lang_id].format(
           name = game.master.name)

@@ -45,7 +45,7 @@ At every round, the players can choose one of [number of players] different priz
 A player recieves the choosen prize only if he is the only one that chose this prize.
 The choices will be revealed publicliy. 
 If all the prizes are distributed, then there will be a bonus at the next round.
-Round 3 : If all the prizes are distributed, then 500 Flouzes are added to the jackpot.
+Round 3 : If all the prizes are distributed at every round, then 500 Flouzes are added to the jackpot.
 
 Star barthering : 
 At the end of game 4 the players will be asked if they want to donate stars to other players. 

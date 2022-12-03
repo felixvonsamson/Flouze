@@ -103,8 +103,8 @@
           {{question}}<br>
           {{player.name}} : {{answer}}<br>
           ({{correct_answer}})
-          <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin-right" value="rejeter{{ loop.index0 }}">Rejeter</button>
-          <button name="quiz" type="submit" class="w3-button w3-teal w3-margin-left" value="valider{{ loop.index0 }}">Valider</button></p>
+          <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin-right" value="refuse{{ loop.index0 }}">Rejeter</button>
+          <button name="quiz" type="submit" class="w3-button w3-teal w3-margin-left" value="validate{{ loop.index0 }}">Valider</button></p>
             {% endif %}
           {% endfor %}
         {% endif %}

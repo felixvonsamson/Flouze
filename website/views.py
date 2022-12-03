@@ -11,8 +11,8 @@ flash_error = lambda msg: flash(msg, category="error")
 def check_user():
   if session["ID"] == "admin":
     return redirect(url_for("monitoring.home"))
-  assert session["ID"] in range(5)
   g.engine = current_app.config["engine"]
+  assert session["ID"] in range(len(g.engine.players))
   g.player = g.engine.players[session["ID"]]
   def render_template_ctx(page):
     g.player.last_page = page
@@ -168,7 +168,7 @@ def home():
     if g.engine.current_page["phase"] == "proposition":
       if g.player == game.master:
         return g.render_template_ctx("Jeu5-proposition.jinja")
-      elif game.current_round_id == 0 and game.question_id < 4:
+      elif game.current_round_id == 0 and game.question_id < 8:
         return g.render_template_ctx("quiz.jinja")
       else:
         return g.render_template_ctx("results.jinja")

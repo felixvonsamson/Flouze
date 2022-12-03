@@ -14,7 +14,7 @@ def home():
   if request.method == "POST":
     game = engine.current_game
     if "reveal" in request.form:
-      assert request.form["reveal"] in map(str, range(5))
+      assert request.form["reveal"] in map(str, range(len(engine.players)))
       game.reveal_card(int(request.form["reveal"]))
 
     elif "diapo" in request.form:
@@ -41,19 +41,19 @@ def home():
     elif "quiz" in request.form:
       decision = request.form["quiz"][:-1]
       question_id = request.form["quiz"][-1:]
-      assert decision in ["rejeter", "valider"]
-      assert question_id in map(str, range(4))
+      assert decision in ["refuse", "validate"]
+      assert question_id in map(str, range(8))
       question_id = int(question_id)
       question, correct_answer = engine.text["quiz"][question_id]\
         [engine.lang_id]
-      if decision == "rejeter":
+      if decision == "refuse":
         game.is_answer_correct[question_id] = False
         engine.log(engine.text["logs_txt"]["awnser refused"][engine.lang_id])
         for player in game.other_players:
           player.send_message(engine.text["player_txt"]["wrong awnser"]\
             [player.lang_id].format(question = question,
             correct_answer = correct_answer), category="error")
-      elif decision == "valider":
+      elif decision == "validate":
         game.is_answer_correct[question_id] = True
         engine.log(engine.text["logs_txt"]["awnser accepted"][engine.lang_id])
         for player in game.other_players:
