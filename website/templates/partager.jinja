@@ -5,44 +5,46 @@
 {% block content %}
 
   <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="min-width:270px">
-  <header id="total" class="w3-container w3-text-white large w3-padding theme-dark-{{ game.game_nb }}">
+    <header id="total" class="w3-container w3-text-white large w3-padding theme-dark-{{ game.game_nb }}">
       <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> {{text["to share"][player.lang_id]}}
-  </header>
-  {% if player.last_profit < 0 %}
-  <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
-  <div class="w3-text-red small" style="margin:5px 0 0 2em; width:12.5em">{{text["possible rejection"][player.lang_id]}}</div>
-  {% endif %}
-  <form method="POST">
-  {% for other_player in player.other_players %}
-  <div class="{{ other_player.color }}-light flex-horizontal space-around w3-padding center-items margins-partager">
-    <span style="width:5em"><b>{{ other_player.name }}</b></span>
-    <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // 5 }} type="number" style="width:5em; height:1.6em" {% if player.last_profit >= 0 %}min="0"{% endif %} required>
-  </div>
-  {% endfor %}
-  <div class="{{ player.color }}-light flex-horizontal space-around w3-padding center-items margins-partager">
-    <span style="width:5em;"><b>{{ player.name }}</b></span>
-    <div id="rest" style="width:5em;"></div>
-  </div>
-    <button type="button" onclick="window.location.href='/'" class="w3-button w3-red" style="margin:10px">{{text["actually no"][player.lang_id]}}</button>
-    <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}{{text["claim"][player.lang_id]}}{% else %}{{text["send"][player.lang_id]}}{% endif %}</button>
-</form>
+    </header>
+    {% if player.last_profit < 0 %}
+    <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
+    <div class="w3-text-red small" style="margin:5px 0 0 2em; width:12.5em">{{text["possible rejection"][player.lang_id]}}</div>
+    {% endif %}
+    <form method="POST">
+      {% for other_player in player.other_players %}
+      <div class="{{ other_player.color }}-light flex-horizontal space-around w3-padding center-items margins-partager">
+        <span style="width:5em"><b>{{ other_player.name }}</b></span>
+        <input id=sent{{ loop.index0 }} onchange="update_rest()" name={{ other_player.name }} class="w3-input w3-border w3-round-large w3-center" value={{ player.last_profit // engine.players|length }} type="number" style="width:5em; height:1.6em" {% if player.last_profit >= 0 %}min="0"{% endif %} required>
+      </div>
+      {% endfor %}
+      <div class="{{ player.color }}-light flex-horizontal space-around w3-padding center-items margins-partager">
+        <span style="width:5em;"><b>{{ player.name }}</b></span>
+        <div id="rest" style="width:5em;"></div>
+      </div>
+        <button type="button" onclick="window.location.href='/'" class="w3-button w3-red" style="margin:10px">{{text["actually no"][player.lang_id]}}</button>
+        <button type="submit" name="envoyer" value="{{ engine.get_nonce() }}" class="w3-button w3-text-white theme-dark-{{ game.game_nb }}" style="margin:10px;">{% if player.last_profit < 0 %}{{text["claim"][player.lang_id]}}{% else %}{{text["send"][player.lang_id]}}{% endif %}</button>
+    </form>
   </div>
 
-<script>
+{% endblock %}
+
+{% block additionnal_script %}
+
   var total = {{ player.last_profit }};
   document.getElementById('total').innerHTML = total + document.getElementById('total').innerHTML
-  document.getElementById('sent0').value = Math.floor(total/5)
-  document.getElementById('sent1').value = Math.floor(total/5)
-  document.getElementById('sent2').value = Math.floor(total/5)
-  document.getElementById('sent3').value = Math.floor(total/5)
+  for (let i = 0; i < player.other_players.length; i++){
+    document.getElementById('sent'+str(i)).value = Math.floor(total/{{ engine.players|length }})
+  }
   update_rest()
   function update_rest() {
-    document.getElementById('rest').innerHTML = total -
-                                                    document.getElementById('sent0').value -
-                                                    document.getElementById('sent1').value -
-                                                    document.getElementById('sent2').value -
-                                                    document.getElementById('sent3').value + ' <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin">'
+    var rest = total
+    for (let i = 0; i < player.other_players.length; i++){
+      rest -= document.getElementById('sent'+str(i)).value
+    }
+    rest += ' <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">'
+    document.getElementById('rest').innerHTML = rest
   }
-</script>
 
 {% endblock %}

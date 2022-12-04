@@ -195,7 +195,7 @@ class Game1(Game):
     lottery = []
     for player, nb_tickets in zip(game.players, choices):
       lottery += [player] * nb_tickets
-      player.message = player_txt["chosen tickets"][player.lang_id].format(
+      player.message = player_txt["lottery looser"][player.lang_id].format(
         smiley = icons['sad'])
     if len(lottery) > 0:
       winner = random.choice(lottery)
@@ -469,7 +469,6 @@ class Game5(Game):
     if stars.count(max(stars)) == 1:
       master_id = np.argmax(stars)
       game.master = game.players[master_id]
-      game.quiz.pop(master_id)
       game.other_players = game.master.other_players
       for i in range(3):
         game.choices[i][master_id] = 0
@@ -483,7 +482,6 @@ class Game5(Game):
       game.master.message = player_txt["you are the starmaster"]\
         [game.master.lang_id].format(jackpot = game.jackpot,
         coin = icons['coin'])
-      game.next_question()
     else:
       engine.log(logs_txt["tie star"][engine.lang_id])
       for player in game.players:
@@ -504,6 +502,7 @@ class Game5(Game):
             questions[q_id][p.name].append("_"*len(w)+ ' ')
         questions[q_id][p.name] = ''.join(questions[q_id][p.name])
     game.quiz = questions
+    game.next_question()
   
   @property
   def current_proposition(game):
