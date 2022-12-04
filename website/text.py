@@ -411,7 +411,7 @@ player_txt = {
     "Sie haben {amount} {coin} in den gemeinsamen Spendentopf eingezahlt."],
   "return on investment" : [
     "You have received {prize} {coin}.",
-    "Vous avez reçu {prize} {coin}."
+    "Vous avez reçu {prize} {coin}.",
     "Sie haben {prize} {coin} erhalten."],
   "made the most money" : [
     "You received {prize} {coin}. You also received {stars} {star} because you won the most money during this game.",

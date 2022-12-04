@@ -10,10 +10,7 @@ class Player(object):
     player.sid = None
     player.name = name
     player.password = password
-    if lang_id is None :
-      player.lang_id = engine.lang_id
-    else :
-      player.lang_id = int(lang_id)
+    player.lang_id = int(lang_id) if lang_id else engine.lang_id
     player.lang_txt = engine.text["languages_name"][player.lang_id]
     player.color = None
     player.flouze = 0

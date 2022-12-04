@@ -6,7 +6,7 @@
 
   <div class="w3-card-4 w3-white w3-center animate__animated animate__fadeIn" style="min-width:270px">
     <header id="total" class="w3-container w3-text-white large w3-padding theme-dark-{{ game.game_nb }}">
-      <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> {{text["to share"][player.lang_id]}}
+      {{ player.last_profit }} <img src="{{ url_for("static", filename="images/coin.png") }}" class="coin" alt="Coin"> {{text["to share"][player.lang_id]}}
     </header>
     {% if player.last_profit < 0 %}
     <i class="fa fa-info-circle w3-left w3-text-red" style="position:relative; top:20px; left:20px"></i>
@@ -33,16 +33,13 @@
 {% block additionnal_script %}
 
   var total = {{ player.last_profit }};
-  document.getElementById('total').innerHTML = total + document.getElementById('total').innerHTML
-  for (let i = 0; i < player.other_players.length; i++){
-    document.getElementById('sent'+str(i)).value = Math.floor(total/{{ engine.players|length }})
-  }
+  for (let i = 0; i < {{ player.other_players|length }}; i++)
+    document.getElementById('sent' + i).value = Math.floor(total/{{ engine.players|length }});
   update_rest()
   function update_rest() {
     var rest = total
-    for (let i = 0; i < player.other_players.length; i++){
-      rest -= document.getElementById('sent'+str(i)).value
-    }
+    for (let i = 0; i < {{ player.other_players|length }}; i++)
+      rest -= document.getElementById('sent' + i).value;
     rest += ' <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">'
     document.getElementById('rest').innerHTML = rest
   }

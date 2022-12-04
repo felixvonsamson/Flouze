@@ -5,7 +5,7 @@ from flask import Markup
 
 from .html_icons import icons
 from .pages_ordering import pages
-from .text import color_names, game_names, logs_txt, player_txt
+from .text import color_names, game_names, logs_txt, player_txt, quiz
 
 games_config = {
   "colors": {
@@ -36,9 +36,15 @@ games_config = {
     # total Flouze per round depending on bonuses
     "total_prizes" : [[300, None, None], [600, 750, None], [900, 1200, 1500]],    
     # number of avalable stars depending on number of players and round
-    "star_number" : [[0, 1, 1], [1, 1, 1], [1, 1, 2], [1, 1, 2], [1, 2, 3],
-                    [2, 2, 3]],
-    "s_value" : [0, -0.2, -0.5], # multiplicator for negative prizes
+    "star_number" : {
+      3: [0, 1, 1], 
+      4: [1, 1, 1], 
+      5: [1, 1, 2], 
+      6: [1, 1, 2], 
+      7: [1, 2, 3], 
+      8: [2, 2, 3]
+    }, 
+    "penalty_factor" : [0, -0.2, -0.5], # multiplicator for negative prizes
   }, 
   "game5": {
     "title": game_names["game 5"], 
@@ -316,7 +322,7 @@ class Game3(Game):
     if game.sabotage and common_pot>299 :
       common_pot -= 120
       engine.log(logs_txt["sabotage"][engine.lang_id].format(
-        common_pot = common_pot))
+        common_pot=common_pot))
       game.sabotage = False
 
     interest = game.config["interests"][game.current_round_id]
@@ -358,8 +364,7 @@ class Game4(Game):
     super().__init__(engine)
     game.game_nb = 4
     game.config = games_config["game4"]
-    game.config["remaning"] = np.subtract([[i]*3 for i in engine.n_players],
-      game.config["star_number"])
+
     # combien de fois les joueurs ont tous choisi des objets differents
     game.bonuses = [False] * 3
     game.reveal_states = [[False]*len(game.players) for _ in range(3)]
@@ -381,14 +386,21 @@ class Game4(Game):
 
   @property
   def current_prizes(game):
-    a = game.config["total_prizes"][game.current_round_id][game.current_bonuses]
-    b = game.config["remaning"][len(game.players)][game.current_round_id]
-    c = game.config["s_value"][game.current_round_id]
-    d = game.config["star_number"][len(game.players)][game.current_round_id]
-    prize = np.round(np.linspace(a*c, a/b*2-a*c, b)).astype(int).tolist()
-    for star in range(d):
-      prize.append("star")
-    return prize
+    """
+    This function returns an array that contains ...
+    """
+    total_money = game.config["total_prizes"][game.current_round_id][game.current_bonuses]
+    star_prizes_count = game.config["star_number"][len(game.players)][game.current_round_id]
+    money_prizes_count = len(game.players) - star_prizes_count
+    penalty_factor = game.config["penalty_factor"][game.current_round_id]
+
+    min_prize = total_money * penalty_factor
+    max_prize = total_money / money_prizes_count * 2 \
+                - total_money * penalty_factor
+    prizes = np.round(np.linspace(min_prize, max_prize, money_prizes_count))
+    prizes = prizes.astype(int).tolist()
+    prizes.append(["star"] * star_prizes_count)
+    return prizes
   
   def set_choice(game, player, prize_id):
     engine = game.engine
@@ -488,15 +500,28 @@ class Game5(Game):
         player.message = player_txt["tie"][player.lang_id]
       game.end()
 
-  def dashed_questions(game, quiz, lang_id):
+  @staticmethod
+  def genrate_dashed_question(question_txt, nb_prints):
+    words = question_txt.split()
+    nb_words = len(words)
+    dashed_words = list(map(lambda w: "_" * len(w), words))
+    array = np.stack((dashed_words, words))
+    mask = (((np.arange(nb_prints)[:, np.newaxis] - np.arange(nb_words)) 
+              % nb_prints) == 0).astype(int)
+    return array[mask, np.arange(nb_words)]
+
+
+  def dashed_questions(game):
+    nb_prints = len(game.other_players) - 1
+
     questions = [None]*len(quiz)
     for q_id, q in enumerate(quiz): 
       questions[q_id] = {}
-      words = q[lang_id][0].split()
+      words = q[game.engine.lang_id][0].split()
       for p_id, p in enumerate(game.other_players):
         questions[q_id][p.name] = []
         for w_id, w in enumerate(words):
-          if p_id == (w_id + q_id)%len(game.other_players):
+          if p_id == (w_id + q_id) % (len(game.other_players) - 1):
             questions[q_id][p.name].append(w + ' ')
           else :
             questions[q_id][p.name].append("_"*len(w)+ ' ')
