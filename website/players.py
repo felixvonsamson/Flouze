@@ -4,17 +4,17 @@ from flask import Markup, flash
 from .html_icons import icons
 
 class Player(object):
-  def __init__(player, engine, ID, name, password, lang_id=-1):
+  def __init__(player, engine, ID, name, password, lang_id=None):
     player.engine = engine
     player.ID = ID
     player.sid = None
     player.name = name
     player.password = password
-    if lang_id == None :
+    if lang_id is None :
       player.lang_id = engine.lang_id
     else :
       player.lang_id = int(lang_id)
-    player.lang_txt = engine.text["languages_name"][int(lang_id)]
+    player.lang_txt = engine.text["languages_name"][player.lang_id]
     player.color = None
     player.flouze = 0
     # Dans le jeu 3 l'argent est mis de coté
