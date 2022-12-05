@@ -469,7 +469,7 @@ class Game5(Game):
     game.propositions = [[0]*len(game.players) for _ in range(3)]
     game.question_id = -1
     game.is_done_stars = [False]*len(game.players)
-    game.answers = [None]*(len(game.players)-1)
+    game.answers = [None]*(len(quiz))
     game.is_answer_correct = [None]*(len(game.players)-1)
       
   def set_master(game):
@@ -494,6 +494,8 @@ class Game5(Game):
       game.master.message = player_txt["you are the starmaster"]\
         [game.master.lang_id].format(jackpot = game.jackpot,
         coin = icons['coin'])
+      game.generate_dashed_questions()
+      game.next_question()
     else:
       engine.log(logs_txt["tie star"][engine.lang_id])
       for player in game.players:
@@ -501,33 +503,24 @@ class Game5(Game):
       game.end()
 
   @staticmethod
-  def genrate_dashed_question(question_txt, nb_prints):
-    words = question_txt.split()
+  def dashed_questions(question_data, nb_prints):
+    question, _ = question_data
+    words = question.split()
     nb_words = len(words)
     dashed_words = list(map(lambda w: "_" * len(w), words))
     array = np.stack((dashed_words, words))
     mask = (((np.arange(nb_prints)[:, np.newaxis] - np.arange(nb_words)) 
               % nb_prints) == 0).astype(int)
-    return array[mask, np.arange(nb_words)]
+    dashed_questions = array[mask, np.arange(nb_words)]
+    dashed_questions = list(map(" ".join, dashed_questions))
+    return dashed_questions, question_data
 
 
-  def dashed_questions(game):
+  def generate_dashed_questions(game):
     nb_prints = len(game.other_players) - 1
-
-    questions = [None]*len(quiz)
-    for q_id, q in enumerate(quiz): 
-      questions[q_id] = {}
-      words = q[game.engine.lang_id][0].split()
-      for p_id, p in enumerate(game.other_players):
-        questions[q_id][p.name] = []
-        for w_id, w in enumerate(words):
-          if p_id == (w_id + q_id) % (len(game.other_players) - 1):
-            questions[q_id][p.name].append(w + ' ')
-          else :
-            questions[q_id][p.name].append("_"*len(w)+ ' ')
-        questions[q_id][p.name] = ''.join(questions[q_id][p.name])
-    game.quiz = questions
-    game.next_question()
+    full_questions = np.array(quiz)[:,game.engine.lang_id]
+    game.quiz = list(map(lambda q: game.dashed_questions(q, nb_prints),
+                         full_questions))
   
   @property
   def current_proposition(game):
@@ -536,7 +529,7 @@ class Game5(Game):
 
   @property
   def current_guesser(game):
-    return game.other_players[game.question_id]
+    return game.other_players[game.question_id % len(game.other_players)]
 
   @property
   def current_question(game):
@@ -565,7 +558,7 @@ class Game5(Game):
         player.emit("refresh", None)
       return
     guessers = game.other_players.copy()
-    guessers.pop(game.question_id)
+    guessers.pop(game.question_id % len(guessers))
     for player, question in zip(guessers, game.current_question[0]):
       player.question = question
     if game.question_id:
