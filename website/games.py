@@ -53,6 +53,7 @@ games_config = {
   "game5": {
     "title": game_names["game 5"], 
     "background": "7.jpg",
+    "maximize": "maximize1.png",
     "prize": 3000,
     "bonus": 500,
     "quiz_prize": 50
@@ -591,7 +592,7 @@ class Game5(Game):
   
   def logic(game):
     engine = game.engine
-    if sum(game.current_choices) >= 3:
+    if sum(game.current_choices) > len(game.players)/2:
       engine.log(logs_txt["offer accepted"][engine.lang_id])
       game.master.message = player_txt["your offer is accepted"]\
         [game.master.lang_id]

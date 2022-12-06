@@ -64,35 +64,35 @@ game_names = {
 
 quiz = [
   [
-    ("Which country is landlocked in Senegal?", "Gambia"),
+    ("Which country is landlocked in Senegal ?", "Gambia"),
     ("Quel pays est enclavé dans le Sénégal ?", "La Gambie"),
-    ("Welches Land wird von Senegal umschlossen?", "Gambia")],
+    ("Welches Land wird von Senegal umschlossen ?", "Gambia")],
   [
-    ("Who wrote 'The Lord of the Rings'?", "J. R. R. Tolkien"),
+    ("Who wrote 'The Lord of the Rings' ?", "J. R. R. Tolkien"),
     ("Qui est l'auteur du 'Segnieurs des anneaux' ?", "J. R. R. Tolkien"),
     ("Wer hat 'Herr der Ringe' geschrieben ?", "J. R. R. Tolkien")],
   [
-    ("What is the derivative of speed?", "acceleration"),
+    ("What is the derivative of speed ?", "acceleration"),
     ("Quel est la dérivée de la vitesse ?", "l'accélération"),
     ("Was ist die Ableitung der Geschwindigkeit ?", "die Beschleunigung")],
   [
-    ("In which year did the fall of the Berlin Wall happen?", "1989"),
+    ("In which year did the fall of the Berlin Wall happen ?", "1989"),
     ("En quelle année s'est déroulé la chute du mur de Berlin ?", "1989"),
     ("In welchem Jahr ist die Berliner Mauer gefallen ?", "1989")],
   [
-    ("Who won the 2018 football world cup?", "France"),
+    ("Who won the 2018 football world cup ?", "France"),
     ("Qui a gagné la coupe du monde de foot 2018 ?", "la France"),
     ("Wer hat die Fußballweltmeisterschaft 2018 gewonne ?", "Frankreich")],
   [
-    ("Who is the actor that plays the Warden Supervisor in the moveie 'The Green Mile'?", "Tom Hanks"),
+    ("Who is the actor that plays the Warden Supervisor in the moveie 'The Green Mile' ?", "Tom Hanks"),
     ("Quel est l'acteur qui joue le gardien-chef dans le film 'La Ligne verte' ?", "Tom Hanks"),
     ("Welcher Schauspieler spielt den Oberaufseher in dem Film 'The Green Mile' ?", "Tom Hanks")],
   [
-    ("Which renewable energy is the most used?", "biomass"),
+    ("Which renewable energy is the most used ?", "biomass"),
     ("Quelle énergie renouvelable est la plus utilisée ?", "la biomasse"),
     ("Welche erneuerbare Energie wird am häufigsten genutzt ?", "Biomasse")],
   [
-    ("Who gave birth to communism?", "Karl Marx"),
+    ("Who gave birth to communism ?", "Karl Marx"),
     ("Qui a donné naissance au communisme ?", "Karl Marx"),
     ("Wer hat den Kommunismus ins Leben gerufen ?", "Karl Marx")]
 ]
@@ -342,7 +342,7 @@ player_txt = {
     "{name} ne peut pas accepter votre offre car iel n'a pas assez d'argent.",
     "{name} kann Ihren Angebot nicht annehmen, weil er/sie nicht genug Geld hat."],
   "claim rejected" : [
-    "Your request has been denied by {name}."
+    "Your request has been denied by {name}.",
     "Votre demande à été refusée par {name}.",
     "Ihre Anfrage wurde von {name} abgelehnt."],
   "not enough money" : [
@@ -470,7 +470,7 @@ player_txt = {
     "Votre offre a été acceptée par la majorité.",
     "Ihr Angebot wurde von der Mehrheit angenommen."],
   "offer accepted" : [
-    "The offer was accepted by the majority."
+    "The offer was accepted by the majority.",
     "La proposition à été acceptée par la majorité des joueurs.",
     "Das Angebot wurde von der Mehrheit der Spieler angenommen."],
   "offer received" : [
@@ -478,7 +478,7 @@ player_txt = {
     "<br>Vous avez reçu {offer} {coin} de la part de {name}.",
     "<br>Sie haben {offer} {coin} von {name} erhalten."],
   "lost flouze" : [
-    "<br>You have been shaken down {loss} {coin} by {name}"
+    "<br>You have been shaken down {loss} {coin} by {name}",
     "<br>Vous vous êtes fait racketter {loss} {coin} par {name}.",
     "<br>Sie wurden von {name} um {loss} {coin} erpresst."],
   "your last offer is declined" : [

@@ -128,7 +128,7 @@ def home():
     elif "jeu5" in request.form:
       assert request.form["jeu5"] in [
         "proposition", "nouvelle_proposition", 
-        "refusé", "accepté", "quiz_reponse"]
+        "declined", "accepted", "quiz_reponse"]
       
       if request.form["jeu5"] == "quiz_reponse":
         game.current_answer = request.form.get("réponse")
