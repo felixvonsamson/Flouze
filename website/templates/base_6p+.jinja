@@ -20,11 +20,12 @@
 
 <body class="flex-vertical" style="background-image: url({{ url_for('static', filename='images/' + game.config['background']) }});">
 
-<div>
 
-  <!--Stars Table-->
+<div style="position:absolute;">
+<!--Stars Table-->
   {% block stars_table %}
-  <div id="star-table" class="flex-vertical">
+  <img src="{{ url_for('static', filename='images/' + game.config['maximize']) }}" id="maximize" alt="maximize" onclick="document.getElementById('star-table').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
+  <div id="star-table" class="flex-vertical minimized" onclick="document.getElementById('star-table').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
     {% for player_it in engine.players %}
       <div class="star-cell small space-between flex-horizontal {{ player_it.color }}-light">
         {{ player_it.name }}
@@ -33,7 +34,9 @@
     {% endfor %}
   </div>
   {% endblock %}
+</div>
 
+<div>
   <!--Top bar with money-->
   {% block player_money %}
   <div onclick="var history = document.getElementById('history'); history.classList.remove('hidden'); var history_list = document.getElementById('history_list').classList.remove('hidden'); history.scrollTop = history.scrollHeight;" class="top-bar theme-dark-{{game_nb}} huge space-between center-items">

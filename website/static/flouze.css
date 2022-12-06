@@ -217,8 +217,11 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 
 .top-bar{height:min(63px, 9vh); display: flex; flex-direction: row-reverse;}
 
+#maximize{position:absolute; height:min(63px, 9vh); z-index: 20; transition: all 0.5s;}
+#maximize.hide{visibility:hidden; opacity:0;}
+
 #star-table{float:left; z-index: 10; transition: all 0.5s;}
-#star-table.minimized {transform: translateY(-50%);}
+#star-table.minimized {transform: translateY(-45%);}
 
 .star-cell{padding:0.05em 0.3em; flex-grow:1; align-items:center; gap:0.2em}
 

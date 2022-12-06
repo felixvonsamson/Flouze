@@ -14,25 +14,29 @@ games_config = {
   "game1": {
     "title": game_names["game 1"], 
     "background": "10.jpg", 
+    "maximize": "maximize1.png",
     "prizes": [200, 400, 600], #max : 1200
     "3rd_round_stars": 1
   }, 
   "game2": {
     "title": game_names["game 2"], 
-    "background": "9.jpg", 
+    "background": "9.jpg",
+    "maximize": "maximize2.png",
     "prizes": [50, 100, 150], #max : 1500
     "3rd_round_stars": 2
   }, 
   "game3": {
     "title": game_names["game 3"], 
-    "background": "8.jpg", 
+    "background": "8.jpg",
+    "maximize": "maximize3.png",
     "total_initial_flouze": 500,
     "interests": [1.2, 1.5, 2], #max : 1800
     "3rd_round_stars": 2
   }, 
   "game4": {
     "title": game_names["game 4"], 
-    "background": "6.jpg", 
+    "background": "6.jpg",
+    "maximize": "maximize4.png",
     # total Flouze per round depending on bonuses
     "total_prizes" : [[300, None, None], [600, 750, None], [900, 1200, 1500]],    
     # number of avalable stars depending on number of players and round
@@ -171,8 +175,8 @@ class Colors(Game):
 
   def end(game):
     engine = game.engine
-    for player in game.players:
-      color = game.choices[0][player.ID]
+    for player, col in zip(game.players, game.colors):  #temporary to check color
+      color = col #game.choices[0][player.ID]  #temporary to check color
       player.color = color
       engine.log(logs_txt["color choice"][engine.lang_id].format(
         name = player.name, color = color_names[player.color][engine.lang_id]))
