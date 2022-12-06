@@ -175,8 +175,8 @@ class Colors(Game):
 
   def end(game):
     engine = game.engine
-    for player, col in zip(game.players, game.colors):  #temporary to check color
-      color = col #game.choices[0][player.ID]  #temporary to check color
+    for player in game.players: 
+      color = game.choices[0][player.ID]
       player.color = color
       engine.log(logs_txt["color choice"][engine.lang_id].format(
         name = player.name, color = color_names[player.color][engine.lang_id]))

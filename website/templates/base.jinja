@@ -20,10 +20,24 @@
 
 <body class="flex-vertical" style="background-image: url({{ url_for('static', filename='images/' + game.config['background']) }});">
 
+{% block stars_table %}
+{% if engine.players|length >= 5 %}
+<div style="position:absolute; z-index: 10;">
+<!--Stars Table for 5+ Players-->
+  <img src="{{ url_for('static', filename='images/' + game.config['maximize']) }}" id="maximize" alt="maximize" onclick="document.getElementById('star-table').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
+  <div id="star-table" class="flex-vertical minimized" onclick="document.getElementById('star-table').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
+    {% for player_it in engine.players %}
+      <div class="star-cell small space-between flex-horizontal {{ player_it.color }}-light">
+        {{ player_it.name }}
+        <i id="player{{ loop.index0 }}_star" class="fa fa-star" style="padding: 0 0.3em"> {{ player_it.stars }}</i>
+      </div>
+    {% endfor %}
+  </div>
+</div>
 <div>
-
-  <!--Stars Table-->
-  {% block stars_table %}
+{% else %}
+<div>
+  <!--Stars Table for 4- Players-->
   <div id="star-table" class="flex-vertical">
     {% for player_it in engine.players %}
       <div class="star-cell small space-between flex-horizontal {{ player_it.color }}-light">
@@ -32,6 +46,7 @@
       </div>
     {% endfor %}
   </div>
+  {% endif %}
   {% endblock %}
 
   <!--Top bar with money-->
