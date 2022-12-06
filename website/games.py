@@ -26,7 +26,7 @@ games_config = {
   "game3": {
     "title": game_names["game 3"], 
     "background": "8.jpg", 
-    "initial_flouze": 100, # 500 / n_players
+    "total_initial_flouze": 500,
     "interests": [1.2, 1.5, 2], #max : 1800
     "3rd_round_stars": 2
   }, 
@@ -288,6 +288,8 @@ class Game3(Game):
     super().__init__(engine)
     game.game_nb = 3
     game.config = games_config["game3"]
+    game.config["initial_flouze"] = game.config["total_initial_flouze"]\
+      /len(game.players)
     game.real_gain = [0]*len(game.players)
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
