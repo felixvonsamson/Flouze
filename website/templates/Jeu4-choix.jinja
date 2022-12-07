@@ -12,7 +12,10 @@
 <form method="POST">
   <div class="w3-margin" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px">
   {% for prize in prizes %}
-    <label value={{ loop.index0 }} class="prize-radio w3-border-0 w3-card large w3-padding-small w3-hover-opacity {% if prize == 'star' and loop.index0 == 3 %} w3-text-teal {% else %} w3-text-black {% endif %}" style="white-space:nowrap;">
+    <label value={{ loop.index0 }} class="prize-radio w3-border-0 w3-card large w3-padding-small w3-hover-opacity 
+        {% if prize == 'star' and loop.index0 == prizes|lengh-3  %} w3-text-white 
+        {% elif prize == 'star' and loop.index0 == prizes|lengh-2  %} w3-text-grey 
+        {% else %} w3-text-black {% endif %}" style="white-space:nowrap;">
     <input type="radio" name="choice" value={{ loop.index0 }} onchange="update_choice(this)" required/>
     {% if prize == "star" %}
       <i class="fa fa-star" style="position:relative; top:2px;"></i>
