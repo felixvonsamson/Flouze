@@ -406,7 +406,7 @@ class Game4(Game):
                 - total_money * penalty_factor
     prizes = np.round(np.linspace(min_prize, max_prize, money_prizes_count))
     prizes = prizes.astype(int).tolist()
-    prizes.append(["star"] * star_prizes_count)
+    prizes += ["star"] * star_prizes_count
     return prizes
   
   def set_choice(game, player, prize_id):
