@@ -294,7 +294,7 @@ class Game3(Game):
     game.game_nb = 3
     game.config = games_config["game3"]
     game.config["initial_flouze"] = game.config["total_initial_flouze"]\
-      /len(game.players)
+      //len(game.players)
     game.real_gain = [0]*len(game.players)
     # Sabotage du 3ème jeu si les participants sont trop coopératifs
     game.sabotage = False
