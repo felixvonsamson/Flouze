@@ -22,14 +22,14 @@
 
 {% block stars_table %}
 {% if engine.players|length >= 5 %}
-<div style="position:absolute; z-index: 10;">
+<div class="star-table-5p">
 <!--Stars Table for 5+ Players-->
-  <img src="{{ url_for('static', filename='images/' + game.config['maximize']) }}" id="maximize" alt="maximize" onclick="document.getElementById('star-table').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
-  <div id="star-table" class="flex-vertical minimized" onclick="document.getElementById('star-table').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
+  <img src="{{ url_for('static', filename='images/' + game.config['maximize']) }}" id="maximize" alt="maximize" onclick="document.getElementById('star-table-5p').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
+  <div id="star-table-5p" class="flex-vertical minimized" onclick="document.getElementById('star-table-5p').classList.toggle('minimized'); document.getElementById('maximize').classList.toggle('hide');">
     {% for player_it in engine.players %}
-      <div class="star-cell small space-between flex-horizontal {{ player_it.color }}-light">
-        {{ player_it.name }}
-        <i id="player{{ loop.index0 }}_star" class="fa fa-star" style="padding: 0 0.3em"> {{ player_it.stars }}</i>
+      <div class="star-cell small space-between {{ player_it.color }}-light">
+        <i id="player{{ loop.index0 }}_star" class="fa fa-star" style="white-space: nowrap;"> {{ player_it.stars }}</i>
+        <span class="name-cell">{{ player_it.name }}</span>
       </div>
     {% endfor %}
   </div>
@@ -40,9 +40,9 @@
   <!--Stars Table for 4- Players-->
   <div id="star-table" class="flex-vertical">
     {% for player_it in engine.players %}
-      <div class="star-cell small space-between flex-horizontal {{ player_it.color }}-light">
-        {{ player_it.name }}
-        <i id="player{{ loop.index0 }}_star" class="fa fa-star" style="padding: 0 0.3em"> {{ player_it.stars }}</i>
+      <div class="star-cell small space-between {{ player_it.color }}-light">
+        <i id="player{{ loop.index0 }}_star" class="fa fa-star" style="white-space: nowrap;"> {{ player_it.stars }}</i>
+        <span class="name-cell">{{ player_it.name }}</span>
       </div>
     {% endfor %}
   </div>
@@ -67,7 +67,7 @@
 
   <!--Donation button-->
   {% block donation_button %}
-  <form method="GET" action="faire_un_don" class="w3-right" style="margin: 8px 16px;">
+  <form method="GET" action="faire_un_don" class="w3-right donation-button">
   <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">{{text["donate"][player.lang_id]}}</button>
   </form>
   {% endblock %}
@@ -82,12 +82,12 @@
     {% endfor %}
   </div>
   <!--Change language-->
-  <div class="w3-center w3-padding" style="position:fixed; bottom:0; width:100%">
+  <div class="w3-center w3-padding" style="position:fixed; bottom:0; width:100%; z-index:50;">
     <div id="language" onclick="document.getElementById('language_list').classList.remove('hidden');" class="w3-btn flag-container medium theme-dark-{{game_nb}}">
       <img src="{{ url_for('static', filename='images/' + player.lang_txt + '.png') }}" class="flag" alt="flag">
     </div>
   </div>
-  <div id="language_list" class="hidden w3-center w3-padding" style="position:fixed; bottom:0; width:100%">
+  <div id="language_list" class="hidden w3-center w3-padding" style="position:fixed; bottom:0; width:100%; z-index:100;">
     <div class="medium theme-dark-{{game_nb}} flag_select-container">
       {% for lang in engine.text["languages_name"] %}
       <img src="{{ url_for('static', filename='images/' + lang + '.png') }}" onclick="change_lang('{{lang}}');" class="flag_select flag" alt="flag">
