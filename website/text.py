@@ -202,14 +202,18 @@ logs_txt = {
     "The money set aside has been put back into play.",
     "L'argent mis de coté a été remis en jeu.",
     "Das beiseitegelegte Geld wurde wieder ins Spiel gebracht"],
-  "chosen star2" : [
-    "{name} chose the second star.",
-    "{name} a choisi la deuxième étoile.",
-    "{name} hat den zweiten Stern gewählt."],
   "chosen star" : [
     "{name} chose the star.",
     "{name} a choisi l'étoile.",
     "{name} hat den Stern gewählt."],
+  "chosen star2" : [
+    "{name} chose the second star.",
+    "{name} a choisi la deuxième étoile.",
+    "{name} hat den zweiten Stern gewählt."],
+  "chosen star3" : [
+    "{name} chose the third star.",
+    "{name} a choisi la troisième étoile.",
+    "{name} hat den dritten Stern gewählt."],
   "chosen prize" : [
     "{name} chose the prize : {prize} coins.",
     "{name} a choisi le lot : {prize} Pièces.",

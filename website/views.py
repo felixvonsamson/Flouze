@@ -127,19 +127,19 @@ def home():
 
     elif "jeu5" in request.form:
       assert request.form["jeu5"] in [
-        "proposition", "nouvelle_proposition", 
+        "offer", "new_offer", 
         "declined", "accepted", "quiz_reponse"]
       
       if request.form["jeu5"] == "quiz_reponse":
         game.current_answer = request.form.get("réponse")
       
-      elif request.form["jeu5"] == "proposition":
+      elif request.form["jeu5"] == "offer":
         if not game.is_allowed_to_play(g.player, 5):
           return redirect(url_for("views.home"))
         total = 0
         for other_player in game.other_players:
           amount = int(request.form.get(other_player.name))
-          if amount + other_player.flouze < 0:
+          if amount + other_player.flouze < 0 and amount < 0:
             flash_error(g.engine.text["player_txt"]["claim can't be accepted"]\
               [g.player.lang_id].format(name = other_player.name))
             return g.render_template_ctx("Jeu5-proposition.jinja")
@@ -157,7 +157,7 @@ def home():
           return redirect(url_for("views.home"))
         g.player.choice = request.form["jeu5"]
       
-      elif request.form["jeu5"] == "nouvelle_proposition":
+      elif request.form["jeu5"] == "new_offer":
         g.engine.next_page(refresh=False)
         g.engine.save_data()
 
@@ -165,7 +165,7 @@ def home():
     g.engine.refresh_monitoring()
   
   if g.engine.current_page["url"] == "Jeu 5":
-    if g.engine.current_page["phase"] == "proposition":
+    if g.engine.current_page["phase"] == "offer":
       if g.player == game.master:
         return g.render_template_ctx("Jeu5-proposition.jinja")
       elif game.current_round_id == 0 and game.question_id < 8:

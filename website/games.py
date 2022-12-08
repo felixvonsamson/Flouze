@@ -394,7 +394,8 @@ class Game4(Game):
   @property
   def current_prizes(game):
     """
-    This function returns an array that contains ...
+    This function returns an array that contains the prizes that the player can
+    choose from depending on the amount of players, the round and the bonus level.
     """
     total_money = game.config["total_prizes"][game.current_round_id][game.current_bonuses]
     star_prizes_count = game.config["star_number"][len(game.players)][game.current_round_id]
@@ -415,7 +416,10 @@ class Game4(Game):
     prizes = game.current_prizes
     prize = prizes[prize_id]
     if prize == "star":
-      if player.choice == 3 :
+      if player.choice == len(game.players)-3 :
+        engine.log(logs_txt["chosen star3"][engine.lang_id].format(
+          name = player.name))
+      elif player.choice == len(game.players)-2 :
         engine.log(logs_txt["chosen star2"][engine.lang_id].format(
           name = player.name))
       else :

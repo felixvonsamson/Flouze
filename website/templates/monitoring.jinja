@@ -58,7 +58,7 @@
           <i class="fa fa-times-circle w3-text-red"></i>
         {% endif %}
         </div>
-        choix : {{ player.choice }}
+        choix : {{ game.current_prizes[player.choice] if stage[0] == 4 else player.choice }}
       {% endif %}
       {% if stage[0] in [2, 4] and "reveal" in page["url"] %}
         {% set reveal_state = game.current_reveal_state %}
