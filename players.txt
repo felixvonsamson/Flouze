@@ -1,6 +1,6 @@
 Player1 1 0
 Player2 2 1
-Player3 3 2
+LONGNAMEP3 3 2
 Player4 4
 Player5 5
 Player6 6

@@ -224,7 +224,11 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 #star-table{float:left; transition: all 0.5s;}
 #star-table.minimized {transform: translateY(-45%);}
 
-.star-cell{padding:0.05em 0.3em; flex-grow:1; align-items:center; gap:0.2em}
+.star-cell{padding:0.05em 0.3em; flex-grow:1; align-items:center; gap:0.2em;}
+
+.donation-button{margin: 8px 16px;}
+
+@media (min-width:1000px){.donation-button{margin:-20%;}}
 
 @media (min-height:680px){.margins-partager{margin:8px;}}
 

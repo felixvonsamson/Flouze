@@ -58,7 +58,7 @@
     </span>
     <!--Saved Flouze for game 3-->
     {% if player.saved_flouze %}
-    <span class="medium w3-margin-left">
+    <span class="medium w3-display-topmiddle" style="z-index: 100;">
       ({{ player.saved_flouze }})
     </span>
     {% endif %}
@@ -67,7 +67,7 @@
 
   <!--Donation button-->
   {% block donation_button %}
-  <form method="GET" action="faire_un_don" class="w3-center" style="margin: 16px 0 0 115px;">
+  <form method="GET" action="faire_un_don" class="w3-right" style="margin: 8px 16px;">
   <button type="submit" class="w3-btn w3-round-large w3-green medium" style="border:2px solid #fff">{{text["donate"][player.lang_id]}}</button>
   </form>
   {% endblock %}
