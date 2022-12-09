@@ -6,32 +6,37 @@
 {% block title %}{{text["game 4"][player.lang_id]}}{% endblock %}
 {% block content %}
 
-<div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">
+<div class="w3-center contrainte_reveal animate__animated animate__fadeIn"
+  style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">
   {% for player_it in engine.players %}
-    <div class="flip-card card-size">
-      <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
-        <div class="flip-card-front {{ player_it.color }}-light">
-          <b class="w3-xlarge">{{ player_it.name}}</b>
-        </div>
-        <div class="flip-card-back {{ player_it.color }}-light flex-vertical center-items">
-          <b class="w3-xlarge">{{ player_it.name }}</b>
+  <div class="flip-card card-size">
+    <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %}
+      class="flip-card-inner">
+      <div class="flip-card-front {{ player_it.color }}-light">
+        <b class="w3-xlarge">{{ player_it.name}}</b>
+      </div>
+      <div class="flip-card-back {{ player_it.color }}-light flex-vertical center-items">
+        <b class="w3-xlarge">{{ player_it.name }}</b>
         {% if prizes[player_it.choice] == "star" %}
-        <div class="w3-xlarge {% if player_it.choice == 3 %} w3-text-teal {% else %} w3-text-white {% endif %} {{ player_it.color }}-dark" style="margin:6px; padding:0.2em 0.5em"><i class="fa fa-star" style="position:relative; top:2px;"></i></div>
+        <div
+          class="w3-xlarge {{ player_it.color }}-dark"
+          style="margin:6px; padding:0.2em 0.5em"><i class="fa fa-star {% if player_it.choice == prizes|length-3 %}w3-text-black{% elif player_it.choice == prizes|length-2 %}w3-text-grey{% else %}w3-text-white{% endif %}" style="position:relative; top:2px;"></i></div>
         {% else %}
-        <div class="w3-xlarge w3-text-white {{ player_it.color }}-dark" style="margin:6px; padding:0.2em 0.7em">{{ prizes[player_it.choice] }} <img src="/static/images/coin.png" class="coin" alt="Coin"></div>
+        <div class="w3-xlarge w3-text-white {{ player_it.color }}-dark" style="margin:6px; padding:0.2em 0.7em">{{
+          prizes[player_it.choice] }} <img src="/static/images/coin.png" class="coin" alt="Coin"></div>
         {% endif %}
-        </div>
       </div>
     </div>
+  </div>
   {% endfor %}
 </div>
 
 {% endblock %}
 {% block additionnal_script %}
-    socket.on('reveal_card', function(card_id) {
-        var card = document.getElementById('card' + card_id);
-        if (card != null) {
-          card.style.transform = "rotateY(180deg)";
-        }
-    });
+socket.on('reveal_card', function(card_id) {
+var card = document.getElementById('card' + card_id);
+if (card != null) {
+card.style.transform = "rotateY(180deg)";
+}
+});
 {% endblock %}

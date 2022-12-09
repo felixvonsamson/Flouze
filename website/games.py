@@ -80,8 +80,8 @@ class Game(ABC):
 
   @property
   def current_round_id(game):
-    assert (game.current_stage[1] in [1, 2, 3])
-    return game.current_stage[1] - 1
+    return game.current_stage[1] - 1 if game.current_stage[1] in [1, 2, 3] \
+           else None
 
   @property
   def current_choices(game):
@@ -256,13 +256,13 @@ class Game2(Game):
   def logic(game):
     assert game.is_everyone_done
     engine = game.engine
+    round_id = game.current_round_id
     choices = game.current_choices
     values, counts = np.unique(choices, return_counts=True)
     if 1 in counts:
       winning_value = values[list(counts).index(1)]
       winner_id = choices.index(winning_value)
       winner = game.players[winner_id]
-      round_id = game.current_round_id
       prize = game.config["prizes"][round_id] * int(winning_value)
       winner.flouze += prize
       winner.last_profit = prize
@@ -596,7 +596,7 @@ class Game5(Game):
   
   def logic(game):
     engine = game.engine
-    if sum(game.current_choices) > len(game.players)/2:
+    if sum(game.current_choices) > len(game.other_players) / 2:
       engine.log(logs_txt["offer accepted"][engine.lang_id])
       game.master.message = player_txt["your offer is accepted"]\
         [game.master.lang_id]
@@ -633,7 +633,7 @@ class Game5(Game):
           [game.master.lang_id]
         for player in game.other_players:
           player.message = player_txt["offer declined"][player.lang_id].format(
-            players = int(len(game.players)/2))
+            players = len(game.other_players)//2)
   
   def end(game):
     engine = game.engine

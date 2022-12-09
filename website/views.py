@@ -158,6 +158,8 @@ def home():
         g.player.choice = request.form["jeu5"]
       
       elif request.form["jeu5"] == "new_offer":
+        if not game.is_allowed_to_play(g.player, 5):
+          return redirect(url_for("views.home"))
         g.engine.next_page(refresh=False)
         g.engine.save_data()
 
