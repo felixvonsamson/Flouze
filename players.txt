@@ -1,8 +1,7 @@
-Player1 1 0
-Player2 2 1
-LONGNAMEP3 3 2
-Player4 4
-Player5 5
-Player6 6
-Player7 7
-Player8 8
+Matthias matthias 2
+Markus markus 2
+Liridon liridon 2
+Pascal pascal 2
+Stephan stephan 2
+Dominik dominik 2
+Damian damian 2
