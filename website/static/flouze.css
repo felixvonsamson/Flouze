@@ -282,6 +282,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 }
 
 .card-size {width:150px; height:120px;}
+.card-size-7p {width:100px; height:80px;}
 @media (max-width:350px){.card-size {width:140px; height:110px;}}
 .padding-reveal {padding:8px}
 @media (max-width:350px){.padding-reveal {padding:4px}}
