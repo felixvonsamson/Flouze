@@ -69,4 +69,7 @@ def home():
       
     engine.save_data()
   
-  return render_template("monitoring.jinja", engine=engine)
+  if engine.current_page["url"] == "final-results.jinja":
+    return render_template("monitoring-recap.jinja", engine=engine)
+  else:
+    return render_template("monitoring.jinja", engine=engine)

@@ -35,6 +35,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .w3-table,.w3-table-all{border-collapse:collapse;border-spacing:0;width:100%;display:table}.w3-table-all{border:1px solid #ccc}
 .w3-bordered tr,.w3-table-all tr{border-bottom:1px solid #ddd}.w3-striped tbody tr:nth-child(even){background-color:#f1f1f1}
 .w3-table-all tr:nth-child(odd){background-color:#fff}.w3-table-all tr:nth-child(even){background-color:#f1f1f1}
+.w3-striped2 tbody tr:nth-child(even){background-color:#fff}
 .w3-hoverable tbody tr:hover,.w3-ul.w3-hoverable li:hover{background-color:#ccc}.w3-centered tr th,.w3-centered tr td{text-align:center}
 .w3-table td,.w3-table th,.w3-table-all td,.w3-table-all th{padding:8px 8px;display:table-cell;text-align:left;vertical-align:top}
 .w3-table th:first-child,.w3-table td:first-child,.w3-table-all th:first-child,.w3-table-all td:first-child{padding-left:16px}
@@ -152,6 +153,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .w3-teal{color:#fff;background-color:#009688}
 .w3-white{color:#000;background-color:#fff}
 .w3-green{color:#fff;background-color:#4CAF50}
+.w3-light-grey{color:#000;background-color:#f1f1f1}
 .w3-grey,.w3-hover-grey:hover,.w3-gray,.w3-hover-gray:hover{color:#000;background-color:#9e9e9e}
 .w3-light-grey,.w3-hover-light-grey:hover,.w3-light-gray,.w3-hover-light-gray:hover{color:#000;background-color:#f1f1f1}
 .w3-pale-red{color:#000;background-color:#ffdddd}
@@ -327,3 +329,7 @@ html {height: 100%;}
 body {height: 100%; justify-content:flex-start;}
 
 .container-jeu-1{max-width:min(90%, 560px); min-width:300px;}
+
+.recap-div{display:flex; flex-direction:column; align-items:center}
+.recap-subdiv{width:800px; display:flex; flex-direction:column; align-items:center}
+.recap-txt{font-size:18px; text-align: justify; text-justify: inter-word;}

@@ -1,0 +1,162 @@
+{% set game = engine.current_game %}
+{% set page = engine.current_page %}
+{% set stage = engine.current_stage %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
+  <link rel="stylesheet" href="{{ url_for("static", filename="flouze.css" ) }}" type="text/css">
+  <style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Baloo 2', cursive;
+    }
+  </style>
+  <link rel="icon" href="{{ url_for("static", filename="images/coin.png" ) }}" type="image/x-icon">
+  <title>Flouze-Recap</title>
+</head>
+
+<body>
+  <div class="recap-div w3-light-grey">
+    <h1>Recap of the game</h1>
+  </div>
+
+  <div class="recap-div w3-white">
+    <div class="recap-subdiv">
+      <h2>Game 1</h2>
+      <p class="recap-txt">
+        In the first game the participants had to chose a number of lottery tickets (between 0 and 10).
+        From all the tickets chosen, 1 is randomly selected and the owner winns the lottery.
+        Hoever the winners lot is divided by the total amount of tickets chosen by all players.
+        3 rounds were played and the winner of the last round is granted 1 Star in addition to the money.
+      </p>
+      <p class="recap-txt" style="width:100%">Money avalable at each round:</p>
+      <div class="flex-horizontal space-around w3-xlarge" style="width:100%">
+        <div class="w3-show-inline-block w3-light-grey w3-padding">Round 1 : <b>{{ engine.games[1].config["prizes"][0] }}</b> <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
+        <div class="w3-show-inline-block w3-light-grey w3-padding">Round 2 : <b>{{ engine.games[1].config["prizes"][1] }}</b> <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
+        <div class="w3-show-inline-block w3-light-grey w3-padding">Round 3 : <b>{{ engine.games[1].config["prizes"][2] }}</b> <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> + <i class="fa fa-star"></i></div>
+      </div>
+      <p>(winner gets the amount <b>divided</b> by the total amount of tickets)</p>
+      <p class="recap-txt">
+        The following table shows the amount of tickets chosen by each player at each round. The cell colored in green is the winner of each round.
+      </p>
+      <table class="w3-table w3-striped w3-xlarge w3-centered">
+        <tr>
+          <th>Participants</th>
+          <th>Round 1</th>
+          <th>Round 2</th>
+          <th>Round 3</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            <td>{{engine.games[1].choices[0][player.ID]}}</td>
+            <td>{{engine.games[1].choices[1][player.ID]}}</td>
+            <td>{{engine.games[1].choices[2][player.ID]}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <p class="recap-txt" style="width:100%">
+        In the first round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][0] }}/____).<br>
+        In the second round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][1] }}/____).<br>
+        In the third round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][2] }}/____). In addition to that, he is granted a Star.
+      </p>
+    </div>
+  </div>
+
+  <div class="recap-div w3-light-grey">
+    <div class="recap-subdiv">
+      <h2>Game 2</h2>
+      <p class="recap-txt">
+        In the second game the participants had to chose a number between 1 and 5.
+        The winner is the person that chooses the lowest number that has not been chosen by somone else.
+        He will earn the lot money multiplied by the number he chose.
+        3 rounds were played and the winner of the last round is granted 2 Star in addition to the money.
+      </p>
+      <p class="recap-txt" style="width:100%">Money avalable at each round:</p>
+      <div class="flex-horizontal space-around w3-xlarge" style="width:100%">
+        <div class="w3-show-inline-block w3-white w3-padding">Round 1 : <b>{{ engine.games[2].config["prizes"][0] }}</b> <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
+        <div class="w3-show-inline-block w3-white w3-padding">Round 2 : <b>{{ engine.games[2].config["prizes"][1] }}</b> <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
+        <div class="w3-show-inline-block w3-white w3-padding">Round 3 : <b>{{ engine.games[2].config["prizes"][2] }}</b> <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> + <i class="fa fa-star"></i><i class="fa fa-star"></i></div>
+      </div>
+      <p>(winner gets the amount <b>multiplied</b> by the number he chose)</p>
+      <p class="recap-txt">
+        The following table shows the numbers chosen by each player at each round. The cell colored in green is the winner of each round.
+      </p>
+      <table class="w3-table w3-striped2 w3-xlarge w3-centered">
+        <tr>
+          <th>Participants</th>
+          <th>Round 1</th>
+          <th>Round 2</th>
+          <th>Round 3</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            <td>{{engine.games[2].choices[0][player.ID]}}</td>
+            <td>{{engine.games[2].choices[1][player.ID]}}</td>
+            <td>{{engine.games[2].choices[2][player.ID]}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <p class="recap-txt" style="width:100%">
+        In the first round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][0] }}*____).<br>
+        In the second round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][1] }}*____).<br>
+        In the third round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][2] }}*____). In addition to that, he is granted 2 Stars.
+      </p>
+    </div>
+  </div>
+
+  <div class="recap-div w3-white">
+    <div class="recap-subdiv">
+      <h2>Game 3</h2>
+      <p class="recap-txt">
+        For the third game, all participants have the same amount of money : {{engine.games[3].config["total_initial_flouze"]//engine.players|length}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">.
+        The rest of their money is set aside and will be returned at the end of the game.
+        At each of the 3 rounds, the players can invest whatever amount of money they have in a common pot.
+        Then, a certain percentage of the total amount is added to the common pot by the bank.
+        Finally the total amount with the bonus is shared equally between all participants.
+        The person that made the most money during the 3 rounds is granted 2 Stars.
+      </p>
+      <p class="recap-txt" style="width:100%">Percentage added by the bank at each round:</p>
+      <div class="flex-horizontal space-around w3-xlarge" style="width:100%">
+        <div class="w3-show-inline-block w3-light-grey w3-padding">Round 1 : <b>{{ ((engine.games[3].config["interests"][0]-1)*100)|round|int }}%</b></div>
+        <div class="w3-show-inline-block w3-light-grey w3-padding">Round 2 : <b>{{ ((engine.games[3].config["interests"][1]-1)*100)|round|int }}%</b></div>
+        <div class="w3-show-inline-block w3-light-grey w3-padding">Round 3 : <b>{{ ((engine.games[3].config["interests"][2]-1)*100)|round|int }}%</b></div>
+      </div>
+      <p class="recap-txt">The player That makes the most benefit during the 3 rounds wins <i class="fa fa-star"></i><i class="fa fa-star"></i></p>
+      <p class="recap-txt">
+        The following table shows the amount invested by each player at each round. The value in parenthesis is the porportion of their total money. The last column show the net benefit each player made during the 3 rounds and the cell colored in green is the largest benefit.
+      </p>
+      <table class="w3-table w3-striped w3-xlarge w3-centered">
+        <tr>
+          <th>Participants</th>
+          <th>Round 1</th>
+          <th>Round 2</th>
+          <th>Round 3</th>
+          <th>Benefits</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            <td>{{engine.games[3].choices[0][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
+            <td>{{engine.games[3].choices[1][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
+            <td>{{engine.games[3].choices[2][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
+            <td>{{engine.games[3].real_gain[player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+</body>
+
+</html>
