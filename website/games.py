@@ -53,7 +53,7 @@ games_config = {
   "game5": {
     "title": game_names["game 5"], 
     "background": "7.jpg",
-    "maximize": "maximize1.png",
+    "maximize": "maximize5.png",
     "prize": 3000,
     "bonus": 500,
     "quiz_prize": 50
@@ -391,16 +391,18 @@ class Game4(Game):
   def current_bonus(game, bonus):
     game.bonuses[game.current_round_id] = bonus
 
-  @property
-  def current_prizes(game):
+  def current_prizes(game, round_id=None,  bonus=None):
     """
     This function returns an array that contains the prizes that the player can
     choose from depending on the amount of players, the round and the bonus level.
     """
-    total_money = game.config["total_prizes"][game.current_round_id][game.current_bonuses]
-    star_prizes_count = game.config["star_number"][len(game.players)][game.current_round_id]
+    if round_id == None :
+      round_id = game.current_round_id
+      bonus = game.current_bonuses
+    total_money = game.config["total_prizes"][round_id][bonus]
+    star_prizes_count = game.config["star_number"][len(game.players)][round_id]
     money_prizes_count = len(game.players) - star_prizes_count
-    penalty_factor = game.config["penalty_factor"][game.current_round_id]
+    penalty_factor = game.config["penalty_factor"][round_id]
 
     min_prize = total_money * penalty_factor
     max_prize = total_money / money_prizes_count * 2 \

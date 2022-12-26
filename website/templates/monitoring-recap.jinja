@@ -157,6 +157,124 @@
       </table>
     </div>
   </div>
+
+  <div class="recap-div w3-light-grey">
+    <div class="recap-subdiv">
+      <h2>Game 4</h2>
+      <p class="recap-txt">
+        In the fourth game each participant has to choose one of {{ engine.players|length }} prizes.
+        A player gets his prize only if he is the only one that chose this prize otherwise he gets nothing.
+        If all prizes are delivered i.e. all participants chose a different prize, then a bonus is applied to the prizes at the next round.
+        If all the prizes are delivered for all 3 rounds then the jackpot for the player with the most stars goes from {{engine.games[5].config["prize"]}} 
+        <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> to {{ engine.games[5].config["prize"]+engine.games[5].config["bonus"] }} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">.
+      </p>
+      <p class="recap-txt">
+        The following table shows the prizes chosen by each player at each round. The green prizes were chosen by a single player and the red ones where not delivered.
+      </p>
+      <table class="w3-table w3-striped2 w3-xlarge w3-centered">
+        <tr>
+          <th>Participants</th>
+          <th>Round 1</th>
+          <th>Round 2</th>
+          <th>Round 3</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            {% for i in range(3) %}
+              {% set prizes = engine.games[4].current_prizes(i,engine.games[4].bonuses[i]) %}
+              {% if prizes[engine.games[4].choices[i][player.ID]] == "star" %}
+                <td><i class="fa fa-star {% if engine.games[4].choices[i][player.ID] == prizes|length-3 %}w3-text-black{% elif engine.games[4].choices[i][player.ID] == prizes|length-2 %}w3-text-grey{% else %}w3-text-white{% endif %}" style="position:relative; top:2px;"></i></td>
+              {% else %}
+                <td>{{prizes[engine.games[4].choices[i][player.ID]]}} <img src="/static/images/coin.png" class="coin" alt="Coin"></td>
+              {% endif %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+   
+  <div class="recap-div w3-white">
+    <div class="recap-subdiv">
+      <h2>Game 5</h2>
+      <p class="recap-txt"  style="width:100%">
+        At this point of the game the players had the choice to donate stars to each other. <br>
+        This table shows how many stars each player had before and after the donation:
+      </p>
+      <table class="w3-table w3-striped w3-xlarge w3-centered">
+        <tr>
+          <th>Participants</th>
+          <th>Before Donation</th>
+          <th>After Donation</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            <td>{% for stars in range(player.stars) %}<i class="fa fa-star" style="position:relative; top:2px;"></i> {% endfor %}</td>
+            <td>{% for stars in range(player.stars) %}<i class="fa fa-star" style="position:relative; top:2px;"></i> {% endfor %}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <p class="recap-txt">
+        The player with the most stars was {{engine.games[5].master.name}}. He/she receives {{engine.games[5].jackpot}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> 
+        but in order to keep at least part of this money he/she will need to find an agreement with the other players by making a monetary proposal to each of them.
+        If the proposition is accepted by at least {{ (engine.players|length+1)//2 }} players then every player gets the offered money and {{engine.games[5].master.name}} gets the rest.
+        If hoever the proposition is rejected by at least {{ (engine.players|length)//2 }} players then {{engine.games[5].master.name}} gets another chance to make a propositon. 
+        If after 3 attempts no agreement is found, then the jackpot money is withdrawn from the Starmaster.
+      </p>
+      <p class="recap-txt"  style="width:100%">
+        The folowing Table shows the offers made by {{engine.games[5].master.name}} and the decision of the other players to accept or decline them:
+      </p>
+      <table class="w3-table w3-striped w3-xlarge w3-centered">
+        <tr>
+          <th>Participants</th>
+          <th>Round 1</th>
+          <th>Round 2</th>
+          <th>Round 3</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            {% for i in range(3) %}
+              <td>{{engine.games[5].propositions[i][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">  
+              {% if engine.games[5].choices[i][player.ID] == 0 %}
+              <i class="fa fa-times-circle w3-text-red"></i>
+              {% else %}
+              <i class="fa fa-check-circle w3-text-green"></i>
+              {% endif %}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+      <p class="recap-txt"  style="width:100%">
+        The folowing Table shows the amount of money and stars owned by each player at the end of each game:
+      </p>
+      <table class="w3-table w3-striped w3-xlarge w3-centered" style="width:160%">
+        <tr>
+          <th>Participants</th>
+          <th>Game 1</th>
+          <th>Game 2</th>
+          <th>Game 3</th>
+          <th>Game 4</th>
+          <th>Game 5</th>
+        </tr>
+        {% for player in engine.players %}
+          <tr>
+            <td>{{player.name}}</td>
+            {% for i in range(5) %}
+              <td>{{player.flouze}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> {% if player.stars > 0 %} + {{player.stars}} <i class="fa fa-star"></i> {% endif %} </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
 </body>
 
 </html>
