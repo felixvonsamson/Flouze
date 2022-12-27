@@ -59,16 +59,16 @@
         {% for player in engine.players %}
           <tr>
             <td>{{player.name}}</td>
-            <td>{{engine.games[1].choices[0][player.ID]}}</td>
-            <td>{{engine.games[1].choices[1][player.ID]}}</td>
-            <td>{{engine.games[1].choices[2][player.ID]}}</td>
+            {% for i in range(3) %}
+              <td {% if engine.games[1].winners[i][0] == player %} class="green-light" {% endif %}>{{engine.games[1].choices[i][player.ID]}}</td>
+            {% endfor %}
           </tr>
         {% endfor %}
       </table>
       <p class="recap-txt" style="width:100%">
-        In the first round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][0] }}/____).<br>
-        In the second round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][1] }}/____).<br>
-        In the third round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][2] }}/____). In addition to that, he is granted a Star.
+        In the first round {{engine.games[1].winners[0][0].name}} won {{engine.games[1].winners[0][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][0] }}/{{ engine.games[1].choices[i]|sum }}).<br>
+        In the second round {{engine.games[1].winners[1][0].name}} won {{engine.games[1].winners[1][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][1] }}/{{ engine.games[1].choices[i]|sum }}).<br>
+        In the third round {{engine.games[1].winners[2][0].name}} won {{engine.games[1].winners[2][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][2] }}/{{ engine.games[1].choices[i]|sum }}). In addition to that, he is granted a Star.
       </p>
     </div>
   </div>
@@ -102,16 +102,16 @@
         {% for player in engine.players %}
           <tr>
             <td>{{player.name}}</td>
-            <td>{{engine.games[2].choices[0][player.ID]}}</td>
-            <td>{{engine.games[2].choices[1][player.ID]}}</td>
-            <td>{{engine.games[2].choices[2][player.ID]}}</td>
+            {% for i in range(3) %}
+              <td {% if engine.games[2].winners[i] == player %} class="green-light" {% endif %}>{{engine.games[2].choices[i][player.ID]}}</td>
+            {% endfor %}
           </tr>
         {% endfor %}
       </table>
       <p class="recap-txt" style="width:100%">
-        In the first round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][0] }}*____).<br>
-        In the second round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][1] }}*____).<br>
-        In the third round ____ won ____ <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][2] }}*____). In addition to that, he is granted 2 Stars.
+        In the first round {{engine.games[2].winners[0][0].name}} won {{engine.games[2].winners[0][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][0] }}*engine.games[2].choices[0][engine.games[2].winners[0][0].ID]).<br>
+        In the second round {{engine.games[2].winners[1][0].name}} won {{engine.games[2].winners[1][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][1] }}*engine.games[2].choices[1][engine.games[2].winners[1][0].ID]).<br>
+        In the third round {{engine.games[2].winners[2][0].name}} won {{engine.games[2].winners[2][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][2] }}*engine.games[2].choices[2][engine.games[2].winners[2][0].ID]). In addition to that, he is granted 2 Stars.
       </p>
     </div>
   </div>
@@ -151,10 +151,13 @@
             <td>{{engine.games[3].choices[0][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
             <td>{{engine.games[3].choices[1][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
             <td>{{engine.games[3].choices[2][player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
-            <td>{{engine.games[3].real_gain[player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
+            <td {% if engine.games[3].winners[2] == player %} class="green-light" {% endif %}>{{engine.games[3].real_gain[player.ID]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></td>
           </tr>
         {% endfor %}
       </table>
+      <p class="recap-txt" style="width:100%">
+        {{engine.games[3].winners[2].name}} made the most money during the 3 rounds and therefore gets 2 stars.
+      </p>
     </div>
   </div>
 
@@ -184,9 +187,9 @@
             {% for i in range(3) %}
               {% set prizes = engine.games[4].current_prizes(i,engine.games[4].bonuses[i]) %}
               {% if prizes[engine.games[4].choices[i][player.ID]] == "star" %}
-                <td><i class="fa fa-star {% if engine.games[4].choices[i][player.ID] == prizes|length-3 %}w3-text-black{% elif engine.games[4].choices[i][player.ID] == prizes|length-2 %}w3-text-grey{% else %}w3-text-white{% endif %}" style="position:relative; top:2px;"></i></td>
+                <td class="{% if engine.games[4].winners[i] == 1 %} green-light {% else %} red-light {% endif %}" ><i class="fa fa-star {% if engine.games[4].choices[i][player.ID] == prizes|length-3 %}w3-text-black{% elif engine.games[4].choices[i][player.ID] == prizes|length-2 %}w3-text-grey{% else %}w3-text-white{% endif %}" style="position:relative; top:2px;"></i></td>
               {% else %}
-                <td>{{prizes[engine.games[4].choices[i][player.ID]]}} <img src="/static/images/coin.png" class="coin" alt="Coin"></td>
+                <td class="{% if engine.games[4].winners[i] == 1 %} green-light {% else %} red-light {% endif %}">{{prizes[engine.games[4].choices[i][player.ID]]}} <img src="/static/images/coin.png" class="coin" alt="Coin"></td>
               {% endif %}
             {% endfor %}
           </tr>
@@ -263,7 +266,7 @@
           <tr>
             <td>{{player.name}}</td>
             {% for i in range(5) %}
-              <td>{{player.flouze}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> {% if player.stars > 0 %} + {{player.stars}} <i class="fa fa-star"></i> {% endif %} </td>
+              <td>{{engine.games[i].money_log[2][player.ID][0]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> {% if engine.games[i].money_log[2][player.ID][1] > 0 %} + {{engine.games[i].money_log[2][player.ID][1]}} <i class="fa fa-star"></i> {% endif %} </td>
             {% endfor %}
           </tr>
         {% endfor %}
