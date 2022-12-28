@@ -289,10 +289,6 @@ logs_txt = {
 }
 
 player_txt = {
-  "incorect password" : [
-    "Wrong password, try again.",
-    "Mot de passe incorrect, réessayez.",
-    "Falsches Passwort, versuchen sie es erneut."],
   "not recognized" : [
     "You're not a participant.",
     "Vous n'êtes pas un participant.",
@@ -520,10 +516,6 @@ html_txt = {
     "Name",
     "Prénom",
     "Vornahme"],
-  "password" : [
-    "Password",
-    "Mot de passe",
-    "Passwort"],
   "log in" : [
     "Log in",
     "Se connecter",

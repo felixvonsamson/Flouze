@@ -4,12 +4,11 @@ from flask import Markup, flash
 from .html_icons import icons
 
 class Player(object):
-  def __init__(player, engine, ID, name, password, lang_id=None):
+  def __init__(player, engine, ID, name, lang_id=None):
     player.engine = engine
     player.ID = ID
     player.sid = None
     player.name = name
-    player.password = password
     player.lang_id = int(lang_id) if lang_id else engine.lang_id
     player.lang_txt = engine.text["languages_name"][player.lang_id]
     player.color = None
