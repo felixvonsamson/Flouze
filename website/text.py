@@ -454,9 +454,9 @@ player_txt = {
     "Perdu ! La bonne réponse à la question '{question}' était : {correct_answer}.",
     "Falsch ! Die richtige Antwort auf die Frage '{question}' war : {correct_answer}."],
   "right awnser" : [
-    "Congratulations ! Yoou win {prize} {coin} !",
-    "Félicitation ! Vous remportez {prize} {coin} !",
-    "Herzlichen Glückwunsch ! Sie erhalten {prize} {coin} !"],
+    "Congratulations ! You awnser has been accepted !",
+    "Félicitation ! Votre réponse à été acceptée !",
+    "Herzlichen Glückwunsch ! Ihre antwort wurde angenommen !"],
   "wait" : [
     "Please wait for the offer from {name}...",
     "Veuillez attendre l'offre de {name} ...",

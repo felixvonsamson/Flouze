@@ -93,8 +93,7 @@ class Player(object):
     donation_log = engine.text["logs_txt"]["donation"][engine.lang_id].format(
       name = player.name, amount = amount, receiver = receiver.name)
     engine.log(donation_log)
-    player.engine.current_game.interactions[player.engine.current_stage].append(
-      donation_log)
+    player.engine.current_game.interactions[player.engine.current_game.current_round_id].append(donation_log)
     updates = [("flouze", receiver.flouze)]
     engine.update_fields(updates, [receiver])
     if update_sender:
@@ -130,8 +129,7 @@ class Player(object):
       [player.engine.lang_id].format(name = player.name, stars = sent_stars,
       receiver = receiver.name)
     player.engine.log(sent_star_log)
-    player.engine.current_game.interactions[player.engine.current_stage].append(
-      sent_star_log)
+    player.engine.current_game.interactions[0].append(sent_star_log)
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
                (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)

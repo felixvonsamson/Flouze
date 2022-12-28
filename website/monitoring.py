@@ -56,13 +56,6 @@ def home():
       elif decision == "validate":
         game.is_answer_correct[question_id] = True
         engine.log(engine.text["logs_txt"]["awnser accepted"][engine.lang_id])
-        for player in game.other_players:
-          quiz_prize = game.config["quiz_prize"]
-          player.flouze += quiz_prize
-          updates = [("flouze", player.flouze)]
-          engine.update_fields(updates, [player])
-          player.send_message(engine.text["player_txt"]["right awnser"]\
-            [player.lang_id].format(prize = quiz_prize, coin = icons['coin']))
         
     elif "current_page_id" in request.form:
       engine.goto_page(int(request.form["current_page_id"]))

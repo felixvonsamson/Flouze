@@ -6,9 +6,9 @@
 {% block title %}{{text["game 2"][player.lang_id]}}{% endblock %}
 {% block content %}
 
-<div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">
+<div class="w3-center contrainte_reveal animate__animated animate__fadeIn" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:{% if game.players|length>6 %}10px{% else %}20px{% endif %}; max-width:500px;">
   {% for id in permutation %}
-  <div class="flip-card card-size">
+  <div class="flip-card card-size{{'-7p' if game.players|length>6}}">
     <div id="card{{ id }}" {% if reveal_state[id] %} style="transform: rotateY(180deg)" {% endif %} class="flip-card-inner">
       <div class="flip-card-front theme-light-2">
       </div>

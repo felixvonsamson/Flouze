@@ -10,7 +10,7 @@ def init_engine(lang_id=0):
   with open("players.txt", "r") as file:
     players_raw = [(player_id, *line.split()) 
                    for player_id, line in enumerate(file) if line]
-    for p in players_raw : assert(len(p[1]) <= 10)
+    for p in players_raw : assert(len(p[1]) <= 12)
   return gameEngine(players_raw=players_raw, lang_id=lang_id)
 
 def create_app(lang_id=0):

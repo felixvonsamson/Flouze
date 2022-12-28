@@ -56,7 +56,6 @@ games_config = {
     "maximize": "maximize5.png",
     "prize": 3000,
     "bonus": 500,
-    "quiz_prize": 50
   }
 }
 
@@ -409,7 +408,7 @@ class Game4(Game):
   def current_bonus(game, bonus):
     game.bonuses[game.current_round_id] = bonus
 
-  def current_prizes(game, round_id=None,  bonus=None):
+  def current_prizes(game, round_id=None, bonus=None):
     """
     This function returns an array that contains the prizes that the player can
     choose from depending on the amount of players, the round and the bonus level.
@@ -433,7 +432,7 @@ class Game4(Game):
   def set_choice(game, player, prize_id):
     engine = game.engine
     game.current_choices[player.ID] = prize_id
-    prizes = game.current_prizes
+    prizes = game.current_prizes()
     prize = prizes[prize_id]
     if prize == "star":
       if player.choice == len(game.players)-3 :
@@ -465,7 +464,7 @@ class Game4(Game):
     for player, choice in zip(game.players, choices):
       if choice in unique_choices:
         winners[player.ID] = 1
-        prize = game.current_prizes[choice]
+        prize = game.current_prizes()[choice]
         if prize == "star":
           player.stars += 1
           engine.log(logs_txt["won star"][engine.lang_id].format(
@@ -661,10 +660,10 @@ class Game5(Game):
           [game.master.lang_id]
         for player in game.other_players:
           player.message = player_txt["offer declined"][player.lang_id].format(
-            players = len(game.other_players)//2)
+            players = len(game.players)//2)
 
     for player in game.players:
-      game.money_log[game.current_round_id][player.ID] = (player.flouze, 
+      game.money_log[2][player.ID] = (player.flouze, 
       player.stars)
   
   def end(game):
