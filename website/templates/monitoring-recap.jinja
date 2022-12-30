@@ -109,8 +109,8 @@
         {% endfor %}
       </table>
       <p class="recap-txt" style="width:100%">
-        In the first round {{engine.games[2].winners[0][0].name}} won {{engine.games[2].winners[0][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][0] }}*engine.games[2].choices[0][engine.games[2].winners[0][0].ID]).<br>
-        In the second round {{engine.games[2].winners[1][0].name}} won {{engine.games[2].winners[1][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][1] }}*engine.games[2].choices[1][engine.games[2].winners[1][0].ID]).<br>
+        In the first round {{engine.games[2].winners[0][0].name}} won {{engine.games[2].winners[0][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][0] }}*{{engine.games[2].choices[0][engine.games[2].winners[0][0].ID]}}).<br>
+        In the second round {{engine.games[2].winners[1][0].name}} won {{engine.games[2].winners[1][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][1] }}*{{engine.games[2].choices[1][engine.games[2].winners[1][0].ID]}}).<br>
         In the third round {{engine.games[2].winners[2]}} won {{engine.games[2].winners[2][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][2] }}*engine.games[2].choices[2][engine.games[2].winners[2][0].ID]). In addition to that, he is granted 2 Stars.
       </p>
     </div>
