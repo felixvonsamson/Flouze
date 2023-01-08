@@ -65,11 +65,26 @@
           </tr>
         {% endfor %}
       </table>
-      <p class="recap-txt" style="width:100%">
-        In the first round {{engine.games[1].winners[0][0].name}} won {{engine.games[1].winners[0][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][0] }}/{{ engine.games[1].choices[i]|sum }}).<br>
-        In the second round {{engine.games[1].winners[1][0].name}} won {{engine.games[1].winners[1][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][1] }}/{{ engine.games[1].choices[i]|sum }}).<br>
-        In the third round {{engine.games[1].winners[2][0].name}} won {{engine.games[1].winners[2][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[1].config["prizes"][2] }}/{{ engine.games[1].choices[i]|sum }}). In addition to that, he is granted a Star.
-      </p>
+      <br>
+      <div class="recap-txt" style="width:100%">
+        {% for i in range(3) %}
+          Round {{i+1}} : 
+          {% if engine.games[1].winners[i] == None %}
+            There was no winner at this game because no one participated to the tottery 
+          {% else %}
+            {{engine.games[1].winners[i][0].name}} won {{engine.games[1].winners[i][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">
+            {% if i == 2 %} In addition to that, he/she is granted a Star.{% endif %}
+          {% endif %}
+          <br>
+          <div class="w3-pale-blue w3-padding">
+            {% for interaction in engine.games[1].interactions[i] %}
+              {{interaction}}<br>
+            {% endfor %}
+          </div>
+          <br>
+        {% endfor %}
+      </div>
+      <br>
     </div>
   </div>
 
@@ -108,11 +123,26 @@
           </tr>
         {% endfor %}
       </table>
-      <p class="recap-txt" style="width:100%">
-        In the first round {{engine.games[2].winners[0][0].name}} won {{engine.games[2].winners[0][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][0] }}*{{engine.games[2].choices[0][engine.games[2].winners[0][0].ID]}}).<br>
-        In the second round {{engine.games[2].winners[1][0].name}} won {{engine.games[2].winners[1][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][1] }}*{{engine.games[2].choices[1][engine.games[2].winners[1][0].ID]}}).<br>
-        In the third round {{engine.games[2].winners[2]}} won {{engine.games[2].winners[2][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> ({{ engine.games[2].config["prizes"][2] }}*engine.games[2].choices[2][engine.games[2].winners[2][0].ID]). In addition to that, he is granted 2 Stars.
-      </p>
+      <br>
+      <div class="recap-txt" style="width:100%">
+        {% for i in range(3) %}
+          Round {{i+1}} : 
+          {% if engine.games[2].winners[i] == None %}
+            There was no winner at this game because no one participated to the tottery 
+          {% else %}
+            {{engine.games[2].winners[i][0].name}} won {{engine.games[2].winners[i][1]}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin">
+            {% if i == 2 %} In addition to that, he/she is granted 2 Stars.{% endif %}
+          {% endif %}
+          <br>
+          <div class="w3-pale-blue w3-padding">
+            {% for interaction in engine.games[2].interactions[i] %}
+              {{interaction}}<br>
+            {% endfor %}
+          </div>
+          <br>
+        {% endfor %}
+      </div>
+      <br>
     </div>
   </div>
 
@@ -155,9 +185,17 @@
           </tr>
         {% endfor %}
       </table>
-      <p class="recap-txt" style="width:100%">
-        {{engine.games[3].winners[2].name}} made the most money during the 3 rounds and therefore gets 2 stars.
-      </p>
+      <div class="recap-txt" style="width:100%">
+        <p>{{engine.games[3].winners[2].name}} made the most money during the 3 rounds and therefore gets 2 stars.</p>
+        <div class="w3-pale-blue w3-padding">
+          {% for i in range(3) %}
+            {% for interaction in engine.games[3].interactions[i] %}
+              {{interaction}}<br>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <br>
+      </div>
     </div>
   </div>
 
@@ -195,6 +233,20 @@
           </tr>
         {% endfor %}
       </table>
+      <br>
+      <div class="recap-txt" style="width:100%">
+        {% for i in range(3) %}
+          Round {{i+1}} :
+          <br>
+          <div class="w3-pale-blue w3-padding">
+            {% for interaction in engine.games[4].interactions[i] %}
+              {{interaction}}<br>
+            {% endfor %}
+          </div>
+          <br>
+        {% endfor %}
+      </div>
+      <br>
     </div>
   </div>
    
@@ -219,6 +271,15 @@
           </tr>
         {% endfor %}
       </table>
+      <br>
+      <div class="w3-pale-blue w3-padding recap-txt" style="width:100%">
+        {% for i in range(3) %}
+          {% for interaction in engine.games[5].interactions[i] %}
+            {{interaction}}<br>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <br>
       <p class="recap-txt">
         The player with the most stars was {{engine.games[5].master.name}}. He/she receives {{engine.games[5].jackpot}} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"> 
         but in order to keep at least part of this money he/she will need to find an agreement with the other players by making a monetary proposal to each of them.

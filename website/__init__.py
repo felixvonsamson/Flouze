@@ -43,7 +43,7 @@ def create_app(lang_id=0):
       return redirect(url_for("auth.login"))
   @app.after_request
   def add_header(response):
-    if request.endpoint == "static" and False:
+    if request.endpoint == "static":
       response.cache_control.no_cache = None
       response.cache_control.private = True
       response.cache_control.max_age = 604800
