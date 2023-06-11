@@ -4,12 +4,11 @@ from flask import Markup, flash
 from .html_icons import icons
 
 class Player(object):
-  def __init__(player, engine, ID, name, password, lang_id=None):
+  def __init__(player, engine, ID, name, lang_id=None):
     player.engine = engine
     player.ID = ID
     player.sid = None
     player.name = name
-    player.password = password
     player.lang_id = int(lang_id) if lang_id else engine.lang_id
     player.lang_txt = engine.text["languages_name"][player.lang_id]
     player.color = None
@@ -91,8 +90,10 @@ class Player(object):
     assert (player.flouze >= amount)
     player.flouze -= amount
     receiver.flouze += amount
-    engine.log(engine.text["logs_txt"]["donation"][engine.lang_id].format(
-      name = player.name, amount = amount, receiver = receiver.name))
+    donation_log = engine.text["logs_txt"]["donation"][engine.lang_id].format(
+      name = player.name, amount = amount, receiver = receiver.name)
+    engine.log(donation_log)
+    player.engine.current_game.interactions[player.engine.current_game.current_round_id].append(donation_log)
     updates = [("flouze", receiver.flouze)]
     engine.update_fields(updates, [receiver])
     if update_sender:
@@ -110,9 +111,12 @@ class Player(object):
 
   def request_money(player, receiver, amount):
     receiver.flouze_request = (player, amount)
-    player.engine.log(player.engine.text["logs_txt"]["claim"]\
+    claim_log = player.engine.text["logs_txt"]["claim"]\
       [player.engine.lang_id].format(name = player.name, amount = amount,
-      donor = receiver.name))
+      donor = receiver.name)
+    player.engine.log(claim_log)
+    player.engine.current_game.interactions[player.engine.current_stage].append(
+      claim_log)
     receiver.send_request(player.engine.text["player_txt"]["flouze claim"]\
       [receiver.lang_id].format(name = player.name, amount = amount,
       coin = icons['coin']))
@@ -121,9 +125,11 @@ class Player(object):
     assert (player.stars >= sent_stars)
     player.stars -= sent_stars
     receiver.stars += sent_stars
-    player.engine.log(player.engine.text["logs_txt"]["star donation"]\
+    sent_star_log = player.engine.text["logs_txt"]["star donation"]\
       [player.engine.lang_id].format(name = player.name, stars = sent_stars,
-      receiver = receiver.name))
+      receiver = receiver.name)
+    player.engine.log(sent_star_log)
+    player.engine.current_game.interactions[0].append(sent_star_log)
     updates = [(f"player{player.ID}_star", f" {player.stars}"),
                (f"player{receiver.ID}_star", f" {receiver.stars}")]
     player.engine.update_fields(updates)

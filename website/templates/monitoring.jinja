@@ -18,9 +18,10 @@
     <title>Flouze-Admin</title>
   </head>
 <body>
-  <div style="display:flex; justify-content:space-evenly;">
+  <div class="flex-vertical" style="height:100%">
+  <div class="flex-horizontal space-evenly" style="flex-grow:0">
     {% for player in engine.players %}
-    <div class="w3-center w3-margin w3-xlarge {{ player.color }}-light" style="width:360px;">
+    <div class="w3-center {% if game.players|length<7 %} w3-margin {% endif %} w3-xlarge {{ player.color }}-light" style="width:360px;">
       {% if player.is_sharing_money %}
         <div class="w3-white w3-center" style="font-size:50px!important;">
         <i class="fa fa-exclamation-triangle w3-text-red"></i>
@@ -47,7 +48,7 @@
       <div class="w3-large w3-margin-left" style="text-align:left;">
         message :
       </div>
-      <div class="w3-text-white w3-large {{ player.color }}-dark" style="margin:0 16px 16px;">
+      <div class="w3-text-white w3-large {{ player.color }}-dark" style="margin:0 8px 8px;">
         {{ player.message }}
       </div>
       {% if stage[1] in [1, 2, 3] %}
@@ -58,7 +59,7 @@
           <i class="fa fa-times-circle w3-text-red"></i>
         {% endif %}
         </div>
-        choix : {{ game.current_prizes[player.choice]|string + " (id " + player.choice|string + ")" if stage[0] == 4 else player.choice }}
+        choix : {{ game.current_prizes()[player.choice]|string + " (id " + player.choice|string + ")" if stage[0] == 4 else player.choice }}
       {% endif %}
       {% if stage[0] in [2, 4] and "reveal" in page["url"] %}
         {% set reveal_state = game.current_reveal_state %}
@@ -71,13 +72,8 @@
   </div>
 
 
-  <div class="w3-row w3-margin">
-    <div class="w3-left w3-large w3-light-gray w3-padding" style="width:40%">
-      {% for i in range(20) %}
-      {{ engine.logs[-i-1] }}<br>
-      {% endfor %}
-    </div>
-    <div class="w3-rest">
+  <div class="flex-horizontal" style="height:250px; flex-grow:1">
+    <div style="width:50%">
       <form class="w3-center w3-xlarge" method="POST">
         <p>Page actuelle : {{ page["url"] }}</p>
         {% if engine.current_stage[1] == 0 %}
@@ -101,8 +97,8 @@
           {% for (_, (question, correct_answer)), player, answer, decision in zip(game.quiz, game.other_players, game.answers, game.is_answer_correct) %}
             {% if answer and decision == None %}
           {{question}}<br>
-          {{player.name}} : {{answer}}<br>
-          ({{correct_answer}})
+          ({{correct_answer}})<br>
+          {{player.name}} : <b>{{answer}}</b>
           <p><button name="quiz" type="submit" class="w3-button w3-red w3-margin-right" value="refuse{{ loop.index0 }}">Rejeter</button>
           <button name="quiz" type="submit" class="w3-button w3-teal w3-margin-left" value="validate{{ loop.index0 }}">Valider</button></p>
             {% endif %}
@@ -110,6 +106,12 @@
         {% endif %}
       </form>
     </div>
+    <div class="w3-left w3-large w3-light-gray w3-padding w3-margin" style="width:50%; overflow-y:scroll; height:95%;">
+      {% for i in range(engine.logs|length) %}
+      {{ engine.logs[-i-1] }}<br>
+      {% endfor %}
+    </div>
+  </div>
   </div>
 
 

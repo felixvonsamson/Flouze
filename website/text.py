@@ -289,10 +289,6 @@ logs_txt = {
 }
 
 player_txt = {
-  "incorect password" : [
-    "Wrong password, try again.",
-    "Mot de passe incorrect, réessayez.",
-    "Falsches Passwort, versuchen sie es erneut."],
   "not recognized" : [
     "You're not a participant.",
     "Vous n'êtes pas un participant.",
@@ -458,9 +454,9 @@ player_txt = {
     "Perdu ! La bonne réponse à la question '{question}' était : {correct_answer}.",
     "Falsch ! Die richtige Antwort auf die Frage '{question}' war : {correct_answer}."],
   "right awnser" : [
-    "Congratulations ! Yoou win {prize} {coin} !",
-    "Félicitation ! Vous remportez {prize} {coin} !",
-    "Herzlichen Glückwunsch ! Sie erhalten {prize} {coin} !"],
+    "Congratulations ! You awnser has been accepted !",
+    "Félicitation ! Votre réponse à été acceptée !",
+    "Herzlichen Glückwunsch ! Ihre antwort wurde angenommen !"],
   "wait" : [
     "Please wait for the offer from {name}...",
     "Veuillez attendre l'offre de {name} ...",
@@ -520,10 +516,6 @@ html_txt = {
     "Name",
     "Prénom",
     "Vornahme"],
-  "password" : [
-    "Password",
-    "Mot de passe",
-    "Passwort"],
   "log in" : [
     "Log in",
     "Se connecter",

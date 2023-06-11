@@ -1,15 +1,15 @@
 {% set game = engine.current_game %}
 {% set config = game.config %}
-{% set prizes = game.current_prizes %}
+{% set prizes = game.current_prizes() %}
 {% set reveal_state = game.current_reveal_state %}
 {% extends "base.jinja" %}
 {% block title %}{{text["game 4"][player.lang_id]}}{% endblock %}
 {% block content %}
 
 <div class="w3-center contrainte_reveal animate__animated animate__fadeIn"
-  style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:20px">
+  style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:{% if game.players|length>6 %}10px{% else %}20px{% endif %}; max-width:500px;">
   {% for player_it in engine.players %}
-  <div class="flip-card card-size">
+  <div class="flip-card card-size{{'-7p' if game.players|length>6}}">
     <div id="card{{ loop.index0 }}" {% if reveal_state[loop.index0] %} style="transform: rotateY(180deg)" {% endif %}
       class="flip-card-inner">
       <div class="flip-card-front {{ player_it.color }}-light">

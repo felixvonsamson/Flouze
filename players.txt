@@ -1,7 +1,8 @@
-Matthias matthias 2
-Markus markus 2
-Liridon liridon 2
-Pascal pascal 2
-Stephan stephan 2
-Dominik dominik 2
-Damian damian 2
+Player1 2
+Player2 1
+LONGPLAYER
+Player4 0
+Player5 2
+Player6 0
+Player7 1
+Player8

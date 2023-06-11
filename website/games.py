@@ -53,10 +53,9 @@ games_config = {
   "game5": {
     "title": game_names["game 5"], 
     "background": "7.jpg",
-    "maximize": "maximize1.png",
+    "maximize": "maximize5.png",
     "prize": 3000,
     "bonus": 500,
-    "quiz_prize": 50
   }
 }
 
@@ -67,7 +66,10 @@ class Game(ABC):
     game.engine = engine
     game.players = engine.players
     game.choices = [[None]*len(engine.players) for _ in range(3)]
+    game.money_log = [[None]*len(engine.players) for _ in range(3)]
+    game.winners = [None]*3
     game.is_done = [[False]*len(engine.players) for _ in range(3)]
+    game.interactions = [[] for _ in range(3)]
     game.frame_id = 0
 
   @abstractmethod
@@ -214,6 +216,7 @@ class Game1(Game):
       prize //= len(lottery)
       winner.flouze += prize
       winner.last_profit = prize
+      game.winners[game.current_round_id] = (winner, prize)
       engine.log(logs_txt["lottery winner"][engine.lang_id].format(
         name = winner.name, prize = prize))
       winner.message = player_txt["lottery winner"][winner.lang_id].format(
@@ -230,6 +233,10 @@ class Game1(Game):
       engine.log(logs_txt["no lottery winner"][engine.lang_id])
       if game.current_round_id == 2:
         engine.log(logs_txt["no stars"][engine.lang_id])
+
+    for player in game.players:
+      game.money_log[game.current_round_id][player.ID] = (player.flouze, 
+      player.stars)
 
 
 class Game2(Game):
@@ -266,6 +273,7 @@ class Game2(Game):
       prize = game.config["prizes"][round_id] * int(winning_value)
       winner.flouze += prize
       winner.last_profit = prize
+      game.winners[game.current_round_id] = (winner, prize)
       engine.log(logs_txt["winner number"][engine.lang_id].format(
         name = winner.name, prize = prize))
       winner.message = player_txt["winner number"][winner.lang_id].format(
@@ -286,6 +294,10 @@ class Game2(Game):
         player.message = player_txt["no winner"][player.lang_id]
       if round_id == 2:
         engine.log(logs_txt["no stars"][engine.lang_id])
+
+    for player in game.players:
+      game.money_log[game.current_round_id][player.ID] = (player.flouze, 
+      player.stars)
 
 
 class Game3(Game):
@@ -346,6 +358,7 @@ class Game3(Game):
     if game.current_round_id == 2:
       winner_id = np.argmax(game.real_gain)
       winner = game.players[winner_id]
+      game.winners[game.current_round_id] = winner
       engine.log(logs_txt["benefits"][engine.lang_id].format(
         benefit = game.real_gain))
       if game.real_gain.count(max(game.real_gain)) == 1:
@@ -358,6 +371,10 @@ class Game3(Game):
           star = icons['star'])
       else:
         engine.log(logs_txt["tie no stars"][engine.lang_id])
+
+    for player in game.players:
+      game.money_log[game.current_round_id][player.ID] = (player.flouze, 
+      player.stars)
 
   def end(game):
     for player in game.players:
@@ -391,16 +408,18 @@ class Game4(Game):
   def current_bonus(game, bonus):
     game.bonuses[game.current_round_id] = bonus
 
-  @property
-  def current_prizes(game):
+  def current_prizes(game, round_id=None, bonus=None):
     """
     This function returns an array that contains the prizes that the player can
     choose from depending on the amount of players, the round and the bonus level.
     """
-    total_money = game.config["total_prizes"][game.current_round_id][game.current_bonuses]
-    star_prizes_count = game.config["star_number"][len(game.players)][game.current_round_id]
+    if round_id == None :
+      round_id = game.current_round_id
+      bonus = game.current_bonuses
+    total_money = game.config["total_prizes"][round_id][bonus]
+    star_prizes_count = game.config["star_number"][len(game.players)][round_id]
     money_prizes_count = len(game.players) - star_prizes_count
-    penalty_factor = game.config["penalty_factor"][game.current_round_id]
+    penalty_factor = game.config["penalty_factor"][round_id]
 
     min_prize = total_money * penalty_factor
     max_prize = total_money / money_prizes_count * 2 \
@@ -413,7 +432,7 @@ class Game4(Game):
   def set_choice(game, player, prize_id):
     engine = game.engine
     game.current_choices[player.ID] = prize_id
-    prizes = game.current_prizes
+    prizes = game.current_prizes()
     prize = prizes[prize_id]
     if prize == "star":
       if player.choice == len(game.players)-3 :
@@ -441,9 +460,11 @@ class Game4(Game):
     choices = game.current_choices
     values, count = np.unique(choices, return_counts=True)
     unique_choices = set(values[np.where(count == 1)])
+    winners = [None]*len(game.players)
     for player, choice in zip(game.players, choices):
       if choice in unique_choices:
-        prize = game.current_prizes[choice]
+        winners[player.ID] = 1
+        prize = game.current_prizes()[choice]
         if prize == "star":
           player.stars += 1
           engine.log(logs_txt["won star"][engine.lang_id].format(
@@ -458,7 +479,9 @@ class Game4(Game):
           player.message = player_txt["won prize"][player.lang_id].format(
             prize = prize, coin = icons['coin'])
       else:
+        winners[player.ID] = 0
         player.message = player_txt["prize not won"][player.lang_id]
+    game.winners[game.current_round_id] = winners
 
     if len(unique_choices) == len(game.players):
       game.current_bonus = True
@@ -470,6 +493,10 @@ class Game4(Game):
                       + games_config["game5"]["bonus"]
         engine.log(logs_txt["bonus round 3"][engine.lang_id].format(
           prize = master_prize, bonus = master_prize_with_bonus))
+    
+    for player in game.players:
+      game.money_log[game.current_round_id][player.ID] = (player.flouze, 
+      player.stars)
 
 
 class Game5(Game):
@@ -633,7 +660,11 @@ class Game5(Game):
           [game.master.lang_id]
         for player in game.other_players:
           player.message = player_txt["offer declined"][player.lang_id].format(
-            players = len(game.other_players)//2)
+            players = len(game.players)//2)
+
+    for player in game.players:
+      game.money_log[2][player.ID] = (player.flouze, 
+      player.stars)
   
   def end(game):
     engine = game.engine

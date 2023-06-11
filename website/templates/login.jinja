@@ -35,10 +35,7 @@
       </div>
 
       <form class="w3-container w3-padding" method="POST">
-        <label>{{text["name"][engine.lang_id]}}</label>
-        <input type="text" class="w3-input w3-border w3-margin-bottom" id="firstName" name="firstName" required>
-        <label>{{text["password"][engine.lang_id]}}</label>
-        <input type="password" class="w3-input w3-border w3-margin-bottom" id="password" name="password" required>
+        <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="{{text['name'][engine.lang_id]}}" id="firstName" name="firstName" required></p>
         <p class="w3-center"><button type="submit" class="w3-btn w3-green">{{text["log in"][engine.lang_id]}}</button></p>
       </form>
     </div>
