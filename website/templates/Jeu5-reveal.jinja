@@ -15,7 +15,7 @@
   </header>
   <div class="w3-margin-top" style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:16px">
     {% for other_player in other_players %}
-    <div class="w3-card w3-padding w3-half {{ other_player.color }}-light" style="width:min(200px,50%);">
+    <div class="w3-card w3-padding w3-half {{ other_player.color }}-light" style="width:min(200px,45%);">
       <b class="w3-xlarge w3-padding">{{ other_player.name }}</b>
       <div class="w3-padding-small w3-text-white {{ other_player.color }}-dark">{{ offer[loop.index0] }} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
       {% if other_player.choice == 0 %}
@@ -66,9 +66,9 @@
       {{ player.message }}
   </header>
   {% for other_player in other_players %}
-  <div class="w3-padding {{ other_player.color }}-light" style="display:flex; justify-content:center;">
+  <div class="w3-padding {{ other_player.color }}-light" style="display:flex; justify-content:center; align-items:center">
     <div style="display:inline-block"><b class="w3-xlarge w3-padding">{{ other_player.name }}</b></div>
-    <div class="w3-padding-small w3-text-white {{ other_player.color }}-dark" style="display:inline-block">{{ offer[loop.index0] }} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
+    <div class="w3-padding-small w3-text-white {{ other_player.color }}-dark" style="display:inline-block; flex-grow: 1;">{{ offer[loop.index0] }} <img src="{{ url_for('static', filename='images/coin.png') }}" class="coin" alt="Coin"></div>
     <div class="w3-white w3-center" style="margin:auto; border-radius:50%; width:1.3em; height:1.3em; display:inline-block">
       {% if other_player.choice == 0 %}
       <i class="fa fa-times-circle w3-text-red"></i>
