@@ -6,12 +6,13 @@ from flask_socketio import SocketIO
 
 from website.gameEngine import gameEngine
 
-def init_engine(lang_id=0):
+def init_players_raw(lang_id=0):
   with open("players.txt", "r") as file:
     players_raw = [(player_id, *line.split()) 
                    for player_id, line in enumerate(file) if line]
     for p in players_raw : assert(len(p[1]) <= 12)
-  return gameEngine(players_raw=players_raw, lang_id=lang_id)
+  return 
+  engine.init_players_raw(players_raw)
 
 def create_app(lang_id=0):
   app = Flask(__name__)
@@ -19,7 +20,7 @@ def create_app(lang_id=0):
   app.jinja_env.globals.update(zip=zip)
   
   engine = gameEngine.load_data() if os.path.isfile("data.pck")  \
-       else init_engine(lang_id)
+       else gameEngine(lang_id=lang_id)
   app.config["engine"] = engine
 
   socketio = SocketIO(app)

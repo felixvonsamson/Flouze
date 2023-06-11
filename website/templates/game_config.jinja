@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2">
+    <link rel="stylesheet" href="{{ url_for("static", filename="flouze.css") }}" type="text/css">
+    <style>
+      body, h1, h2, h3, h4, h5, h6  {
+        font-family: 'Baloo 2', cursive;
+      }
+    </style>
+    <link rel = "icon" href ="{{ url_for("static", filename="images/coin.png") }}" type = "image/x-icon">
+    <title>Flouze-Admin</title>
+  </head>
+<body>
+  <div class="flex-vertical" style="height:100%">
+  
+  <div class="w3-card-4 w3-display-middle w3-white" style="width:300px;">
+    <div class="w3-container w3-green w3-center large w3-padding">
+      Game config
+    </div>
+
+    <form class="w3-container w3-padding" method="POST">
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 1" id="player1" name="player1"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 2" id="player2" name="player2"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 3" id="player3" name="player3"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 4" id="player4" name="player4"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 5" id="player5" name="player5"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 6" id="player6" name="player6"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 7" id="player7" name="player7"></p>
+      <p><input type="text" class="w3-input w3-border w3-margin-bottom" placeholder="Player 8" id="player8" name="player8"></p>
+      <p class="w3-center"><button type="submit" class="w3-btn w3-green">Begin game</button></p>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+   <script type="text/javascript" charset="utf-8">
+     var socket = io();
+     socket.on('connect', function() {
+         socket.emit('give_identity');
+     });
+     socket.on('refresh', function() {
+         window.location = window.location;
+     });
+     function disableBack() { window.history.forward(); }
+     setTimeout("disableBack()", 0);
+     window.onunload = function () { null };
+   </script>
+
+  </body>
+</html>

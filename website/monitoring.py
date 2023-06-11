@@ -12,7 +12,7 @@ def home():
   if session["ID"] != "admin":
     return redirect(url_for("views.home"))
   if request.method == "POST":
-    game = engine.current_game
+    game = engine.current_game if engine.players is not None else None
     if "reveal" in request.form:
       assert request.form["reveal"] in map(str, range(len(engine.players)))
       game.reveal_card(int(request.form["reveal"]))
@@ -59,10 +59,22 @@ def home():
         
     elif "current_page_id" in request.form:
       engine.goto_page(int(request.form["current_page_id"]))
-      
+
+    elif "player1" in request.form:
+      players = []
+      for p_id in range(8):
+        name = request.form[f"player{p_id+1}"]
+        if name == "":
+          break
+        players.append(name)
+      engine.init_players_raw(list(enumerate(players)))
+
     engine.save_data()
   
   if engine.current_page["url"] == "final-results.jinja":
     return render_template("monitoring-recap.jinja", engine=engine)
   else:
-    return render_template("monitoring.jinja", engine=engine)
+    if engine.players is None:
+      return render_template("game_config.jinja", engine=engine)
+    else:
+      return render_template("monitoring.jinja", engine=engine)

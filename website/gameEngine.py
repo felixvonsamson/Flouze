@@ -13,7 +13,7 @@ from .text import languages_name, color_names, game_names, quiz, logs_txt, playe
 class gameEngine(object):
   pages = pages
 
-  def __init__(engine, players_raw, lang_id):
+  def __init__(engine, lang_id):
     engine.lang_id = lang_id
     engine.lang_txt = languages_name[lang_id]
     engine.text = {
@@ -35,6 +35,14 @@ class gameEngine(object):
     engine.logs = []
     engine.nonces = set()
     
+    engine.players = None
+
+    # pointeur pour indiquer sur quelle page on est (l'array 'pages')
+    engine.iterator = 0
+    
+    engine.log(logs_txt["start"][engine.lang_id])
+  
+  def init_players_raw(engine, players_raw):
     assert (len(players_raw) in engine.n_players)
     engine.players = [Player(engine, *player_raw)
               for player_raw in players_raw]
@@ -42,7 +50,6 @@ class gameEngine(object):
       player.other_players = engine.players.copy()
       player.other_players.pop(i)
     engine.players_by_name = { player.name:player for player in engine.players }
-
     engine.games = [
       Colors(engine),
       Game1(engine),
@@ -52,10 +59,6 @@ class gameEngine(object):
       Game5(engine)
     ]
 
-    # pointeur pour indiquer sur quelle page on est (l'array 'pages')
-    engine.iterator = 0
-    
-    engine.log(logs_txt["start"][engine.lang_id])
 
   def init_logger(engine):
     engine.logger.setLevel(logging.INFO)
